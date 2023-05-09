@@ -1,0 +1,8 @@
+html{
+    background: #e9f5e8;
+}
+*{
+    transition: 1000ms;
+    margin: 0;
+    padding: 0;
+}
