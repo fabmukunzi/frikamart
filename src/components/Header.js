@@ -8,40 +8,50 @@ import category from '../assets/images/bxs_category.svg';
 import menu from '../assets/images/icons8-menu.svg';
 import close from '../assets/images/icons8-close-120.png';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-const Header = () => {
+const Header = ({ onCurrencyChange }) => {
   const [showMenu, setShowMenu] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
   const navItems = [
-    { name: 'HOME', path: '/' },
-    { name: 'STORES', path: '/stores' },
-    { name: 'MADE IN AFRICA', path: '/madeinafrica' },
-    { name: 'PRODUCTS', path: '/products' },
-    { name: 'BLOG', path: '/blog' },
-    { name: 'CONTACT', path: '/contact' },
+    { name: `${t('Home')}`, path: '/' },
+    { name: `${t('Stores')}`, path: '/stores' },
+    { name: `${t('Made')} ${t('In')} AFRICA`, path: '/madeinafrica' },
+    { name: `${t('Products')}`, path: '/products' },
+    { name: `${t('Blog')}`, path: '/blog' },
+    { name: `${t('Contact')}`, path: '/contact' },
   ];
   const others = [
-    { name: 'SELL ON AFRIKAMART', path: '/sell' },
-    { name: 'BE AN AFFLIATE', path: '/affliate' },
-    { name: 'TRACK YOUR ORDERS', path: '/orders' },
+    { name: `${t('Sell')} ${t('On')} AFRIKAMART`, path: '/sell' },
+    { name: `${t('Be')} ${t('An')} ${t('Affliate')}`, path: '/affliate' },
+    { name: `${t('Track')} ${t('Your')} ${t('Orders')}`, path: '/orders' },
   ];
   return (
     <div className="w-screen">
       <div className="top-nav flex justify-between bg-[#2C3E50] text-white">
-        <h1 className="ml-6 xs:hidden">
-          Free shipping over $100 & free returns
-        </h1>
+        <h1 className="ml-6 xs:hidden">{t('paragraph')}</h1>
         <div className="flex mx-10 xs:hidden">
-          <h1>HOTLINE:(+250) 788 679 903</h1>
+          <h1>{t('HOTLINE')}:(+250) 788 679 903</h1>
           <div className="pl-0.5 ml-3 mt-1 bg-white"></div>
-          <select className="bg-inherit mx-4">
-            <option>English</option>
-            <option>French</option>
+          <select
+            className="bg-inherit mx-4"
+            onChange={(event) => changeLanguage(event.target.value)}
+          >
+            <option value="en">English</option>
+            <option value="fr">French</option>
           </select>
-          <select className="bg-inherit">
-            <option>USD $</option>
-            <option>RWF</option>
+
+          <select
+            onChange={(event) => onCurrencyChange(event.target.value)}
+            className="bg-inherit"
+          >
+            <option value="RWF">RWF</option>
+            <option value="USD">USD</option>
           </select>
         </div>
       </div>
@@ -60,36 +70,41 @@ const Header = () => {
           />
           <input
             type="search"
-            placeholder="search product here..."
+            placeholder={t('SearchProduct')}
             className="w-[35rem] text-black pl-3 xs:w-60 xs:ml-3 text-left rounded-md"
           />
           <span className="ml-[-38px] rounded-md">
             <img
               src={searchIcon}
               alt="search"
-              className="bg-[#08F46C] rounded-md xs:h-8 xs:w-10"
+              className="bg-[#08F46C] rounded-md xs:h-8 xs:w-10 cursor-pointer"
             />
           </span>
         </div>
         <div className="flex xs:text-xs">
-          <div className="flex items-center">
+          <div
+            className="flex items-center cursor-pointer"
+            onClick={() => navigate('/compare')}
+          >
             <img
               src={compareProducts}
               alt="compare"
               className="w-8 h-8 xs:w-6 xs:h-6 md:mx-3"
             />
             <span className="xs:hidden">
-              compare <br /> Products
+              {t('Compare')} <br /> {t('Product')}
             </span>
           </div>
-          <div className="flex items-center mx-4 xs:mx-2">
+          <div className="flex items-center mx-4 xs:mx-2 cursor-pointer"
+          onClick={() => navigate('/wishlist')}
+          >
             <img
               src={wishList}
               alt="compare"
               className="w-8 h-8 xs:w-6 xs:h-6 md:mx-3"
             />
             <span className="xs:hidden">
-              favorite <br /> Wishlist
+              {t('Favorite')} <br /> {t('Wishlist')}
             </span>
           </div>
           <div className="flex items-center mx-4 xs:mx-2">
@@ -99,7 +114,7 @@ const Header = () => {
               className="w-8 h-8 xs:w-6 xs:h-6 md:mx-3"
             />
             <span className="xs:hidden">
-              Login <br /> my account
+              {t('Login')} <br /> {t('my account')}
             </span>
           </div>
           <div
@@ -121,19 +136,19 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className="bg-[#678385] xs:hidden flex justify-around py-4 text-white font-semibold text-lg items-center w-screen">
+      <div className="bg-[#678385] xs:hidden flex justify-around py-4 text-white font-semibold text-base items-center w-screen">
         <div className="flex w-1/10">
           <img src={category} alt="categories" className="w-8 h-8 mx-3" />
           <select className="bg-inherit">
-            <option>Shop By Category</option>
-            <option>Shoes</option>
-            <option>Watches</option>
-            <option>Fashion</option>
+            <option>{t('ShopByCategory')}</option>
+            <option>{t('Shoes')}</option>
+            <option>{t('Watches')}</option>
+            <option>{t('Fashion')}</option>
           </select>
         </div>
         <div className="p-0.5 pb-10 bg-white"></div>
-        <div className="main-nav">
-          <ul className="flex ">
+        <div className="main-nav overflow-scroll mx-2">
+          <ul className="flex">
             {navItems.map((item) => (
               <li key={item.name} className="mx-2">
                 <Link to={item.path}>{item.name}</Link>
@@ -156,10 +171,10 @@ const Header = () => {
         <div className="bg-[#678385] absolute z-[1] sm:hidden text-center py-4 text-white font-normal text-lg items-center w-screen">
           <div className="block">
             <select className="bg-inherit pb-4">
-              <option>Shop By Category</option>
-              <option>Shoes</option>
-              <option>Watches</option>
-              <option>Fashion</option>
+              <option>{t('ShopByCategory')}</option>
+              <option>{t('Shoes')}</option>
+              <option>{t('Watches')}</option>
+              <option>{t('Fashion')}</option>
             </select>
           </div>
           <div className="main-nav">
@@ -194,11 +209,35 @@ const Header = () => {
               ))}
             </ul>
           </div>
+          <div className="flex flex-col items-center">
+            <label>Select Language</label>
+            <select
+              className="bg-inherit mx-4"
+              onChange={(event) => {
+                changeLanguage(event.target.value)
+                setShowMenu(false);
+              }}
+            >
+              <option value="en">English</option>
+              <option value="fr">French</option>
+            </select>
+            <label>Select Currency</label>
+            <select
+              onChange={(event) => {
+                onCurrencyChange(event.target.value)
+                setShowMenu(false);
+              }}
+              className="bg-inherit"
+            >
+              <option value="RWF">RWF</option>
+              <option value="USD">USD</option>
+            </select>
+          </div>
         </div>
       )}
       <div className="bg-[#D9D9D9] py-4">
-        <h1 className="uppercase text-xl font-bold text-center">{`HOME${
-          location.pathname !== '/' ? location.pathname : ''
+        <h1 className="uppercase text-xl font-bold text-center">{`${t('Home')}${
+          location.pathname !== '/' ? `/ ${t(location.pathname?.split('/')[1])}` : ''
         }`}</h1>
       </div>
     </div>

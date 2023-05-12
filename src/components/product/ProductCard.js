@@ -1,82 +1,110 @@
-import React, { useState } from 'react';
-import phone from '../../assets/images/IMG_0031-removebg-preview 1.svg';
-import phone0 from '../../assets/images/images-removebg-preview 1.svg';
-import phone1 from '../../assets/images/PT_iPhone-14-Pro-removebg-preview 1.svg';
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
 import rates from '../../assets/images/a-guide-to-star-ratings-on-google-and-how-they-work-6123be39b9f2d-sej-removebg-preview 1.svg';
 import wish from '../../assets/images/material-symbols_heart-plus-outline.svg';
 import compare from '../../assets/images/fluent_branch-compare-20-filled.svg';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../Model';
+import { useTranslation } from 'react-i18next';
+import { addProduct } from '../../features/products/compareProducts';
+import { useDispatch } from 'react-redux';
+import convertCurrency from '../../utils/convertCurrency';
+import { showSuccessMessage } from '../../utils/toast';
 
-const ProductCard = ({ ...props }) => {
-    const [showModel, setShowModel] = useState(false);
+const ProductCard = ({...props }) => {
+  const [showModel, setShowModel] = useState(false);
+  const pr=props.product?.price
+  const [price, setPrice] = useState(pr);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const product=props.product;
+
+  const convert=()=>{
+    try {
+      const p=convertCurrency(props.currency,price)
+      return p
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(()=>{
+    const p=convert();
+    setDisplayPrice(p)
+  },[props.currency,convertCurrency])
+  const [displayPrice,setDisplayPrice]=useState(price)
   return (
     <div
-      className={`flex font-poppins hover:shadow-lg shadow-black hover:bg-slate-100 bg-white font-normal justify-around rounded-md border border-slate-300 py-6 xs:w-[22rem] w-[26rem] my-4 mx-auto ${props.className}`}
+      className={`flex transition duration-500	 font-poppins hover:shadow-2xl shadow-slate-600  bg-white font-normal justify-around rounded-md border border-slate-300 py-6 xs:w-[22rem] w-auto my-4 mx-auto md:mx-3 ${props.className}`}
     >
-        {showModel && (
+      {showModel && (
         <Modal
           showModel={showModel}
-        //   message="Are you sure you want to delete this product?"
-          title="Add item to cart"
-        //   onClick={handleConfirm}
+          title="Confirm to add item to cart"
           setShowModel={setShowModel}
-        //   isLoading={loading}
+          product={props.product}
         />
       )}
       <div className="w-1/2">
         <img
-          src={phone}
+          src={product?.image}
           alt="phone"
-          className="cursor-pointer"
+          className="cursor-pointer w-32 h-28 object-contain mx-4"
           onClick={() => {
             navigate(`/products/${12345}`);
           }}
         />
         <div className="flex justify-center mt-8">
           <img
-            src={phone0}
+            src={product?.image}
             alt="phone"
-            className="w-14 h-24 border border-slate-300 mx-3"
+            className="w-14 h-20 border border-slate-300 mx-3"
           />
           <img
-            src={phone1}
+            src={product?.image}
             alt="phone"
-            className="w-14 h-24 border border-slate-300 mx-3"
+            className="w-14 h-20 border border-slate-300 mx-3"
           />
         </div>
       </div>
       <div className="w-1/2">
-        <p>iphone</p>
+        <p>{product?.subCategory}</p>
         <h1
-          className="font-bold text-lg cursor-pointer"
+          className="font-bold text-lg cursor-pointer  h-20 overflow-hidden"
           onClick={() => {
-            navigate(`/products/${12345}`);
+            navigate(`/products/${product?.uid}`);
           }}
         >
-          iPhone | Power Mac Center
+          {product?.title}
         </h1>
-        <p>phones</p>
+        <p>{product?.category}</p>
         <img src={rates} alt="phone" />
         <p className="flex font-bold text-red-600">
-          $600<del className="text-gray-300 ml-3">$700</del>
+        {displayPrice?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          <del className="text-gray-500 ml-3"></del>
         </p>
         <div className="flex items-center">
           <img src={wish} alt="phone" className="w-8 mr-2" />
-          <p className="w-full">add to wishlist</p>
+          <p className="w-full">{t('AddToWishlist')}</p>
         </div>
-        <div className="flex items-center">
-          <img src={compare} alt="phone" className="invert w-10 mr-2" />
-          <p className="w-full">compare product</p>
-        </div>
-        <button
-          className="bg-[#08F46C] px-8 py-2 text-lg rounded-md shadow-md mt-4 shadow-slate-500"
+        <div
+          className="flex items-center cursor-pointer"
           onClick={() => {
-            setShowModel(true)
+            dispatch(addProduct(product));
+            showSuccessMessage('Product has been added to compare')
           }}
         >
-          Add to cart
+          <img src={compare} alt="phone" className="invert rounded-full hover:invert-0 transition duration-500 hover:bg-slate-500 w-10 mr-2" />
+          <p className="w-full">{t('CompareProduct')}</p>
+        </div>
+        <button
+          className="bg-[#08F46C] w-fit px-8 py-2 text-base rounded-md shadow-md mt-4 shadow-slate-500"
+          onClick={() => {
+            setShowModel(true);
+          }}
+        >
+          {t('AddToCart')}
         </button>
       </div>
     </div>

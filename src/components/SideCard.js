@@ -19,7 +19,7 @@ const SideCard = ({ ...props }) => {
         ))}
       </ul>
       {showSub && (
-        <ul>
+        <ul className='md:hidden'>
           {props.categories.map((category) => (
             <li className="my-3 cursor-pointer" key={category.name}>
               {category.name}

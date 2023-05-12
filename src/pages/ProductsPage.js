@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SideCard from '../components/SideCard';
 import ProductCard from '../components/product/ProductCard';
+import { useTranslation } from 'react-i18next';
+import { useOutletContext } from 'react-router-dom';
+import { getAllProducts } from '../features/products/getProducts';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../components/Loader';
 
 const ProductsPage = () => {
   const [showSub, setShowSub] = useState(false);
   const [showSub1, setShowSub1] = useState(false);
+  const { t } = useTranslation();
   const categories = [
     {
       name: 'Clothes',
@@ -31,7 +37,6 @@ const ProductsPage = () => {
     { name: 'Adidas' },
     { name: 'Gucci1' },
   ];
-  const products = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   const colors = [];
   for (let i = 0; i < 10; i++) {
     const r = Math.floor(Math.random() * 255);
@@ -50,26 +55,32 @@ const ProductsPage = () => {
     'electronics',
     'shoes',
   ];
+  const dispatch=useDispatch();
+  const [setCurrentAmount, convertedAmount,currency] = useOutletContext();
+  useEffect(()=>{
+    dispatch(getAllProducts())
+  },[dispatch])
+  const {products,isLoading}=useSelector((state)=>state.allProducts);
   return (
     <div className="my-10 w-full flex xs:flex-wrap justify-around">
       <div className="w-1/4 xs:w-full xs:mx-2">
-        <SideCard categories={categories} header="Shop By Categories" />
-        <SideCard categories={brands} header="By Brands" />
+        <SideCard categories={categories} header={t('ShopByCategory')} />
+        <SideCard categories={brands} header={t('ByBrands')} />
         <div className="bg-white w-4/5 mx-auto rounded-lg mt-5 px-4">
           <h1
             className="font-bold text-lg pt-3 xs:py-3"
             onClick={() => setShowSub(!showSub)}
           >
-            Filter By
-            <span className='ml-4 md:hidden'>{showSub?'-':'+'}</span>
+            {t('FilterBy')}
+            <span className="ml-4 md:hidden">{showSub ? '-' : '+'}</span>
           </h1>
           <div className={showSub ? '' : 'xs:hidden'}>
-            <p className="font-bold my-2">Availability</p>
+            <p className="font-bold my-2">{t('Availability')}</p>
             <input type="checkbox" className="w-10" />
-            In stock
+            {t('InStock')}
             <br />
             <input type="checkbox" className="w-10" />
-            Out of stock
+            {t('OutOfStock')}
           </div>
           <div className={`${showSub ? '' : 'xs:hidden'} "my-3"`}>
             <p className="font-bold">Price</p>
@@ -111,7 +122,7 @@ const ProductsPage = () => {
             onClick={() => setShowSub1(!showSub1)}
           >
             By Product Tag
-            <span className='ml-4 md:hidden'>{showSub1?'-':'+'}</span>
+            <span className="ml-4 md:hidden">{showSub1 ? '-' : '+'}</span>
           </p>
           <div
             className={`${
@@ -135,15 +146,25 @@ const ProductsPage = () => {
             <option>Recommended Products</option>
           </select>
         </div>
-        <div className="grid sm:grid-cols-3 xs:grid-cols-1 w-full">
-          {products.map(() => {
-            return <ProductCard className="w-[20.8rem]" />;
-          })}
-        </div>
-        <div className="md:w-full flex justify-between py-3 bg-white rounded-md xs:px-6 xs:mx-6 px-3">
-          <p>Showing 1 of 2</p>
-          <p>{'>'}</p>
-        </div>
+        {isLoading?<Loader />:(
+        <><div className="grid sm:grid-cols-3 xs:grid-cols-1 w-full">
+            {products.map((product) => {
+              return (
+                <ProductCard
+                  setCurrentAmount={setCurrentAmount}
+                  convertedAmount={convertedAmount}
+                  product={product}
+                  currency={currency}
+                  key={product.id} //
+                />
+              );
+            }
+            )}
+          </div><div className="md:w-full flex justify-between py-3 bg-white rounded-md xs:px-6 xs:mx-6 px-3">
+              <p>Showing 1 of 2</p>
+              <p>{'>'}</p>
+            </div></>
+        )}
       </div>
     </div>
   );

@@ -1,15 +1,16 @@
 import React from 'react';
 import phone from '../../assets/images/IMG_0031-removebg-preview 1.svg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import ProductCard from './ProductCard';
 
 const Cart = () => {
-    const navigate=useNavigate()
+  const [setCurrentAmount, convertedAmount] = useOutletContext();
+  const navigate = useNavigate();
   const items = [
-    { name: 'Partel', price: 600,quantity:2, image: phone, store: 'iPhone' },
-    { name: 'Watch', price: 700,quantity:2, image: phone, store: 'Samsung' },
+    { name: 'Partel', price: 600, quantity: 2, image: phone, store: 'iPhone' },
+    { name: 'Watch', price: 700, quantity: 2, image: phone, store: 'Samsung' },
   ];
-  const relatedProducts=['1','2','3','4','5','6']
+  const relatedProducts = ['1', '2', '3', '4', '5', '6'];
   return (
     <div>
       <div className="">
@@ -51,17 +52,19 @@ const Cart = () => {
                 defaultValue={item.quantity}
                 min="1"
               />
-              <button type='submit'>Apply</button>
+              <button type="submit">Apply</button>
             </div>
-            <div className='xs:mr-3'>
-              <p>${item.price*item.quantity}</p>
+            <div className="xs:mr-3">
+              <p>${item.price * item.quantity}</p>
             </div>
           </div>
         ))}
         {items.length > 0 && (
           <div className="flex xs:flex-wrap-reverse justify-between md:mx-[7.5rem] md:px-10 bg-white">
             <div className="flex md:flex-col xs:mx-2 gap-4 font-bold justify-items-start xs:justify-center my-4">
-              <label htmlFor="coupon" className=''>Coupon code</label>
+              <label htmlFor="coupon" className="">
+                Coupon code
+              </label>
               <input
                 type="text"
                 name="coupon"
@@ -101,12 +104,17 @@ const Cart = () => {
         )}
       </div>
       <div>
-        <h1 className='xs:text-center font-bold sm:ml-14 mt-4'>RELATED PRODUCTS</h1>
-      <div className="grid grid-cols-3 xs:grid-cols-1 mx-10 xs:mx-2">
-        {relatedProducts.map(() => (
-          <ProductCard />
-        ))}
-      </div>
+        <h1 className="xs:text-center font-bold sm:ml-14 mt-4">
+          RELATED PRODUCTS
+        </h1>
+        <div className="grid grid-cols-3 xs:grid-cols-1 mx-10 xs:mx-2">
+          {relatedProducts.map(() => (
+            <ProductCard
+              setCurrentAmount={setCurrentAmount}
+              convertedAmount={convertedAmount}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

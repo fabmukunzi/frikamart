@@ -4,17 +4,20 @@ import appstore from '../assets/images/Rectangle 99.svg';
 import facebook from '../assets/images/bi_facebook (1).svg';
 import twitter from '../assets/images/tabler_brand-twitter-filled.svg';
 import footer from '../assets/images/Group 1.svg';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
-  const about = ['Contact us', 'Careers', 'Our blog', 'Policy'];
+  const { t } = useTranslation();
+
+  const about = [t('ContactUs'), t('Careers'), t('OurBlog'), t('Policy')];
   const safety = [
-    'FAQS',
-    'Your safety',
-    'Delivery',
-    'Return policy',
-    'services',
+    t('FAQS'),
+    t('YourSafety'),
+    t('Delivery'),
+    t('ReturnPolicy'),
+    t('Services'),
   ];
-  const digital = ['Free hosting', 'You online shop', 'API'];
+  const digital = [t('FreeHosting'), t('YourOnlineShop'), t('API')];
   return (
     <div className="flex xs:flex-col xs:pl-4 font-poppins justify-around relative bottom-0 bg-[#2C3E50] w-screen text-white">
       <div className="mt-5">
@@ -23,14 +26,14 @@ const Footer = () => {
           <span className="text-green-500">An online store</span> for you
         </p>
         <div className="w-72 mt-3">
-          <h2>Frikamart is an online store that has come to give</h2>
+          <h2>{t('paragraphf')}</h2>
           <p>
             Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem
             ipsum lorem ipsum lorem ipsum
           </p>
         </div>
         <div className="flex items-center">
-          <h1 className="font-bold mr-3">DOWNLOAD APP</h1>
+          <h1 className="font-bold mr-3">{t('DownloadApp')}</h1>
           <img
             src={playstore}
             alt="playstore"
@@ -39,7 +42,7 @@ const Footer = () => {
           <img src={appstore} alt="appstore" className="w-[100px] h-[100px]" />
         </div>
         <div className="flex items-center mb-5">
-          <h1 className="font-bold">SOCIAL MEDIA</h1>
+          <h1 className="font-bold">{t('SocialMedia')}</h1>
           <img src={facebook} alt="facebook" className="w-[100px] h-[30px]" />
           <img
             src={twitter}
@@ -49,15 +52,15 @@ const Footer = () => {
         </div>
         <div className="my-10">
           <h1 className="mb-3">
-            <span className="font-bold">Electronics: </span>computer, television
+            <span className="font-bold">{t('Electronics')}: </span>computer, television
             ,phones
           </h1>
           <h1 className="mb-3">
-            <span className="font-bold">Fashion: </span>gucci, luis vuiton
+            <span className="font-bold">{t('Fashion')}: </span>gucci, luis vuiton
             ,calvin klein
           </h1>
           <h1 className="mb-3">
-            <span className="font-bold">Electronics: </span>computer,
+            <span className="font-bold">{t('Electronics')}: </span>computer,
             television, phones
           </h1>
         </div>
@@ -86,7 +89,7 @@ const Footer = () => {
       <img
         src={footer}
         alt="footer"
-        className="absolute bottom-0 right-0 w-[400px] h-[300px]"
+        className="absolute bottom-0 object-fill right-0 w-[400px] h-[300px]"
       />
     </div>
   );
