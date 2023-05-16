@@ -2,8 +2,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import Model from '../Model';
-import phone from '../../assets/images/IMG_0031-removebg-preview 1.svg';
-import rates from '../../assets/images/a-guide-to-star-ratings-on-google-and-how-they-work-6123be39b9f2d-sej-removebg-preview 1.svg';
+import rate1 from '../../assets/images/star-svgrepo-com (2).svg';
+import rate0 from '../../assets/images/star-svgrepo-com (1).svg';
 import wish from '../../assets/images/material-symbols_heart-plus-outline.svg';
 import compare from '../../assets/images/fluent_branch-compare-20-filled.svg';
 import YoutubeEmbed from '../YoutubeEmbed';
@@ -31,6 +31,7 @@ const SingleProduct = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { id } = useParams();
+  let rate=product.rate
 
   const convert = () => {
     try {
@@ -52,10 +53,11 @@ const SingleProduct = () => {
 
   useEffect(() => {
     dispatch(getSingleProduct({ productId: id }));
-  }, []);
-  return (
-    isLoading?<Loader />:(
-      <div>
+  }, [id]);
+  return isLoading ? (
+    <Loader />
+  ) : (
+    <div>
       <div className="grid grid-cols-2 xs:grid-cols-1 justify-around xs:mx-auto mx-20 xs:w-full">
         {showModel && (
           <Model
@@ -65,23 +67,23 @@ const SingleProduct = () => {
             product={product}
           />
         )}
-        <div className="flex items-center xs:mx-6 xs:my-3">
-          <div className="grid grid-cols-2  gap-4">
-            {/* {phones.map((image) => ( */}
+        <div className="flex xs:flex-col-reverse gap-2 items-center xs:mx-6 xs:my-3">
+          <div className="grid grid-cols-2 xs:flex  gap-4">
+            {product?.more_imgs?.map((image) => (
             <img
               key={product?.id}
-              src={product?.image}
+              src={image}
               alt="phone"
-              className="w-14 h-24 border border-slate-400 mx-3"
+              className="w-14 xs:w-80 h-24 object-contain border border-slate-400 md:mx-3"
             />
-            {/* ))} */}
+            ))}
           </div>
           <div>
             <img
               key={product.id}
               src={product.image}
               alt="phone"
-              className="w-80"
+              className="w-60 xs:h-40 object-contain"
             />
           </div>
         </div>
@@ -92,7 +94,19 @@ const SingleProduct = () => {
               <h1 className="my-2">
                 BRAND: <span className="text-red-700">IPHONE</span>
               </h1>
-              <img key={phone} src={rates} alt="phone" className="w-28 mx-4" />
+              <div className="flex ml-4 my-2">
+          {[...Array(5)].map((_, i) => {
+            if (rate > 0) {
+              rate--;
+              return (
+                <img key={i} src={rate1} alt="phone" className="w-6 mx-0.5" />
+              );
+            }
+            return (
+              <img key={i} src={rate0} alt="phone" className="w-6 mx-0.5" />
+            );
+          })}
+        </div>
             </div>
             <div>
               <p className="flex items-center">
@@ -105,19 +119,28 @@ const SingleProduct = () => {
               </p>
               <div className="py-[1px] bg-gray-300 w-1/2 my-4"></div>
               <div>
-                <div className="flex my-4 text-lg font-bold">
-                  <p>Color</p>
-                  <div className="bg-red-500 w-7 h-7 mx-2 rounded-full cursor-pointer">
-                    {' '}
+                {product.attributes?.map((attribute) => (
+                  <div className="flex my-4 text-lg font-bold">
+                    <p>{attribute.name}</p>
+                    {attribute.type==='color' &&
+                      attribute.value?.map((v) => {
+                        return(
+                        <div
+                        style={{backgroundColor: `${v.name}`}}
+                          className={`z-[99] p-4 w-7 h-7 mx-2 rounded-full cursor-pointer`}
+                        >{' '}
+                        </div>
+                      )})}
+                      {attribute.type==='toggle' &&
+                      attribute.value?.map((v) => {
+                        return(
+                          <div className="bg-[#678385] w-9 text-center py-0.5 mx-3  cursor-pointer">
+                          {v.name}
+                        </div>
+                      )})}
                   </div>
-                  <div className="bg-black w-7 h-7 mx-2 rounded-full cursor-pointer">
-                    {' '}
-                  </div>
-                  <div className="bg-green-700 w-7 h-7 mx-2 rounded-full cursor-pointer">
-                    {' '}
-                  </div>
-                </div>
-                <div className="flex my-4 text-lg font-bold">
+                ))}
+                {/* <div className="flex my-4 text-lg font-bold">
                   <p>Size</p>
                   <div className="bg-[#678385] w-9 text-center py-1 mx-2  cursor-pointer">
                     32{' '}
@@ -128,32 +151,13 @@ const SingleProduct = () => {
                   <div className="bg-slate-200 w-9 text-center py-1 mx-2  cursor-pointer">
                     21{' '}
                   </div>
-                </div>
-                <div className="flex my-4 text-lg font-bold">
-                  <p>Shape</p>
-                  <div className="bg-slate-300 w-1/6 text-center font-normal text-lg py-1 mx-3 rounded-lg cursor-pointer">
-                    Oval{' '}
-                  </div>
-                  <div className="bg-slate-300 w-1/6 text-center font-normal text-lg py-1 mx-3 rounded-lg cursor-pointer">
-                    {' '}
-                    Square
-                  </div>
-                  <div className="bg-slate-300 w-1/6 text-center font-normal text-lg py-1 mx-3 rounded-lg cursor-pointer">
-                    Curved{' '}
-                  </div>
-                </div>
-                <div className="flex my-4 text-lg font-bold">
-                  <p>Type</p>
-                  <div className="bg-slate-300 w-1/6 text-center font-normal text-lg py-1 mx-3 rounded-lg cursor-pointer">
-                    Mini{' '}
-                  </div>
-                  <div className="bg-slate-300 w-1/6 text-center font-normal text-lg py-1 mx-3 rounded-lg cursor-pointer">
-                    Large{' '}
-                  </div>
-                </div>
+                </div> */}
                 <div className="font-semibold my-4">
                   <h1 className="text-green-800">IN STOCK</h1>
-                  <p>Quantity: 5</p>
+                  <p>
+                    Quantity:{' '}
+                    {product.in_stock === -1 ? 'INFINITY' : product.in_stock}
+                  </p>
                 </div>
                 <div className="flex items-center">
                   <div className="block">
@@ -219,17 +223,16 @@ const SingleProduct = () => {
         <p>Guides of use</p>
       </div>
       <div className="my-10">
-        <h1 className="xs:text-center font-bold sm:ml-14 mt-4">
+        {product?.similary_products?.length>0&&(<h1 className="xs:text-center font-bold sm:ml-14 mt-4">
           RELATED PRODUCTS
-        </h1>
+        </h1>)}
         <div className="grid grid-cols-3 xs:grid-cols-1 mx-10 xs:mx-2">
-          {relatedProducts.map(() => (
-            <ProductCard />
+          {product?.similary_products?.map((p) => (
+            <ProductCard product={p} />
           ))}
         </div>
       </div>
     </div>
-    )
   );
 };
 

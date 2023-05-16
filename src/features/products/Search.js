@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../api/axiosInstance'
 
-export const getSingleProduct = createAsyncThunk(
-  'products/singleProduct',
-  async ({productId}, { rejectWithValue }) => {
+export const searchProducts = createAsyncThunk(
+  'products/search',
+  async ({product}, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/products/${productId}`);
+      const response = await axios.get(`/products/search/${product}`);
       return response.data;
       
     } catch (error) {
@@ -15,27 +15,27 @@ export const getSingleProduct = createAsyncThunk(
 );
 
 const initialState = {
-  product:{},
+  products: [],
   isLoading: false,
 };
 
-export const getProductsSlice = createSlice({
+export const searchProductsSlice = createSlice({
   name: 'product',
   initialState,
   extraReducers: {
-    [getSingleProduct.pending]: (state) => {
+    [searchProducts.pending]: (state) => {
       state.isLoading = true;
     },
-    [getSingleProduct.fulfilled]: (state, { payload }) => {
+    [searchProducts.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      state.product = payload;
+      state.products = payload;
       state.errorMessage = null;
     },
-    [getSingleProduct.rejected]: (state, { payload }) => {
+    [searchProducts.rejected]: (state, { payload }) => {
       state.isLoading = false;
       state.errorMessage = payload;
     },
   },
 });
 
-export default getProductsSlice.reducer;
+export default searchProductsSlice.reducer;

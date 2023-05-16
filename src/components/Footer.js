@@ -70,20 +70,20 @@ const Footer = () => {
       </div>
       <div className="mt-5">
         <h1 className="font-bold text-lg">About us</h1>
-        {about.map((item) => (
-          <h2 className="sm:mt-3">{item}</h2>
+        {about.map((item,i) => (
+          <h2 key={i} className="sm:mt-3">{item}</h2>
         ))}
       </div>
       <div className="mt-5">
         <h1 className="font-bold text-lg">Safety</h1>
-        {safety.map((item) => (
-          <h2 className="sm:mt-3">{item}</h2>
+        {safety.map((item,i) => (
+          <h2 key={i} className="sm:mt-3">{item}</h2>
         ))}
       </div>
       <div className="mt-5 xs:mb-10">
         <h1 className="font-bold text-lg">Digital Product</h1>
-        {digital.map((item) => (
-          <h2 className="sm:mt-3">{item}</h2>
+        {digital.map((item,i) => (
+          <h2 key={i} className="sm:mt-3">{item}</h2>
         ))}
       </div>
       <img

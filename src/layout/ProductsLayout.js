@@ -8,6 +8,7 @@ const ProductsLayout = () => {
     const [currentAmount, setCurrentAmount] = useState('');
     const [convertedAmount, setConvertedAmount] = useState(currentAmount);
     const[currency,setCurrency]=useState('RWF')
+    const [searchProducts,setProducts]=useState(null)
   
     const handleCurrencyChange = (currency) => {
       const converted = convertCurrency(currency, currentAmount);
@@ -17,8 +18,8 @@ const ProductsLayout = () => {
   
     return (
       <div>
-        <Header onCurrencyChange={handleCurrencyChange} />
-        <Outlet context={[setCurrentAmount, convertedAmount,currency]} />
+        <Header onSearch={setProducts} onCurrencyChange={handleCurrencyChange} />
+        <Outlet context={[searchProducts,setCurrentAmount, convertedAmount,currency]} />
         <Footer />
       </div>
     );

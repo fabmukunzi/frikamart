@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import rates from '../../assets/images/a-guide-to-star-ratings-on-google-and-how-they-work-6123be39b9f2d-sej-removebg-preview 1.svg';
+import rate1 from '../../assets/images/star-svgrepo-com (2).svg';
+import rate0 from '../../assets/images/star-svgrepo-com (1).svg';
 import wish from '../../assets/images/material-symbols_heart-plus-outline.svg';
 import compare from '../../assets/images/fluent_branch-compare-20-filled.svg';
 import { useNavigate } from 'react-router-dom';
@@ -12,28 +13,29 @@ import { useDispatch } from 'react-redux';
 import convertCurrency from '../../utils/convertCurrency';
 import { showSuccessMessage } from '../../utils/toast';
 
-const ProductCard = ({...props }) => {
+const ProductCard = ({ ...props }) => {
   const [showModel, setShowModel] = useState(false);
-  const pr=props.product?.price
+  const pr = props.product.price ;
   const [price, setPrice] = useState(pr);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const product=props.product;
+  const product = props.product;
+  let rate = product?.rate;
 
-  const convert=()=>{
+  const convert = () => {
     try {
-      const p=convertCurrency(props.currency,price)
-      return p
+      const p = convertCurrency(props.currency, price);
+      return p;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
-  useEffect(()=>{
-    const p=convert();
-    setDisplayPrice(p)
-  },[props.currency,convertCurrency])
-  const [displayPrice,setDisplayPrice]=useState(price)
+  };
+  useEffect(() => {
+    const p = convert();
+    setDisplayPrice(p);
+  }, [props.currency, convertCurrency]);
+  const [displayPrice, setDisplayPrice] = useState(price);
   return (
     <div
       className={`flex transition duration-500	 font-poppins hover:shadow-2xl shadow-slate-600  bg-white font-normal justify-around rounded-md border border-slate-300 py-6 xs:w-[22rem] w-auto my-4 mx-auto md:mx-3 ${props.className}`}
@@ -46,26 +48,23 @@ const ProductCard = ({...props }) => {
           product={props.product}
         />
       )}
-      <div className="w-1/2">
+      <div className="w-1/2" key={product.uid}>
         <img
           src={product?.image}
           alt="phone"
           className="cursor-pointer w-32 h-28 object-contain mx-4"
           onClick={() => {
-            navigate(`/products/${12345}`);
+            navigate(`/products/${product?.uid}`);
           }}
         />
         <div className="flex justify-center mt-8">
-          <img
-            src={product?.image}
-            alt="phone"
-            className="w-14 h-20 border border-slate-300 mx-3"
-          />
-          <img
-            src={product?.image}
-            alt="phone"
-            className="w-14 h-20 border border-slate-300 mx-3"
-          />
+          {product?.more_imgs?.map((image) => (
+            <img
+              src={image}
+              alt="phone"
+              className="w-14 h-20 border border-slate-300 mx-3"
+            />
+          ))}
         </div>
       </div>
       <div className="w-1/2">
@@ -79,9 +78,21 @@ const ProductCard = ({...props }) => {
           {product?.title}
         </h1>
         <p>{product?.category}</p>
-        <img src={rates} alt="phone" />
+        <div className="flex my-2">
+          {[...Array(5)].map((_, i) => {
+            if (rate > 0) {
+              rate--;
+              return (
+                <img key={i} src={rate1} alt="phone" className="w-6 mx-0.5" />
+              );
+            }
+            return (
+              <img key={i} src={rate0} alt="phone" className="w-6 mx-0.5" />
+            );
+          })}
+        </div>
         <p className="flex font-bold text-red-600">
-        {displayPrice?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          {displayPrice?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           <del className="text-gray-500 ml-3"></del>
         </p>
         <div className="flex items-center">
@@ -92,10 +103,14 @@ const ProductCard = ({...props }) => {
           className="flex items-center cursor-pointer"
           onClick={() => {
             dispatch(addProduct(product));
-            showSuccessMessage('Product has been added to compare')
+            showSuccessMessage('Product has been added to compare');
           }}
         >
-          <img src={compare} alt="phone" className="invert rounded-full hover:invert-0 transition duration-500 hover:bg-slate-500 w-10 mr-2" />
+          <img
+            src={compare}
+            alt="phone"
+            className="invert rounded-full hover:invert-0 transition duration-500 hover:bg-slate-500 w-10 mr-2"
+          />
           <p className="w-full">{t('CompareProduct')}</p>
         </div>
         <button

@@ -56,13 +56,19 @@ const ProductsPage = () => {
     'shoes',
   ];
   const dispatch=useDispatch();
-  const [setCurrentAmount, convertedAmount,currency] = useOutletContext();
+  const [searchProducts,setCurrentAmount, convertedAmount,currency] = useOutletContext();
   useEffect(()=>{
     dispatch(getAllProducts())
   },[dispatch])
-  const {products,isLoading}=useSelector((state)=>state.allProducts);
+  let {products,isLoading}=useSelector((state)=>state.allProducts);
+  if(searchProducts){
+    products=searchProducts
+  }
   return (
     <div className="my-10 w-full flex xs:flex-wrap justify-around">
+      <div className='bg-gray-500 w-full mx-3 text-center mb-3 sm:hidden'>
+        Filter
+      </div>
       <div className="w-1/4 xs:w-full xs:mx-2">
         <SideCard categories={categories} header={t('ShopByCategory')} />
         <SideCard categories={brands} header={t('ByBrands')} />
@@ -147,23 +153,26 @@ const ProductsPage = () => {
           </select>
         </div>
         {isLoading?<Loader />:(
-        <><div className="grid sm:grid-cols-3 xs:grid-cols-1 w-full">
-            {products.map((product) => {
-              return (
-                <ProductCard
-                  setCurrentAmount={setCurrentAmount}
-                  convertedAmount={convertedAmount}
-                  product={product}
-                  currency={currency}
-                  key={product.id} //
-                />
-              );
-            }
-            )}
-          </div><div className="md:w-full flex justify-between py-3 bg-white rounded-md xs:px-6 xs:mx-6 px-3">
-              <p>Showing 1 of 2</p>
-              <p>{'>'}</p>
-            </div></>
+      <div className="grid sm:grid-cols-3 xs:grid-cols-1 w-full">
+            {products.length>0?(
+              products.map((product) => {
+                return (
+                  <ProductCard
+                    setCurrentAmount={setCurrentAmount}
+                    convertedAmount={convertedAmount}
+                    product={product}
+                    currency={currency}
+                    key={product.uid} //
+                  />
+                );
+              }
+              )
+              // <div className="md:w-full flex justify-between py-3 bg-white rounded-md xs:px-6 xs:mx-6 px-3">
+              // <p>Showing 1 of 2</p>
+              // <p>{'>'}</p>
+            // </div>
+            ):<h1 className='text-center my-32 ml-20 text-3xl'>No products found</h1>}
+          </div>
         )}
       </div>
     </div>
