@@ -1,17 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from '../api/axiosInstance'
+import axios from '../api/axiosInstance';
 
-export const homeData = createAsyncThunk(
-  'homedata/fetchAll',
-  async (_, { rejectWithValue }) => {
+export const addToCart = createAsyncThunk(
+  'cart/add',
+  async ({ cart }, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/page/home');
+      const response = await axios.post('/user/cart/add', cart);
       return response.data;
-      
     } catch (error) {
       return rejectWithValue(error.response);
     }
-  },
+  }
 );
 
 const initialState = {
@@ -19,23 +18,23 @@ const initialState = {
   isLoading: false,
 };
 
-export const getHomeDataSlice = createSlice({
-  name: 'homeData',
+export const addToCartSlice = createSlice({
+  name: 'addToCart',
   initialState,
   extraReducers: {
-    [homeData.pending]: (state) => {
+    [addToCart.pending]: (state) => {
       state.isLoading = true;
     },
-    [homeData.fulfilled]: (state, { payload }) => {
+    [addToCart.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
       state.data = payload;
       state.errorMessage = null;
     },
-    [homeData.rejected]: (state, action) => {
+    [addToCart.rejected]: (state, action) => {
       state.isLoading = false;
       state.errorMessage = action.payload?.error;
     },
   },
 });
 
-export default getHomeDataSlice.reducer;
+export default addToCartSlice.reducer;

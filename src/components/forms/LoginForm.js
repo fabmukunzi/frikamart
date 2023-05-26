@@ -3,12 +3,13 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import google from '../../assets/images/logos_google-icon.svg';
 import { loginSchema } from '../../validations/login';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../features/auth/Login';
-import { showErrorMessage, showSuccessMessage } from '../../utils/toast';
+import { showErrorMessage } from '../../utils/toast';
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
+  const {isLoading}=useSelector((state)=>state.login)
   const {
     register,
     handleSubmit,
@@ -20,10 +21,10 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const onSubmit = async (userData) => {
     try {
-      const response = await dispatch(login(userData)).unwrap();
+      await dispatch(login(userData)).unwrap();
       navigate('/')
     } catch (error) {
-      showErrorMessage(error?.data?.error_msg || 'error');
+      showErrorMessage(error.message || 'error');
     }
   };
   return (
@@ -42,7 +43,7 @@ const LoginForm = () => {
             name="email"
             {...register('username')}
             placeholder="Enter your email address"
-            className="border border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
+            className="border outline-none border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
           />
           {errors.username && (
             <p className="text-red-500 mb-4">{errors.username.message}</p>
@@ -52,7 +53,7 @@ const LoginForm = () => {
             type="password"
             name="password"
             {...register('password')}
-            className="border border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
+            className="border outline-none border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
             placeholder="Enter your password"
           />
           {errors.password && (
@@ -61,7 +62,7 @@ const LoginForm = () => {
           <button
             type="submit"
             className="border border-gray-400 my-2 shadow shadow-gray-400 bg-[#08F46C] py-2 mb-4 px-3 rounded-md"
-          >
+          disabled={isLoading}>
             Login
           </button>
         </form>

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import searchIcon from '../assets/images/material-symbols_search.svg';
 import compareProducts from '../assets/images/fluent_branch-compare-20-filled.png';
 import wishList from '../assets/images/Vector (4).svg';
 import account from '../assets/images/fluent-mdl2_profile-search.svg';
-import cart from '../assets/images/ic_baseline-add-shopping-cart.svg';
+import cartImage from '../assets/images/ic_baseline-add-shopping-cart.svg';
 import category from '../assets/images/bxs_category.svg';
 import menu from '../assets/images/icons8-menu.svg';
 import close from '../assets/images/icons8-close-120.png';
@@ -12,12 +12,13 @@ import { useTranslation } from 'react-i18next';
 import Categories from './Categories';
 import { searchProducts } from '../features/products/Search';
 import { useDispatch, useSelector } from 'react-redux';
+import { getCart } from '../features/cart/getCart';
 
 const Header = ({ onSearch, onCurrencyChange }) => {
   const [showMenu, setShowMenu] = useState(false);
-  const [showCategories, setShowCategories] = useState(false);
   const [searchItem, setSearchItem] = useState(null);
   const [showSearchItems, setShowSearchItem] = useState(false);
+  const [scale, setScale] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,12 +27,16 @@ const Header = ({ onSearch, onCurrencyChange }) => {
     i18n.changeLanguage(lng);
   };
   const { products } = useSelector((state) => state.searchProducts);
+  const { cart } = useSelector((state) => state.cart);
+  useEffect(() => {
+    dispatch(getCart());
+  }, [dispatch]);
   const navItems = [
     { name: `${t('Home')}`, path: '/' },
     { name: `${t('Stores')}`, path: '/stores' },
     { name: `${t('Made')} ${t('In')} AFRICA`, path: '/madeinafrica' },
     { name: `${t('Products')}`, path: '/products' },
-    { name: `${t('Blog')}`, path: '/blog' },
+    // { name: `${t('Blog')}`, path: '/blog' },
     { name: `${t('Contact')}`, path: '/contact' },
   ];
   const others = [
@@ -66,11 +71,15 @@ const Header = ({ onSearch, onCurrencyChange }) => {
           >
             <option value="RWF">RWF</option>
             <option value="USD">USD</option>
+            <option value="GNF">GNF</option>
           </select>
         </div>
       </div>
       <div className="top-nav1 flex xs:flex-wrap justify-between xs:pb-14 bg-[#2C3E50] text-white text-sm py-4">
-        <h1 className="md:text-xl md:ml-6 font-bold  text-lg xs:ml-4">
+        <h1
+          className="md:text-xl md:ml-6 font-bold cursor-pointer text-lg xs:ml-4"
+          onClick={() => navigate('/')}
+        >
           FRIKAMART
         </h1>
         <div className="md:w-[36%]">
@@ -103,13 +112,13 @@ const Header = ({ onSearch, onCurrencyChange }) => {
                     dispatch(searchProducts({ product: searchItem }));
                   onSearch(products);
                   setShowSearchItem(false);
-                  navigate(`/products`)
+                  navigate(`/products`);
                 }}
                 className="bg-[#08F46C] rounded-md xs:h-8 xs:w-10 cursor-pointer"
               />
             </span>
           </div>
-          <div className="bg-white text-black w-[32.6rem] xs:w-[64%] xs:inherit xs:right-[2.7rem] xs:top-[5.5rem] absolute">
+          <div className="bg-white text-black text-xs w-[32.6rem] xs:w-[64%] xs:inherit xs:right-[2.7rem] xs:top-[5.5rem] absolute">
             {showSearchItems &&
               products?.map((product) => (
                 <h1
@@ -119,7 +128,7 @@ const Header = ({ onSearch, onCurrencyChange }) => {
                       dispatch(searchProducts({ product: searchItem }));
                     setShowSearchItem(false);
                     onSearch(products);
-                    navigate(`/products`)
+                    navigate(`/products`);
                   }}
                 >
                   {product.title}
@@ -172,45 +181,46 @@ const Header = ({ onSearch, onCurrencyChange }) => {
             onClick={() => navigate('/cart')}
           >
             <img
-              src={cart}
+              src={cartImage}
               alt="compare"
               className="w-8 h-8 xs:w-6 xs:h-6 md:mx-3"
             />
             <p className="xs:hidden">
               <span className="bg-[#D9D9D9] px-5 text-black text-center">
-                {' '}
-                2 <br />
+                {cart.Cart?.length}
+                <br />
               </span>
-              <span>$100.00</span>
+              <span>{cart?.TotalPrice}</span>
             </p>
           </div>
         </div>
       </div>
-      <div className="bg-[#678385] xs:hidden flex justify-around py-4 text-white font-semibold text-base items-center w-screen">
-        <div className="flex w-1/10">
+      <div className="bg-[#678385] xs:hidden flex justify-around py-4 text-white font-semibold text-xs items-center w-screen">
+        <div className="flex w-1/6">
           <img src={category} alt="categories" className="w-8 h-8 mx-3" />
           <button
             className="bg-inherit"
-            onClick={() => setShowCategories(!showCategories)}
+            onMouseOver={() => setScale(true)}
+            onMouseLeave={() => setScale(false)}
           >
-            {t('ShopByCategory')}
+            {t('Category')}
           </button>
         </div>
-        <div className="p-0.5 pb-10 bg-white"></div>
-        <div className="main-nav overflow-scroll mx-2">
+        {/* <div className="p-0.5 pb-10 bg-white"></div> */}
+        <div className="main-nav overflow-scroll mx-1">
           <ul className="flex">
             {navItems.map((item) => (
-              <li key={item.name} className="mx-2">
+              <li key={item.name} className="mx-3">
                 <Link to={item.path}>{item.name}</Link>
               </li>
             ))}
           </ul>
         </div>
-        <div className="p-0.5 pb-10 bg-white"></div>
+        {/* <div className="p-0.5 pb-10 bg-white"></div> */}
         <div>
           <ul className="flex w-full">
             {others.map((item) => (
-              <li key={item.name} className="mx-2">
+              <li key={item.name} className="mx-3">
                 <Link to={item.path}>{item.name}</Link>
               </li>
             ))}
@@ -218,14 +228,17 @@ const Header = ({ onSearch, onCurrencyChange }) => {
         </div>
       </div>
       {showMenu && (
-        <div className="bg-[#678385] translate-x-0	 absolute z-[1] sm:hidden text-center py-4 text-white font-normal text-lg items-center w-screen">
+        <div className="bg-[#678385] translate-x-0 absolute z-[1] sm:hidden text-center py-4 text-white font-normal text-lg items-center w-screen">
           <div className="block">
-          <button
-            className="bg-inherit"
-            onClick={() => {setShowCategories(!showCategories); navigate('/categories')}}
-          >
-            {t('ShopByCategory')}
-          </button>
+            <button
+              className="bg-inherit"
+              onClick={() => {
+                setScale(!scale);
+                navigate('/categories');
+              }}
+            >
+              {t('ShopByCategory')}
+            </button>
           </div>
           <div className="main-nav">
             <ul className="block">
@@ -286,13 +299,13 @@ const Header = ({ onSearch, onCurrencyChange }) => {
         </div>
       )}
       <div className="bg-[#D9D9D9] py-4">
-        <h1 className="uppercase text-xl font-bold text-center">{`${t('Home')}${
+        <h1 className="uppercase text-lg  text-center">{`${t('Home')}${
           location.pathname !== '/'
             ? `/ ${t(location.pathname?.split('/')[1])}`
             : ''
         }`}</h1>
       </div>
-      {showCategories && <Categories />}
+      {<Categories onSearch={onSearch} scale={scale} />}
     </div>
   );
 };

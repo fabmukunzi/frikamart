@@ -1,41 +1,40 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from '../api/axiosInstance'
+import axios from '../api/axiosInstance';
 
-export const homeData = createAsyncThunk(
-  'homedata/fetchAll',
+export const getCart = createAsyncThunk(
+  'cart/getAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/page/home');
+      const response = await axios.get('/user/cart/view');
       return response.data;
-      
     } catch (error) {
       return rejectWithValue(error.response);
     }
-  },
+  }
 );
 
 const initialState = {
-  data: [],
+  cart: [],
   isLoading: false,
 };
 
-export const getHomeDataSlice = createSlice({
-  name: 'homeData',
+export const getCartSlice = createSlice({
+  name: 'cart',
   initialState,
   extraReducers: {
-    [homeData.pending]: (state) => {
+    [getCart.pending]: (state) => {
       state.isLoading = true;
     },
-    [homeData.fulfilled]: (state, { payload }) => {
+    [getCart.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      state.data = payload;
+      state.cart = payload;
       state.errorMessage = null;
     },
-    [homeData.rejected]: (state, action) => {
+    [getCart.rejected]: (state, action) => {
       state.isLoading = false;
       state.errorMessage = action.payload?.error;
     },
   },
 });
 
-export default getHomeDataSlice.reducer;
+export default getCartSlice.reducer;

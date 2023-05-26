@@ -1,21 +1,34 @@
-import React from 'react';
-import phone from '../../assets/images/IMG_0031-removebg-preview 1.svg';
+/* eslint-disable no-unused-vars */
+import React, { useEffect } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import ProductCard from './ProductCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCart } from '../../features/cart/getCart';
+import close from '../../assets/images/icons8-close.svg'
+import { removeCartItem } from '../../features/cart/removeItem';
+import { showErrorMessage, showSuccessMessage } from '../../utils/toast';
+import Loader from '../Loader';
 
 const Cart = () => {
-  const [setCurrentAmount, convertedAmount] = useOutletContext();
+  const [searchProducts, setCurrentAmount, convertedAmount, currency] =
+    useOutletContext();
+  const { cart,isLoading } = useSelector((state) => state.cart);
+  const data = useSelector((state) => state.removeCartItem.cart);
   const navigate = useNavigate();
-  const items = [
-    { name: 'Partel', price: 600, quantity: 2, image: phone, store: 'iPhone' },
-    { name: 'Watch', price: 700, quantity: 2, image: phone, store: 'Samsung' },
-  ];
-  const relatedProducts = ['1', '2', '3', '4', '5', '6'];
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCart()).unwrap();
+  }, [dispatch]);
+  let items
+  // if(data.cart?.length>0)
+  // items=data.cart
+  items = cart?.Cart;
+  // const relatedProducts = ['1', '2', '3', '4', '5', '6'];
   return (
     <div>
-      <div className="">
-        {items.length > 0 ? (
-          <div className="bg-[#D9D9D9] flex justify-between w-5/6 xs:w-screen py-3 mt-8 mx-auto xs:px-4 px-12">
+    {(isLoading||data?.isLoading?<Loader />:(
+        <div className="">
+        {items?.length > 0 ? (
+          <div className="bg-[#D9D9D9] flex justify-around w-5/6 xs:w-screen py-3 mt-8 mx-auto xs:px-4">
             <p className="md:w-2/6">Product name</p>
             <p>Price</p>
             <p>Quantity</p>
@@ -29,37 +42,57 @@ const Cart = () => {
             </button>
           </div>
         )}
-        {items.map((item) => (
-          <div className="flex bg-white border-b xs:text-xs border-[#D9D9D9] items-center justify-between w-5/6 xs:w-screen py-3 md:mx-auto md:px-6">
-            <div className="flex items-center xs:w-14">
-              <img src={item.image} alt="phone" className="w-28 h-32" />
-              <div>
-                <p>{item.name}</p>
-                <p>
-                  PRODUCT FROM <span>{item.store}</span>
-                </p>
-              </div>
-            </div>
+        {items?.map((item) => (
+          <div className="flex bg-white border-b xs:text-xs border-[#D9D9D9] xs:justify-around  items-center md:gap-20 w-5/6 xs:w-screen py-3 md:mx-auto">
+          <div className="flex justify-between items-center w-[35rem]">
             <div>
-              <p className="text-red-500 ml-32 xs:ml-20">
-                ${item.price} <del className="text-slate-400">$700</del>
+              <img
+                src={item.image}
+                alt="phone"
+                className="w-28 h-24 object-contain"
+              />
+            </div>
+            <div className="md:w-4/5 ml-4">
+              <p>{item.title}</p>
+              <p>
+                PRODUCT FROM <span>{item.store}</span>
               </p>
             </div>
-            <div className="flex py-1 gap-2 text-lg px-2 justify-between">
-              <input
-                type="number"
-                className="w-14 xs:w-8 border text-center"
-                defaultValue={item.quantity}
-                min="1"
-              />
-              <button type="submit">Apply</button>
-            </div>
-            <div className="xs:mr-3">
-              <p>${item.price * item.quantity}</p>
-            </div>
           </div>
+          <div className="">
+            <p className="text-red-500">
+              {item?.price} <del className="text-slate-400 hidden">$700</del>
+            </p>
+          </div>
+          <div className="flex items-center py-1 gap-2 text-lg px-2 justify-between">
+            <input
+              type="number"
+              className="w-14 xs:w-8 border text-center"
+              defaultValue={item.count}
+              min="1"
+            />
+            <button type="submit">Apply</button>
+          </div>
+          <div className="xs:mr-3 flex gap-3">
+            <p>
+              {item?.price.split(' ')[0] +
+                ' ' +
+                item?.price.split(' ')[1] * item.count}
+            </p>
+            <div>
+          <img src={close} alt='remove' className='w-5 cursor-pointer invert mr-4' onClick={()=>{
+            try {
+              dispatch(removeCartItem({id:item.puid})).unwrap()
+            showSuccessMessage('Product removed from cart')
+            } catch (error) {
+              showErrorMessage('failed to remove')
+            }
+          }} />
+          </div>
+          </div>
+        </div>
         ))}
-        {items.length > 0 && (
+        {items?.length > 0 && (
           <div className="flex xs:flex-wrap-reverse justify-between md:mx-[7.5rem] md:px-10 bg-white">
             <div className="flex md:flex-col xs:mx-2 gap-4 font-bold justify-items-start xs:justify-center my-4">
               <label htmlFor="coupon" className="">
@@ -77,15 +110,15 @@ const Cart = () => {
               <div className="text-lg font-bold bg-[#D9D9D9] w-full xs:w-screen px-4">
                 <div className="flex justify-between border-b border-slate-500 py-3">
                   <p>Subtotal</p>
-                  <p>$1200</p>
+                  <p>{cart.TotalPrice}</p>
                 </div>
                 <div className="flex justify-between border-b border-slate-500 py-3">
                   <p>Tax</p>
-                  <p>$200</p>
+                  <p>RWF 0</p>
                 </div>
                 <div className="flex justify-between border-b py-3">
                   <p>Total</p>
-                  <p>$1400</p>
+                  <p>{cart.TotalPrice}</p>
                 </div>
               </div>
               <div className="w-full flex xs:flex-wrap justify-between">
@@ -103,18 +136,19 @@ const Cart = () => {
           </div>
         )}
       </div>
+    ))}
       <div>
         <h1 className="xs:text-center font-bold sm:ml-14 mt-4">
           RELATED PRODUCTS
         </h1>
-        <div className="grid grid-cols-3 xs:grid-cols-1 mx-10 xs:mx-2">
-          {relatedProducts.map(() => (
+        {/* <div className="grid grid-cols-3 xs:grid-cols-1 mx-10 xs:mx-2">
+          {relatedProducts?.map(() => (
             <ProductCard
               setCurrentAmount={setCurrentAmount}
               convertedAmount={convertedAmount}
             />
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );

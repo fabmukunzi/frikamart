@@ -62,6 +62,7 @@ const ProductsPage = () => {
   },[dispatch])
   let {products,isLoading}=useSelector((state)=>state.allProducts);
   if(searchProducts){
+    console.log(searchProducts,'========>')
     products=searchProducts
   }
   return (

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../api/axiosInstance'
 
-export const homeData = createAsyncThunk(
-  'homedata/fetchAll',
+export const getAllStores = createAsyncThunk(
+  'stores/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/page/home');
+      const response = await axios.get('/store');
       return response.data;
       
     } catch (error) {
@@ -15,27 +15,27 @@ export const homeData = createAsyncThunk(
 );
 
 const initialState = {
-  data: [],
+  stores: [],
   isLoading: false,
 };
 
-export const getHomeDataSlice = createSlice({
-  name: 'homeData',
+export const getStoresSlice = createSlice({
+  name: 'product',
   initialState,
   extraReducers: {
-    [homeData.pending]: (state) => {
+    [getAllStores.pending]: (state) => {
       state.isLoading = true;
     },
-    [homeData.fulfilled]: (state, { payload }) => {
+    [getAllStores.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      state.data = payload;
+      state.stores = payload;
       state.errorMessage = null;
     },
-    [homeData.rejected]: (state, action) => {
+    [getAllStores.rejected]: (state, { payload }) => {
       state.isLoading = false;
-      state.errorMessage = action.payload?.error;
+      state.errorMessage = payload;
     },
   },
 });
 
-export default getHomeDataSlice.reducer;
+export default getStoresSlice.reducer;

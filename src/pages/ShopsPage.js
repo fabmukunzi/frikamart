@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ShopCard from '../components/shops/ShopCard';
 import searchIcon from '../assets/images/material-symbols_search.svg';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllStores } from '../features/stores/getAll';
 
 const ShopsPage = () => {
   const { t } = useTranslation();
+  const {stores}=useSelector((state)=>state.stores);
+  const dispatch=useDispatch();
+  useEffect(()=>{
+    dispatch(getAllStores())
+  },[dispatch])
   return (
     <div className='my-6'>
       <div className='relative flex py-3'>
@@ -20,9 +27,7 @@ const ShopsPage = () => {
           />
       </div>
       <div className="grid grid-cols-3 xs:grid-cols-1 xs:gap-10 gap-20 mx-3 md:mx-20">
-        <ShopCard />
-        <ShopCard />
-        <ShopCard />
+        {stores?.map((store)=><ShopCard data={store} />)}
       </div>
     </div>
   );

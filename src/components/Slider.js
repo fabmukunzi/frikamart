@@ -7,11 +7,10 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Slider({ ...props }) {
   const dataSlider = props?.data?props?.data:[];
-  console.log(dataSlider,'dataslider')
   const { t } = useTranslation();
   const navigate=useNavigate()
   return (
-    <div className="container-slider ">
+    <div className="container-slider">
       <Carousel
         swipeable={true}
         draggable={true}
@@ -27,16 +26,18 @@ export default function Slider({ ...props }) {
         {dataSlider?.map((product) => (
           <div  className="flex px-2 py-4 justify-between">
             <div className="sm:w-40 sm:ml-10 xs:ml-3 my-auto">
-              <p className="uppercase" >{product?.decription}</p>
+              <p className="uppercase text-white" >{product?.title}</p>
               <button onClick={()=>navigate(`/products/${product.uid}`)} className="bg-[#08F46C] hover:invert px-8 py-2 text-lg rounded-md shadow-md mt-4 shadow-black absolute bottom-10">
                 {t('BuyNow')}
               </button>
             </div>
+            <div className='md:m-10'>
             <img
               src={product?.image}
               alt="dress"
-              className="w-80 xs:w-40 mr-5 mt-10"
+              className="xs:w-40 xs:absolute object-contain xs:h-auto w-80 h-80"
             />
+            </div>
           </div>
         ))}
       </Carousel>

@@ -24,14 +24,14 @@ import Loader from '../Loader';
 
 const SingleProduct = () => {
   const { product, isLoading } = useSelector((state) => state.singleProduct);
-  const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
+  const [searchProducts, setCurrentAmount, convertedAmount, currency] = useOutletContext();
   const [showModel, setShowModel] = useState(false);
-  const relatedProducts = ['1', '2', '3', '4', '5', '6'];
   const [price, setPrice] = useState(product?.price);
+  const [currentImage,setCurrentImage]=useState(null)
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { id } = useParams();
-  let rate=product.rate
+  let rate=product.rating
 
   const convert = () => {
     try {
@@ -58,7 +58,7 @@ const SingleProduct = () => {
     <Loader />
   ) : (
     <div>
-      <div className="grid grid-cols-2 xs:grid-cols-1 justify-around xs:mx-auto mx-20 xs:w-full">
+      <div className="grid grid-cols-2 xs:grid-cols-1 mx-10 justify-around xs:mx-auto mr-20 xs:w-full">
         {showModel && (
           <Model
             showModel={showModel}
@@ -68,7 +68,7 @@ const SingleProduct = () => {
           />
         )}
         <div className="flex xs:flex-col-reverse gap-2 items-center xs:mx-6 xs:my-3">
-          <div className="grid grid-cols-2 xs:flex  gap-4">
+          <div className="grid grid-cols-2  gap-4">
             {product?.more_imgs?.map((image) => (
             <img
               key={product?.id}
@@ -81,7 +81,7 @@ const SingleProduct = () => {
           <div>
             <img
               key={product.id}
-              src={product.image}
+              src={currentImage?currentImage:product.image}
               alt="phone"
               className="w-60 xs:h-40 object-contain"
             />
@@ -113,28 +113,31 @@ const SingleProduct = () => {
                 <img src={store} alt="whatsapp" className="w-10 mx-2" />{' '}
                 <span className="text-blue-900">SAM STORE</span>
               </p>
-              <p className="text-2xl my-2 text-red-600">
+              <p className="text-xl my-2 text-red-600">
                 {price || product?.price}{' '}
                 <del className="mx-6 text-slate-500 hidden">$700</del>
               </p>
               <div className="py-[1px] bg-gray-300 w-1/2 my-4"></div>
               <div>
                 {product.attributes?.map((attribute) => (
-                  <div className="flex my-4 text-lg font-bold">
+                  <div className="flex  my-4 text-sm font-bold">
                     <p>{attribute.name}</p>
                     {attribute.type==='color' &&
                       attribute.value?.map((v) => {
                         return(
                         <div
                         style={{backgroundColor: `${v.name}`}}
-                          className={`z-[99] p-4 w-7 h-7 mx-2 rounded-full cursor-pointer`}
+                          className={`z-[40] p-4 w-7 h-7 mx-2 rounded-full cursor-pointer`}
                         >{' '}
                         </div>
                       )})}
                       {attribute.type==='toggle' &&
                       attribute.value?.map((v) => {
                         return(
-                          <div className="bg-[#678385] w-9 text-center py-0.5 mx-3  cursor-pointer">
+                          <div onClick={()=>{
+                            if(v.imgsrc!=='')
+                            setCurrentImage(v.imgsrc)
+                          }} className="bg-[#678385] mb-4 p-1 w-fit text-center py-0.5 mx-3  cursor-pointer">
                           {v.name}
                         </div>
                       )})}
@@ -159,7 +162,7 @@ const SingleProduct = () => {
                     {product.in_stock === -1 ? 'INFINITY' : product.in_stock}
                   </p>
                 </div>
-                <div className="flex items-center">
+                <div className="items-center">
                   <div className="block">
                     <div className="flex items-center">
                       <img src={wish} alt="phone" className="w-8 mr-4" />
@@ -175,7 +178,7 @@ const SingleProduct = () => {
                     </div>
                   </div>
                   <button
-                    className="bg-[#08F46C] px-8 py-2 text-md w-fit xs:p-4 rounded-md ml-4 shadow-md mt-4 shadow-slate-500"
+                    className="bg-[#08F46C] px-8 py-2 text-md w-fit xs:p-4 rounded-md ml-1 shadow-md mt-4 shadow-slate-500"
                     onClick={() => {
                       setShowModel(true);
                     }}
@@ -190,7 +193,7 @@ const SingleProduct = () => {
         <div className="my-4">
           <YoutubeEmbed embedId="WhWc3b3KhnY" />
         </div>
-        <div className="text-xl mx-2">
+        <div className="text-base mx-2">
           <p className="my-3">SKU-: SW-110-A0</p>
           <p className="my-3">
             Categories:{' '}

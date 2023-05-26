@@ -9,7 +9,6 @@ import store from './store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 function App() {
   const { i18n } = useTranslation();
 
@@ -18,7 +17,7 @@ function App() {
       <TranslationContext.Provider value={{ i18n }}>
         <Provider store={store}>
           <ToastContainer />
-        <AppRoutes />
+          <AppRoutes />
         </Provider>
       </TranslationContext.Provider>
     </BrowserRouter>

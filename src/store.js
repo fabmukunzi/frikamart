@@ -5,6 +5,11 @@ import getSingleProductReducer from './features/products/getSingleProduct';
 import searchProductsReducer from './features/products/Search';
 import getHomeDataReducer from './features/home/getHome';
 import loginReducer from './features/auth/Login';
+import getCategoriesReducer from './features/products/category';
+import addToCartReducer from './features/cart/addToCart';
+import getCartReducer from './features/cart/getCart';
+import removeCartItemReducer from './features/cart/removeItem';
+import getStoresReducer from './features/stores/getAll';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +19,11 @@ const store = configureStore({
     searchProducts: searchProductsReducer,
     homeData: getHomeDataReducer,
     login:loginReducer,
+    categories:getCategoriesReducer,
+    addToCart:addToCartReducer,
+    cart:getCartReducer,
+    removeCartItem:removeCartItemReducer,
+    stores:getStoresReducer,
   },
 });
 

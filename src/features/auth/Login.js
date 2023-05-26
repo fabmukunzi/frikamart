@@ -5,21 +5,18 @@ export const login = createAsyncThunk(
   'auth/login',
   async (userData, { rejectWithValue }) => {
     try {
-      console.log(userData, 'userdata');
-      const { data } = await axios.post(`/auth/`,userData);
-      localStorage.setItem('token', data.token);
-      console.log(data);
+      const { data } = await axios.post(`/user/login/`,userData);
+      localStorage.setItem('token', data?.token);
       return data;
     } catch (error) {
-      console.log(error, 'errro');
-      return rejectWithValue(error.response);
+      return rejectWithValue(error.response?.data);
     }
   }
 );
 
 const initialState = {
   isAuthenticated: false,
-  data: null,
+  data: [''],
   isLoading: false,
 };
 

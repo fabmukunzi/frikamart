@@ -1,69 +1,29 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategories } from '../features/products/category';
+import { useNavigate } from 'react-router-dom';
+import { searchProducts } from '../features/products/Search';
 
-const categories = [
-  {
-    id: 'cat001',
-    name: 'Shoes',
-    subCategories: [
-      {
-        id: 'cat001001',
-        name: 'Male shoes',
-        subSubCategories: [
-          {
-            name: 'Mules',
-          },
-          {
-            name: 'Elegant hats',
-          },
-        ],
-      },
-      {
-        id: 'cat001002',
-        name: 'Female shoes',
-        subSubCategories: [
-          {
-            name: 'Mules',
-          },
-          {
-            name: 'Elegant hats',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'cat002',
-    name: 'Clothes',
-    subCategories: [
-      {
-        id: 'cat002001',
-        name: 'Male shoes',
-        subSubCategories: [
-          {
-            name: 'Mules',
-          },
-          {
-            name: 'Elegant hats',
-          },
-        ],
-      },
-      {
-        id: 'cat002002',
-        name: 'Female shoes',
-        subSubCategories: [
-          {
-            name: 'Mules',
-          },
-          {
-            name: 'Elegant hats',
-          },
-        ],
-      },
-    ],
-  },
-];
+const Categories = ({ onSearch, scale }) => {
+  const [show, setShow] = useState(false);
+  const { products } = useSelector((state) => state.searchProducts);
+  const { categories } = useSelector((state) => state.categories);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-const Categories = () => {
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      if (window.screen.width > 500) navigate('/products');
+      else navigate('/categories');
+    });
+    dispatch(getCategories());
+  }, [dispatch, window.onresize]);
+
+  useEffect(() => {
+    setShow(false);
+  }, [scale]);
+
   const [showSubCategory, setShowSubCategory] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [showSubSubCategory, setShowSubSubCategory] = useState(false);
@@ -86,53 +46,95 @@ const Categories = () => {
     }
     setCurrentSubCategory(subcategoryId);
   };
+  useEffect(() => {
+    if (products && products.length !== 0 && products !== '') {
+      setShow(false)
+      onSearch(products);
+    }
+  }, [dispatch, products, scale, onSearch]);
 
   return (
-    <div className="w-full md:ml-5 md:w-1/4 md:absolute bg-white h-fit bg- z-[99] text-xl font-poppins transition duration-1000">
+    <div
+    // onMouseLeave={()=>setShow(false)}
+      className={`${
+        scale
+          ? 'md:-translate-y-[3.7rem]'
+          : 'opacity-0 -translate-y-[3.7rem] xs:hidden -translate-x-[100%]'
+      } ${
+        show
+          ? 'opacity-0 -translate-y-[3.7rem] xs:hidden -translate-x-[100%]'
+          : 'md:-translate-y-[3.7rem]'
+      } w-full transition duration-500 transform md:w-1/4 md:absolute bg-white h-fit bg- z-[999] text-xl font-poppins`}
+    >
       <ul>
-        {categories.map((category) => (
-          <li key={category.id} className="py-">
-            <div className="flex flex-row-reverse border-b w-full  justify-between px-4 items-center">
+        {categories?.map((category) => (
+          <li key={category.uid} className="">
+            <div className="flex hover:bg-[#D9D9D9] flex-row-reverse border-b w-full  justify-between px-4 items-center">
               <span
-                className="cursor-pointer"
-                onClick={() => handleCategoryClick(category.id)}
+                className="py-2 cursor-pointer"
+                onClick={() => handleCategoryClick(category.uid)}
               >
-                {showSubCategory && currentCategory === category.id ? '-' : '+'}
+                {category.subCategories.length > 0
+                  ? showSubCategory && currentCategory === category.uid
+                    ? '-'
+                    : '+'
+                  : ''}
               </span>
-              <span className="">{category.name}</span>
+              <span
+                className="py-2 cursor-pointer"
+                onClick={() => {
+                  setShow(true)
+                  dispatch(searchProducts({ product: category.category_name }));
+                }}
+              >
+                {category.category_name}
+              </span>
             </div>
             <ul
               className={
-                showSubCategory && currentCategory === category.id
+                showSubCategory && currentCategory === category.uid
                   ? ''
                   : 'hidden'
               }
             >
               {category.subCategories?.map((subcategory) => (
-                <li key={subcategory.name} className="">
-                  <div className="flex border-b w-full flex-row-reverse justify-between px-4 items-center">
+                <li key={subcategory.category_name} className="">
+                  <div className="flex hover:bg-[#D9D9D9] border-b w-full flex-row-reverse justify-between px-4 items-center">
                     <span
-                      className="cursor-pointer"
-                      onClick={() => handleSubCategoryClick(subcategory.id)}
+                      className="py-2 cursor-pointer text-xl"
+                      onClick={() => handleSubCategoryClick(subcategory.uid)}
                     >
-                      {showSubSubCategory &&
-                      currentSubCategory === subcategory.id
-                        ? '-'
-                        : '+'}
+                      {subcategory.subCategories?.length > 0
+                        ? showSubSubCategory &&
+                          currentSubCategory === subcategory.uid
+                          ? '-'
+                          : '+'
+                        : ''}
                     </span>
-                    <span className="">{subcategory.name}</span>
+                    <span className="py-2 text-lg cursor-pointer" onClick={() => {
+                  setShow(true)
+                  dispatch(searchProducts({ product: subcategory.category_name }));
+                }}>
+                      {subcategory.category_name}
+                    </span>
                   </div>
                   <ul
                     className={
                       showSubSubCategory &&
-                      currentSubCategory === subcategory.id
+                      currentSubCategory === subcategory.uid
                         ? ''
                         : 'hidden'
                     }
                   >
-                    {subcategory.subSubCategories?.map((subsubcategory) => (
-                      <li key={subsubcategory.name} className="border-b w-full py-2">
-                        {subsubcategory.name}
+                    {subcategory.subCategories?.map((subsubcategory) => (
+                      <li
+                        key={subsubcategory.category_name}
+                        className="border-b hover:bg-[#D9D9D9] cursor-pointer w-full px-4 py-2"
+                        onClick={() => {
+                          setShow(true)
+                          dispatch(searchProducts({ product: subsubcategory.category_name }));
+                        }}>
+                        {subsubcategory.category_name}
                       </li>
                     ))}
                   </ul>

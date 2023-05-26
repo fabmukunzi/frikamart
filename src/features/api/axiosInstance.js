@@ -7,8 +7,7 @@ const axiosInstance = axios.create({
 });
 const requestHandler = (request) => {
   const token = localStorage?.getItem('token') || '';
-  console.log(token,'local token')
-  request.headers.Authorization = `Bearer ${token}`;
+  request.headers.Authorization = token;
   return request;
 };
 
@@ -17,7 +16,7 @@ const responseHandler = (response) => response;
 const errorHandler = (error) => {
   if (error?.response?.status === 401) {
     localStorage.clear();
-    return (window.location.href = '/auth/login');
+    // return (window.location.href = '/auth/login');
   }
   return Promise.reject(error);
 };

@@ -1,26 +1,24 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
-import image from '../../assets/images/Rectangle 14501.png';
 import { useNavigate } from 'react-router-dom';
 
-const ShopCard = () => {
+const ShopCard = ({data}) => {
   const navigate = useNavigate();
   return (
     <div className="w-full bg-white mx-auto rounded-lg font-bold my-2">
-      <img src={image} alt="image1" className="w-full" />
+      <img src={data?.image} alt="image1" className="w-full" />
       <div className="px-4 py-3">
         <div className="flex justify-between my-4">
-          <h1>SAM STORE</h1>
-          <h1>GOLDEN SUPPLIER</h1>
+          <h1>{data?.store_name}</h1>
+          <h1>{data?.rank}</h1>
         </div>
         <p className="my-2">
-          My store give abundant fashion clothes of all kind get your confidence
-          increased with sam store we take care of every looks
+          {data?.description}
         </p>
         <div className="flex justify-between py-2">
           <p>Domain:</p>
           <a href="#" className="text-blue-900">
-            samstore.fk.com
+            {data?.store_url}
           </a>
         </div>
         <button

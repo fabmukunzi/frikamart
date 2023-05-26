@@ -37,7 +37,7 @@ const RegisterForm = () => {
                 name="firstname"
                 {...register('firstname')}
                 placeholder="Enter your firstname address"
-                className="border border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
+                className="border outline-none border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
               />
               {errors.firstname && (
                 <p className="text-red-500 text-sm font-semibold mb-2">
@@ -50,7 +50,7 @@ const RegisterForm = () => {
                 name="lastname"
                 {...register('lastname')}
                 placeholder="Enter your lastname address"
-                className="border border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
+                className="border outline-none border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
               />
               {errors.lastname && (
                 <p className="text-red-500 text-sm font-semibold mb-2">
@@ -63,7 +63,7 @@ const RegisterForm = () => {
                 name="email"
                 {...register('email')}
                 placeholder="Enter your email address"
-                className="border border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
+                className="border outline-none border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm font-semibold mb-2">
@@ -75,7 +75,7 @@ const RegisterForm = () => {
                 type="password"
                 name="password"
                 {...register('password')}
-                className="border border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
+                className="border outline-none border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
                 placeholder="Enter your password"
               />
               {errors.password && (
@@ -89,7 +89,7 @@ const RegisterForm = () => {
                 name="firstname"
                 {...register('phone')}
                 placeholder="Enter your phone number"
-                className="border border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
+                className="border outline-none border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
               />
               {errors.phone && (
                 <p className="text-red-500 text-sm font-semibold mb-2">
@@ -105,7 +105,7 @@ const RegisterForm = () => {
                     name="firstname"
                     {...register('shop')}
                     placeholder="Enter your shop name"
-                    className="border border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
+                    className="border outline-none border-gray-400 py-2 mb-2 shadow shadow-gray-400 focus:outline-none px-3 rounded-md font-normal"
                   />
                   {errors.shop && (
                     <p className="text-red-500 text-sm font-semibold mb-2">
