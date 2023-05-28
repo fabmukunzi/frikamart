@@ -7,7 +7,7 @@ const YoutubeEmbed = ({ embedId }) => (
       width="480"
       height="200"
       src={`https://www.youtube.com/embed/${embedId}`}
-      className="xs:w-screen"
+      className="xs:w-screen xs:px-2"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
       title="Embedded youtube"

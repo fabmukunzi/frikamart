@@ -1,13 +1,15 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: `${process.env.REACT_APP_PRODUCTS_API}`,
-  timeout: 50000,
-  headers: {},
+  baseURL: process.env.REACT_APP_PRODUCTS_API,
+  timeout: 5000, 
 });
+
 const requestHandler = (request) => {
-  const token = localStorage?.getItem('token') || '';
-  request.headers.Authorization = token;
+  const token = localStorage.getItem('token');
+  if (token) {
+    request.headers.Authorization = `${token}`;
+  }
   return request;
 };
 
@@ -16,18 +18,20 @@ const responseHandler = (response) => response;
 const errorHandler = (error) => {
   if (error?.response?.status === 401) {
     localStorage.clear();
-    // return (window.location.href = '/auth/login');
+    // Uncomment the line below if you want to redirect to the login page
+    // window.location.href = '/auth/login';
   }
   return Promise.reject(error);
 };
+
 axiosInstance.interceptors.request.use(
   (request) => requestHandler(request),
-  (error) => errorHandler(error),
+  (error) => errorHandler(error)
 );
 
 axiosInstance.interceptors.response.use(
   (response) => responseHandler(response),
-  (error) => errorHandler(error),
+  (error) => errorHandler(error)
 );
 
 export default axiosInstance;

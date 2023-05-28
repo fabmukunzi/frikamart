@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import searchIcon from '../assets/images/material-symbols_search.svg';
 import compareProducts from '../assets/images/fluent_branch-compare-20-filled.png';
-import wishList from '../assets/images/Vector (4).svg';
+// import wishList from '../assets/images/Vector (4).svg';
 import account from '../assets/images/fluent-mdl2_profile-search.svg';
 import cartImage from '../assets/images/ic_baseline-add-shopping-cart.svg';
 import category from '../assets/images/bxs_category.svg';
@@ -13,13 +13,15 @@ import Categories from './Categories';
 import { searchProducts } from '../features/products/Search';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart } from '../features/cart/getCart';
+import { getCategories } from '../features/products/category';
+import convertCurrency from '../utils/convertCurrency';
 
-const Header = ({ onSearch, onCurrencyChange }) => {
+const Header = ({ onCurrencyChange, currency }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [searchItem, setSearchItem] = useState(null);
   const [showSearchItems, setShowSearchItem] = useState(false);
   const [scale, setScale] = useState(false);
-  const location = useLocation();
+  // const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
@@ -27,9 +29,10 @@ const Header = ({ onSearch, onCurrencyChange }) => {
     i18n.changeLanguage(lng);
   };
   const { products } = useSelector((state) => state.searchProducts);
-  const { cart } = useSelector((state) => state.cart);
+  const { data,totalprice } = useSelector((state) => state.cart.cart);
+  const cart=data;
   useEffect(() => {
-    dispatch(getCart());
+    dispatch(getCart()).unwrap();
   }, [dispatch]);
   const navItems = [
     { name: `${t('Home')}`, path: '/' },
@@ -61,17 +64,27 @@ const Header = ({ onSearch, onCurrencyChange }) => {
             className="bg-inherit mx-4"
             onChange={(event) => changeLanguage(event.target.value)}
           >
-            <option value="en">English</option>
-            <option value="fr">French</option>
+            <option className="text-black" value="en">
+              English
+            </option>
+            <option className="text-black" value="fr">
+              French
+            </option>
           </select>
 
           <select
             onChange={(event) => onCurrencyChange(event.target.value)}
             className="bg-inherit"
           >
-            <option value="RWF">RWF</option>
-            <option value="USD">USD</option>
-            <option value="GNF">GNF</option>
+            <option className="text-black" value="RWF">
+              RWF
+            </option>
+            <option className="text-black" value="USD">
+              USD
+            </option>
+            <option className="text-black" value="GNF">
+              GNF
+            </option>
           </select>
         </div>
       </div>
@@ -101,7 +114,7 @@ const Header = ({ onSearch, onCurrencyChange }) => {
                   dispatch(searchProducts({ product: event.target.value }));
                 setShowSearchItem(true);
               }}
-              className="w-[35rem] text-black pl-3 xs:w-60 xs:ml-3 text-left rounded-md"
+              className="w-[35rem] outline-none text-black pl-3 xs:w-60 xs:ml-3 text-left rounded-md"
             />
             <span className="ml-[-35px] rounded-md">
               <img
@@ -110,9 +123,10 @@ const Header = ({ onSearch, onCurrencyChange }) => {
                 onClick={() => {
                   searchItem &&
                     dispatch(searchProducts({ product: searchItem }));
-                  onSearch(products);
+                  // onSearch(products);
+                  navigate(`/search/${searchItem}`);
                   setShowSearchItem(false);
-                  navigate(`/products`);
+                  // navigate(`/products`);
                 }}
                 className="bg-[#08F46C] rounded-md xs:h-8 xs:w-10 cursor-pointer"
               />
@@ -127,8 +141,8 @@ const Header = ({ onSearch, onCurrencyChange }) => {
                     searchItem &&
                       dispatch(searchProducts({ product: searchItem }));
                     setShowSearchItem(false);
-                    onSearch(products);
-                    navigate(`/products`);
+                    // onSearch(products);
+                    navigate(`/search/${searchItem}`);
                   }}
                 >
                   {product.title}
@@ -144,25 +158,25 @@ const Header = ({ onSearch, onCurrencyChange }) => {
             <img
               src={compareProducts}
               alt="compare"
-              className="w-8 h-8 xs:w-6 xs:h-6 md:mx-3"
+              className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
             />
             <span className="xs:hidden">
               {t('Compare')} <br /> {t('Product')}
             </span>
           </div>
-          <div
+          {/* <div
             className="flex items-center mx-4 xs:mx-2 cursor-pointer"
             onClick={() => navigate('/wishlist')}
           >
             <img
               src={wishList}
               alt="compare"
-              className="w-8 h-8 xs:w-6 xs:h-6 md:mx-3"
+              className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
             />
             <span className="xs:hidden">
               {t('Favorite')} <br /> {t('Wishlist')}
             </span>
-          </div>
+          </div> */}
           <div
             className="flex items-center mx-4 xs:mx-2 cursor-pointer"
             onClick={() => navigate('/auth/login')}
@@ -170,7 +184,7 @@ const Header = ({ onSearch, onCurrencyChange }) => {
             <img
               src={account}
               alt="compare"
-              className="w-8 h-8 xs:w-6 xs:h-6 md:mx-3"
+              className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
             />
             <span className="xs:hidden">
               {t('Login')} <br /> {t('my account')}
@@ -183,31 +197,37 @@ const Header = ({ onSearch, onCurrencyChange }) => {
             <img
               src={cartImage}
               alt="compare"
-              className="w-8 h-8 xs:w-6 xs:h-6 md:mx-3"
+              className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
             />
             <p className="xs:hidden">
               <span className="bg-[#D9D9D9] px-5 text-black text-center">
-                {cart.Cart?.length}
+                {cart?.length}
                 <br />
               </span>
-              <span>{cart?.TotalPrice}</span>
+              <span>
+                {convertCurrency(currency, totalprice)
+                  ?.toString()
+                  ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              </span>
             </p>
           </div>
         </div>
       </div>
       <div className="bg-[#678385] xs:hidden flex justify-around py-4 text-white font-semibold text-xs items-center w-screen">
         <div className="flex w-1/6">
-          <img src={category} alt="categories" className="w-8 h-8 mx-3" />
+          <img src={category} alt="categories" className="w-7 h-7 mx-3" />
           <button
             className="bg-inherit"
-            onMouseOver={() => setScale(true)}
-            onMouseLeave={() => setScale(false)}
+            onClick={() => {
+              setScale(!scale);
+              dispatch(getCategories());
+            }}
           >
             {t('Category')}
           </button>
         </div>
         {/* <div className="p-0.5 pb-10 bg-white"></div> */}
-        <div className="main-nav overflow-scroll mx-1">
+        <div className="main-nav mx-1">
           <ul className="flex">
             {navItems.map((item) => (
               <li key={item.name} className="mx-3">
@@ -235,6 +255,7 @@ const Header = ({ onSearch, onCurrencyChange }) => {
               onClick={() => {
                 setScale(!scale);
                 navigate('/categories');
+                dispatch(getCategories());
               }}
             >
               {t('ShopByCategory')}
@@ -294,18 +315,19 @@ const Header = ({ onSearch, onCurrencyChange }) => {
             >
               <option value="RWF">RWF</option>
               <option value="USD">USD</option>
+              <option value="GNF">GNF</option>
             </select>
           </div>
         </div>
       )}
-      <div className="bg-[#D9D9D9] py-4">
+      {/* <div className="bg-[#D9D9D9] py-4">
         <h1 className="uppercase text-lg  text-center">{`${t('Home')}${
           location.pathname !== '/'
             ? `/ ${t(location.pathname?.split('/')[1])}`
             : ''
         }`}</h1>
-      </div>
-      {<Categories onSearch={onSearch} scale={scale} />}
+      </div> */}
+      {<Categories scale={scale} />}
     </div>
   );
 };

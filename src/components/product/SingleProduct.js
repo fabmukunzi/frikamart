@@ -21,35 +21,48 @@ import { useOutletContext, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import convertCurrency from '../../utils/convertCurrency';
 import Loader from '../Loader';
+import QuoteRequestForm from '../quoteModel';
 
 const SingleProduct = () => {
   const { product, isLoading } = useSelector((state) => state.singleProduct);
-  const [searchProducts, setCurrentAmount, convertedAmount, currency] = useOutletContext();
+  const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
+  const uid = product?.data?.uid;
   const [showModel, setShowModel] = useState(false);
-  const [price, setPrice] = useState(product?.price);
-  const [currentImage,setCurrentImage]=useState(null)
+  const [showForm, setShowForm] = useState(false);
+  const [price, setPrice] = useState(product?.data?.price);
+  const [currentImage, setCurrentImage] = useState(null);
+  const { id } = useParams();
+  const [cart, setCart] = useState({ uid: id, attributes: [] });
+  const [bg, setBg] = useState(false);
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { id } = useParams();
-  let rate=product.rating
+  let rate = product?.data?.rating;
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  });
+  const handleRequestQuote = () => {
+    setShowForm(true);
+  };
+  const handleCloseForm = () => {
+    setShowForm(false);
+  };
+  const handleAttributeChange = (attribute, value) => {
+    const isSelected = cart.attributes.some((attr) => attr.name === attribute);
 
-  const convert = () => {
-    try {
-      const p = convertCurrency(currency, price);
-      return p;
-    } catch (error) {
-      console.log(error);
+    if (isSelected) {
+      setCart((prevCart) => ({
+        ...prevCart,
+        attributes: prevCart.attributes.filter(
+          (attr) => attr.name !== attribute
+        ),
+      }));
+    } else {
+      setCart((prevCart) => ({
+        ...prevCart,
+        attributes: [...prevCart.attributes, { name: attribute, value }],
+      }));
     }
   };
-  useEffect(() => {
-    const p = convert();
-    setPrice(p);
-  }, [currency]);
-  useEffect(() => {
-    if (product.price) {
-      setPrice(product?.price);
-    }
-  }, [isLoading]);
 
   useEffect(() => {
     dispatch(getSingleProduct({ productId: id }));
@@ -64,110 +77,148 @@ const SingleProduct = () => {
             showModel={showModel}
             title="Confirm to add item to cart"
             setShowModel={setShowModel}
-            product={product}
+            product={product?.data}
+            cart={cart}
           />
         )}
         <div className="flex xs:flex-col-reverse gap-2 items-center xs:mx-6 xs:my-3">
           <div className="grid grid-cols-2  gap-4">
-            {product?.more_imgs?.map((image) => (
-            <img
-              key={product?.id}
-              src={image}
-              alt="phone"
-              className="w-14 xs:w-80 h-24 object-contain border border-slate-400 md:mx-3"
-            />
+            {product?.data?.more_imgs?.map((image) => (
+              <img
+                key={product?.data?.id}
+                src={image}
+                alt="phone"
+                className="w-14 h-fit xs:w-48 xs:h-[8.17rem] object-contain border border-slate-400 md:mx-3"
+              />
             ))}
           </div>
           <div>
             <img
-              key={product.id}
-              src={currentImage?currentImage:product.image}
+              key={product?.data?.uid}
+              src={currentImage ? currentImage : product?.data?.image}
               alt="phone"
-              className="w-60 xs:h-40 object-contain"
+              className="w-60 xs:w-[25rem] xs:h-60 object-contain"
             />
           </div>
         </div>
         <div className="xs:mx-4">
           <div className="font-bold">
-            <h1 className="text-xl mt-8">{product?.title}</h1>
+            <h1 className="text-xl mt-8">{product?.data?.title}</h1>
             <div className="flex items-center">
               <h1 className="my-2">
                 BRAND: <span className="text-red-700">IPHONE</span>
               </h1>
               <div className="flex ml-4 my-2">
-          {[...Array(5)].map((_, i) => {
-            if (rate > 0) {
-              rate--;
-              return (
-                <img key={i} src={rate1} alt="phone" className="w-6 mx-0.5" />
-              );
-            }
-            return (
-              <img key={i} src={rate0} alt="phone" className="w-6 mx-0.5" />
-            );
-          })}
-        </div>
+                {[...Array(5)].map((_, i) => {
+                  if (rate > 0) {
+                    rate--;
+                    return (
+                      <img
+                        key={i}
+                        src={rate1}
+                        alt="phone"
+                        className="w-6 mx-0.5"
+                      />
+                    );
+                  }
+                  return (
+                    <img
+                      key={i}
+                      src={rate0}
+                      alt="phone"
+                      className="w-6 mx-0.5"
+                    />
+                  );
+                })}
+              </div>
             </div>
             <div>
               <p className="flex items-center">
                 <img src={store} alt="whatsapp" className="w-10 mx-2" />{' '}
-                <span className="text-blue-900">SAM STORE</span>
+                <a href="/" className="text-blue-900">
+                  {product?.data?.slug}
+                </a>
               </p>
               <p className="text-xl my-2 text-red-600">
-                {price || product?.price}{' '}
+                {convertCurrency(currency, product?.data?.price)
+                  ?.toString()
+                  ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') ||
+                  convertCurrency(currency, product?.price)
+                    ?.toString()
+                    ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 <del className="mx-6 text-slate-500 hidden">$700</del>
               </p>
               <div className="py-[1px] bg-gray-300 w-1/2 my-4"></div>
               <div>
-                {product.attributes?.map((attribute) => (
-                  <div className="flex  my-4 text-sm font-bold">
+                {product?.data?.attributes?.map((attribute) => (
+                  <div
+                    className="flex my-4 text-sm font-bold"
+                    key={attribute.name}
+                  >
                     <p>{attribute.name}</p>
-                    {attribute.type==='color' &&
+                    {attribute.type === 'color' &&
                       attribute.value?.map((v) => {
-                        return(
-                        <div
-                        style={{backgroundColor: `${v.name}`}}
-                          className={`z-[40] p-4 w-7 h-7 mx-2 rounded-full cursor-pointer`}
-                        >{' '}
-                        </div>
-                      )})}
-                      {attribute.type==='toggle' &&
+                        const isSelected = cart.attributes.some(
+                          (attr) =>
+                            attr.name === attribute.name &&
+                            attr.value === v.name
+                        );
+
+                        return (
+                          <div
+                            style={{ backgroundColor: `${v.name}` }}
+                            className={`z-[40] p-4 w-7 h-7 mx-2 rounded-full cursor-pointer ${
+                              isSelected ? 'border-2 border-red-500' : ''
+                            }`}
+                            onClick={() => {
+                              handleAttributeChange(attribute.name, v.name);
+                            }}
+                            key={v.name}
+                          ></div>
+                        );
+                      })}
+                    {attribute.type === 'toggle' &&
                       attribute.value?.map((v) => {
-                        return(
-                          <div onClick={()=>{
-                            if(v.imgsrc!=='')
-                            setCurrentImage(v.imgsrc)
-                          }} className="bg-[#678385] mb-4 p-1 w-fit text-center py-0.5 mx-3  cursor-pointer">
-                          {v.name}
-                        </div>
-                      )})}
+                        const isSelected = cart.attributes.some(
+                          (attr) =>
+                            attr.name === attribute.name &&
+                            attr.value === v.name
+                        );
+
+                        return (
+                          <div
+                            onClick={() => {
+                              handleAttributeChange(attribute.name, v.name);
+                              setBg(v.name);
+                              if (v.imgsrc !== '') setCurrentImage(v.imgsrc);
+                            }}
+                            className={`border mb-4 p-1 w-fit text-center py-0.5 mx-3 cursor-pointer ${
+                              isSelected ? 'bg-[#678385]' : ''
+                            }`}
+                            key={v.name}
+                          >
+                            {v.name}
+                          </div>
+                        );
+                      })}
                   </div>
                 ))}
-                {/* <div className="flex my-4 text-lg font-bold">
-                  <p>Size</p>
-                  <div className="bg-[#678385] w-9 text-center py-1 mx-2  cursor-pointer">
-                    32{' '}
-                  </div>
-                  <div className="bg-slate-200 w-9 text-center py-1 mx-2  cursor-pointer">
-                    40{' '}
-                  </div>
-                  <div className="bg-slate-200 w-9 text-center py-1 mx-2  cursor-pointer">
-                    21{' '}
-                  </div>
-                </div> */}
+
                 <div className="font-semibold my-4">
                   <h1 className="text-green-800">IN STOCK</h1>
                   <p>
                     Quantity:{' '}
-                    {product.in_stock === -1 ? 'INFINITY' : product.in_stock}
+                    {product.in_stock === -1
+                      ? 'INFINITY'
+                      : product?.data?.in_stock}
                   </p>
                 </div>
                 <div className="items-center">
                   <div className="block">
-                    <div className="flex items-center">
+                    {/* <div className="flex items-center">
                       <img src={wish} alt="phone" className="w-8 mr-4" />
                       <p className="w-full">{t('AddToWishlist')}</p>
-                    </div>
+                    </div> */}
                     <div className="flex items-center">
                       <img
                         src={compare}
@@ -185,6 +236,17 @@ const SingleProduct = () => {
                   >
                     {t('AddToCart')}
                   </button>
+                  <button
+                    onClick={handleRequestQuote}
+                    className="bg-[#08F46C] px-8 py-2 text-md w-fit xs:p-4 rounded-md ml-1 shadow-md mt-4 shadow-slate-500"
+                  >
+                    REQUEST QUOTE
+                  </button>
+                  {showForm && (
+                    <div className="fixed bg-[#35343435] flex justify-center items-center inset-0 z-50">
+                      <QuoteRequestForm onClose={handleCloseForm} />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -194,7 +256,7 @@ const SingleProduct = () => {
           <YoutubeEmbed embedId="WhWc3b3KhnY" />
         </div>
         <div className="text-base mx-2">
-          <p className="my-3">SKU-: SW-110-A0</p>
+          <p className="my-3">SKU-: {product?.data?.SKU}</p>
           <p className="my-3">
             Categories:{' '}
             <span className="text-blue-800">
@@ -216,21 +278,27 @@ const SingleProduct = () => {
           </div>
         </div>
       </div>
-      <div className="mx-8">
-        <p className="text-xl font-bold">DESCRIPTION</p>
+      <div className="mx-8 xs:mx-4">
+        <div className='flex justify-start'>
+        <p className="text-lg font-bold cursor-pointer">DESCRIPTION</p>
+        <p className="text-lg font-bold cursor-pointer mx-32 xs:mx-10">REVIEWS</p>
+        <p className="text-lg font-bold cursor-pointer">FAQS</p>
+        </div>
         <div className="py-[1px] bg-black w-full my-2"></div>
-        <p>{product.description}</p>
+        <p>{product?.data?.description}</p>
       </div>
       <div className="flex items-center my-4 mx-8 font-bold">
         <img src={guides} alt="guides" className="w-10" />
         <p>Guides of use</p>
       </div>
       <div className="my-10">
-        {product?.similary_products?.length>0&&(<h1 className="xs:text-center font-bold sm:ml-14 mt-4">
-          RELATED PRODUCTS
-        </h1>)}
-        <div className="grid grid-cols-3 xs:grid-cols-1 mx-10 xs:mx-2">
-          {product?.similary_products?.map((p) => (
+        {product?.similary?.data?.length > 0 && (
+          <h1 className="xs:text-center font-bold sm:ml-14 mt-4">
+            RELATED PRODUCTS
+          </h1>
+        )}
+        <div className="grid grid-cols-4 xs:grid-cols-1 mx-10 xs:mx-2">
+          {product?.similary?.data?.map((p) => (
             <ProductCard product={p} />
           ))}
         </div>

@@ -6,11 +6,15 @@ import { useOutletContext } from 'react-router-dom';
 import { getAllProducts } from '../features/products/getProducts';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/Loader';
+import { CaretLeft, CaretRight } from 'phosphor-react';
 
 const ProductsPage = () => {
   const [showSub, setShowSub] = useState(false);
   const [showSub1, setShowSub1] = useState(false);
   const { t } = useTranslation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  });
   const categories = [
     {
       name: 'Clothes',
@@ -55,22 +59,25 @@ const ProductsPage = () => {
     'electronics',
     'shoes',
   ];
-  const dispatch=useDispatch();
-  const [searchProducts,setCurrentAmount, convertedAmount,currency] = useOutletContext();
-  useEffect(()=>{
-    dispatch(getAllProducts())
-  },[dispatch])
-  let {products,isLoading}=useSelector((state)=>state.allProducts);
-  if(searchProducts){
-    console.log(searchProducts,'========>')
-    products=searchProducts
+  const dispatch = useDispatch();
+  const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
+  useEffect(() => {
+    dispatch(getAllProducts({ page: 0 }));
+  }, [dispatch]);
+  let { products, isLoading } = useSelector((state) => state.allProducts);
+  let page, pages;
+  if (products?.page) {
+    pages = products?.page[1];
+    page = products?.page[0];
   }
+  // console.log(products?.page[1])
+  // console.log(typeof([...products?.page]),'=========?')
   return (
     <div className="my-10 w-full flex xs:flex-wrap justify-around">
-      <div className='bg-gray-500 w-full mx-3 text-center mb-3 sm:hidden'>
+      {/* <div className="bg-gray-500 w-full mx-3 text-center mb-3 sm:hidden">
         Filter
-      </div>
-      <div className="w-1/4 xs:w-full xs:mx-2">
+      </div> */}
+      {/* <div className="w-1/4 xs:w-full xs:mx-2">
         <SideCard categories={categories} header={t('ShopByCategory')} />
         <SideCard categories={brands} header={t('ByBrands')} />
         <div className="bg-white w-4/5 mx-auto rounded-lg mt-5 px-4">
@@ -143,36 +150,58 @@ const ProductsPage = () => {
             ))}
           </div>
         </div>
-      </div>
-      <div className="w-3/4 xs:w-screen md:mx-4">
-        <div className="bg-white xs:mx-10 xs:pl-3 rounded-md md:px-3">
+      </div> */}
+      <div className=" xs:w-screen md:mx-4">
+        {/* <div className="bg-white xs:mx-10 xs:pl-3 rounded-md md:px-3">
           <label htmlFor="name">Sort by:</label>
           <select name="order" className="bg-gray-400 py-2 my-2 mx-3">
             <option>Best selling</option>
             <option>Featured Products</option>
             <option>Recommended Products</option>
           </select>
-        </div>
-        {isLoading?<Loader />:(
-      <div className="grid sm:grid-cols-3 xs:grid-cols-1 w-full">
-            {products.length>0?(
-              products.map((product) => {
+        </div> */}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div className="grid lg:grid-cols-4 xs:grid-cols-1 w-full">
+            {products?.data?.length > 0 ? (
+              products?.data?.map((product) => {
                 return (
                   <ProductCard
                     setCurrentAmount={setCurrentAmount}
                     convertedAmount={convertedAmount}
                     product={product}
                     currency={currency}
-                    key={product.uid} //
+                    key={product.uid}
                   />
                 );
-              }
-              )
-              // <div className="md:w-full flex justify-between py-3 bg-white rounded-md xs:px-6 xs:mx-6 px-3">
-              // <p>Showing 1 of 2</p>
-              // <p>{'>'}</p>
-            // </div>
-            ):<h1 className='text-center my-32 ml-20 text-3xl'>No products found</h1>}
+              })
+            ) : (
+              <h1 className="text-center my-32 ml-20 text-3xl">
+                No products found
+              </h1>
+            )}
+            <div className="w-screen flex items-center -ml-[10rem] justify-end py-3 bg-white rounded-md xs:px-6 xs:mx-6 px-3">
+              <CaretLeft
+                onClick={() => {
+                  dispatch(getAllProducts({ page: page - 1 }));
+                }}
+                className="cursor-pointer"
+                size={32}
+                weight="fill"
+              />
+              <p>
+                Showing {page + 1} of {pages + 1}
+              </p>
+              <CaretRight
+                className="cursor-pointer"
+                onClick={() => {
+                  dispatch(getAllProducts({ page: page + 1 }));
+                }}
+                size={32}
+                weight="fill"
+              />
+            </div>
           </div>
         )}
       </div>

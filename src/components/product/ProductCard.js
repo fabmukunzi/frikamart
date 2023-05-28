@@ -68,7 +68,7 @@ const ProductCard = ({ ...props }) => {
               <img
                 src={image}
                 alt="phone"
-                className="w-14 object-contain h-20 border border-slate-300 mx-3"
+                className="w-14 object-contain h-14 mx-3"
               />
             ))}
           </div>
@@ -101,14 +101,14 @@ const ProductCard = ({ ...props }) => {
             {displayPrice?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             <del className="text-gray-500 ml-3"></del>
           </p>
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <img src={wish} alt="phone" className="w-8 mr-2" />
             <p className="w-full text-sm">{t('AddToWishlist')}</p>
-          </div>
+          </div> */}
           <div
             className="flex items-center cursor-pointer"
             onClick={() => {
-              dispatch(addProduct(product));
+              dispatch(addProduct(product)).unwrap();
               showSuccessMessage('Product has been added to compare');
             }}
           >
