@@ -1,33 +1,43 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
-import image from '../assets/images/Rectangle 14501.png';
+import React, { useEffect } from 'react';
 import searchIcon from '../assets/images/material-symbols_search.svg';
 import { useTranslation } from 'react-i18next';
 import ProductCard from '../components/product/ProductCard';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSingleStore } from '../features/stores/getSingle';
 
 const SingleShop = () => {
   const { t } = useTranslation();
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const { store } = useSelector((state) => state.store);
+  const Store=store?.Store
+  useEffect(() => {
+    dispatch(getSingleStore({ id: id }));
+  }, [dispatch, id]);
   return (
     <div className="mx-2">
       <div className="flex xs:flex-col xs:w-full mx-auto font-bold justify-end bg-[#D9D9D9] w-2/3 my-6">
-        <img src={image} alt="image0" className="w-[25rem] object-contain" />
+        <img
+          src={Store?.image}
+          alt="image0"
+          className="w-[25rem] object-contain"
+        />
         <div className="px-4 py-3 bg-white w-2/3 xs:w-full">
           <div className="flex items-center justify-between">
             <div className="">
-              <h1>SAM STORE</h1>
-              <h1 className="my-2 text-blue-900 w-full">GOLDEN SUPPLIER</h1>
+              <h1>{Store?.store_name}</h1>
+              <h1 className="my-2 text-blue-900 w-full">{Store?.rank}</h1>
             </div>
             <div className="flex py-2 xs:mb-16">
               <p>Domain:</p>
               <a href="#" className="text-blue-900 ml-3">
-                samstore.fk.com
+                {Store?.store_url}
               </a>
             </div>
           </div>
-          <p className="my-2">
-            My store give abundant fashion clothes of all kind get your
-            confidence increased with sam store we take care of every looks
-          </p>
+          <p className="my-2">{Store?.description}</p>
         </div>
       </div>
       <div className="flex xs:w-full justify-between rounded-lg md:mx-10 px-3 my-6 items-center bg-[#D9D9D9]">
@@ -45,15 +55,10 @@ const SingleShop = () => {
           />
         </div>
       </div>
-      <div className="flex flex-wrap justify-center">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+      <div className="grid grid-cols-4 xs:grid-cols-1 justify-center">
+        {store?.Products?.map((product) => (
+          <ProductCard product={product} />
+        ))}
       </div>
     </div>
   );

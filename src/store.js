@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import getCompareProductsReducer from './features/products/compareProducts';
-import getAllProductsReducer from './features/products/getProducts'
+import getAllProductsReducer from './features/products/getProducts';
 import getSingleProductReducer from './features/products/getSingleProduct';
 import searchProductsReducer from './features/products/Search';
 import getHomeDataReducer from './features/home/getHome';
@@ -10,6 +10,9 @@ import addToCartReducer from './features/cart/addToCart';
 import getCartReducer from './features/cart/getCart';
 import removeCartItemReducer from './features/cart/removeItem';
 import getStoresReducer from './features/stores/getAll';
+import getSingleStoreReducer from './features/stores/getSingle';
+import updateCartReducer from './features/cart/updateCart';
+import clearCartReducer from './features/cart/clearCart';
 
 const store = configureStore({
   reducer: {
@@ -18,12 +21,15 @@ const store = configureStore({
     singleProduct: getSingleProductReducer,
     searchProducts: searchProductsReducer,
     homeData: getHomeDataReducer,
-    login:loginReducer,
-    categories:getCategoriesReducer,
-    addToCart:addToCartReducer,
-    cart:getCartReducer,
-    removeCartItem:removeCartItemReducer,
-    stores:getStoresReducer,
+    login: loginReducer,
+    categories: getCategoriesReducer,
+    addToCart: addToCartReducer,
+    cart: getCartReducer,
+    removeCartItem: removeCartItemReducer,
+    stores: getStoresReducer,
+    store: getSingleStoreReducer,
+    updateCart: updateCartReducer,
+    clearCart: clearCartReducer,
   },
 });
 

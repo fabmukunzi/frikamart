@@ -24,7 +24,7 @@ const LoginForm = () => {
       await dispatch(login(userData)).unwrap();
       navigate('/')
     } catch (error) {
-      showErrorMessage(error.message || 'error');
+      showErrorMessage(error.error || 'error');
     }
   };
   return (
@@ -39,7 +39,7 @@ const LoginForm = () => {
         >
           <label htmlFor="email">Email</label>
           <input
-            type="email"
+            type="text"
             name="email"
             {...register('username')}
             placeholder="Enter your email address"

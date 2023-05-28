@@ -12,6 +12,8 @@ import RegisterForm from '../components/forms/Register';
 import ShopsPage from '../pages/ShopsPage';
 import SingleShop from '../pages/SingleShop';
 import Categories from '../components/Categories';
+import SearchPage from '../pages/SearchPage';
+import Contact from '../components/forms/Contact';
 
 const AppRoutes = () => {
   return (
@@ -26,6 +28,8 @@ const AppRoutes = () => {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/store/:id" element={<SingleShop />} />
         <Route path="/categories" element={<Categories />} />
+        <Route path="/search/:item" element={<SearchPage />} />
+        <Route path="/contact" element={<Contact />} />
       </Route>
       <Route path='/auth'>
         <Route path='/auth/login' element={<LoginForm />} />

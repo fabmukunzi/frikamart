@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../api/axiosInstance';
 
-export const removeCartItem = createAsyncThunk(
-  'cart/delete',
-  async ({id}, { rejectWithValue }) => {
+export const updateCart = createAsyncThunk(
+  'cart/update',
+  async ({id,count}, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`/user/cart/remove/${id}`);
+      const response = await axios.patch(`/user/cart/update/${id}`,{count:count});
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response);
@@ -18,23 +18,23 @@ const initialState = {
   isLoading: false,
 };
 
-export const removeCartItemSlice = createSlice({
-  name: 'cart',
+export const updateCartSlice = createSlice({
+  name: 'updateCart',
   initialState,
   extraReducers: {
-    [removeCartItem.pending]: (state) => {
+    [updateCart.pending]: (state) => {
       state.isLoading = true;
     },
-    [removeCartItem.fulfilled]: (state, { payload }) => {
+    [updateCart.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
       state.cart = payload;
       state.errorMessage = null;
     },
-    [removeCartItem.rejected]: (state, action) => {
+    [updateCart.rejected]: (state, action) => {
       state.isLoading = false;
       state.errorMessage = action.payload?.error;
     },
   },
 });
 
-export default removeCartItemSlice.reducer;
+export default updateCartSlice.reducer;

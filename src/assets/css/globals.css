@@ -1,5 +1,6 @@
 html{
-    background: #e9f5e8;
+    /* background: #e9f5e8; */
+    overflow-x: hidden;
 }
 *{
     transition: 1000ms;

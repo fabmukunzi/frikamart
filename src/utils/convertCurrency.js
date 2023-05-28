@@ -1,6 +1,7 @@
 import exchangeRates from "./exchangeRates";
 
 const convertCurrency = (targetCurrency,amount) => {
+  console.log(amount,'===========')
  const  baseCurrency=amount?.split(' ')[0]
   const  price=amount?.split(' ')[1]
   if(baseCurrency&&price){

@@ -9,7 +9,7 @@ const SideCard = ({ ...props }) => {
         onClick={() => setShowSub(!showSub)}
       >
         {props.header}
-        <span className='ml-4 md:hidden'>{showSub?'-':'+'}</span>
+        <span className="ml-4 md:hidden">{showSub ? '-' : '+'}</span>
       </h1>
       <ul className="xs:hidden">
         {props.categories.map((category) => (
@@ -19,7 +19,7 @@ const SideCard = ({ ...props }) => {
         ))}
       </ul>
       {showSub && (
-        <ul className='md:hidden'>
+        <ul className="md:hidden">
           {props.categories.map((category) => (
             <li className="my-3 cursor-pointer" key={category.name}>
               {category.name}
