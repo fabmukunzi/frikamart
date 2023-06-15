@@ -4,6 +4,9 @@ import Contact from '../components/forms/Contact';
 const ContactPage = () => {
   return (
     <div>
+      <div className='flex justify-center w-screen'>
+      <iframe title='frikamart map' src="https://www.google.com/maps/d/u/0/embed?mid=1OYrkuy3oRZfd8ijveDLxuvEZN3K5xAA&ehbc=2E312F" width="640" height="480"></iframe>
+      </div>
         <p className='text-center font-bold text-xl'>OUR OFFICES</p>
         <div className='grid grid-cols-2 place-items-center gap-10'>
             <div>
