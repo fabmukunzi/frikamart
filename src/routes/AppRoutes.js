@@ -14,6 +14,7 @@ import SingleShop from '../pages/SingleShop';
 import Categories from '../components/Categories';
 import SearchPage from '../pages/SearchPage';
 import ContactPage from '../pages/ContactPage';
+import MadeInAfrica from '../pages/MadeInAfrica';
 
 const AppRoutes = () => {
   return (
@@ -30,6 +31,7 @@ const AppRoutes = () => {
         <Route path="/categories" element={<Categories />} />
         <Route path="/search/:item" element={<SearchPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/madeinafrica" element={<MadeInAfrica />} />
       </Route>
       <Route path='/auth'>
         <Route path='/auth/login' element={<LoginForm />} />
