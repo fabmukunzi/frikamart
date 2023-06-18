@@ -81,14 +81,14 @@ const SingleProduct = () => {
             cart={cart}
           />
         )}
-        <div className="flex xs:flex-col-reverse gap-2 items-center xs:mx-6 xs:my-3">
+        <div className="flex flex-col-reverse xs:mt-4 items-center gap-2">
           <div className="grid grid-cols-2  gap-4">
             {product?.data?.more_imgs?.map((image) => (
               <img
                 key={product?.data?.id}
                 src={image}
                 alt="phone"
-                className="w-14 h-fit xs:w-48 xs:h-[8.17rem] object-contain border border-slate-400 md:mx-3"
+                className="w-[11.5rem] h-fit xs:w-[9.5rem] xs:h-[7.19rem] object-contain border border-slate-400 md:mx-2"
               />
             ))}
           </div>
@@ -97,7 +97,7 @@ const SingleProduct = () => {
               key={product?.data?.uid}
               src={currentImage ? currentImage : product?.data?.image}
               alt="phone"
-              className="w-60 xs:w-[25rem] xs:h-60 object-contain"
+              className="w-[25rem] xs:h-60 object-contain"
             />
           </div>
         </div>
@@ -134,7 +134,7 @@ const SingleProduct = () => {
             </div>
             <div>
               <p className="flex items-center">
-                <img src={store} alt="whatsapp" className="w-10 mx-2" />{' '}
+                <img src={store} alt="whatsapp" className="w-10 mx-2" />
                 <a href="/" className="text-blue-900">
                   {product?.data?.slug}
                 </a>
@@ -163,7 +163,6 @@ const SingleProduct = () => {
                             attr.name === attribute.name &&
                             attr.value === v.name
                         );
-
                         return (
                           <div
                             style={{ backgroundColor: `${v.name}` }}
@@ -252,7 +251,7 @@ const SingleProduct = () => {
             </div>
           </div>
         </div>
-        <div className="my-4">
+        <div className="my-4 mx-auto">
           <YoutubeEmbed embedId="WhWc3b3KhnY" />
         </div>
         <div className="text-base mx-2">
@@ -279,10 +278,12 @@ const SingleProduct = () => {
         </div>
       </div>
       <div className="mx-8 xs:mx-4">
-        <div className='flex justify-start'>
-        <p className="text-lg font-bold cursor-pointer">DESCRIPTION</p>
-        <p className="text-lg font-bold cursor-pointer mx-32 xs:mx-10">REVIEWS</p>
-        <p className="text-lg font-bold cursor-pointer">FAQS</p>
+        <div className="flex justify-start">
+          <p className="text-lg font-bold cursor-pointer">DESCRIPTION</p>
+          <p className="text-lg font-bold cursor-pointer mx-32 xs:mx-10">
+            REVIEWS
+          </p>
+          <p className="text-lg font-bold cursor-pointer">FAQS</p>
         </div>
         <div className="py-[1px] bg-black w-full my-2"></div>
         <p>{product?.data?.description}</p>
@@ -297,7 +298,7 @@ const SingleProduct = () => {
             RELATED PRODUCTS
           </h1>
         )}
-        <div className="grid grid-cols-4 xs:grid-cols-1 mx-10 xs:mx-2">
+        <div className="grid grid-cols-5 xs:grid-cols-2 mx-10 xs:mx-2">
           {product?.similary?.data?.map((p) => (
             <ProductCard product={p} />
           ))}

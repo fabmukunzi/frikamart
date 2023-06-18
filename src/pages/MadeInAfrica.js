@@ -99,7 +99,7 @@ const MadeInAfrica = () => {
           Made in {country}
         </h1>
       </div>
-      <div className="grid grid-cols-4 xs:grid-cols-1">
+      <div className="grid grid-cols-5 xs:grid-cols-2">
         {Array(8)
           .fill(null)
           .map((_, index) => (

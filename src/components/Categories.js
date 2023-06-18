@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const Categories = ({ scale }) => {
   const [show, setShow] = useState(scale);
   const { categories } = useSelector((state) => state.categories);
+  console.log(categories,'========>')
   const navigate = useNavigate();
 
   // useEffect(() => {
@@ -83,7 +84,7 @@ const Categories = ({ scale }) => {
                   : 'hidden'
               }
             >
-              {category.subCategories?.map((subcategory) => (
+              {category?.subCategories?.map((subcategory) => (
                 <li key={subcategory.category_name} className="">
                   <div className="flex hover:bg-[#D9D9D9] border-b w-full flex-row-reverse justify-between px-4 items-center">
                     <span
@@ -115,7 +116,7 @@ const Categories = ({ scale }) => {
                         : 'hidden'
                     }
                   >
-                    {subcategory.subCategories?.map((subsubcategory) => (
+                    {subcategory?.subCategories?.map((subsubcategory) => (
                       <li
                         key={subsubcategory.category_name}
                         className="border-b hover:bg-[#D9D9D9] cursor-pointer w-full px-4 py-2"

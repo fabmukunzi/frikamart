@@ -16,7 +16,7 @@ const HomePage = ({ ...props }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { data, isLoading } = useSelector((state) => state.homeData);
-  console.log(data?.Products?.Popular,'===========>')
+  console.log(data?.Products?.Popular, '===========>');
   useEffect(() => {
     dispatch(homeData());
   }, [dispatch]);
@@ -29,7 +29,7 @@ const HomePage = ({ ...props }) => {
     <Loader />
   ) : (
     <div>
-      <div className="flex ml-3 xs:flex-col justify-around">
+      <div className="flex xs:flex-col justify-around">
         <div className="rounded-md shadow-md xs:h-auto my-3 shadow-black w-2/3 xs:w-screen bg-[#415871]">
           <Slider data={data?.Head?.Sections_001?.Slider} />
         </div>
@@ -91,7 +91,10 @@ const HomePage = ({ ...props }) => {
                 className="w-10 mx-1 bg-[#678385] h-10 mt-1"
               />
               <div>
-                <p onClick={()=>navigate(`/search/${category?.category_name}`)} className="uppercase cursor-pointer text-xs w-full">
+                <p
+                  onClick={() => navigate(`/search/${category?.category_name}`)}
+                  className="uppercase cursor-pointer text-xs w-full"
+                >
                   {category?.category_name}
                 </p>
               </div>
@@ -99,7 +102,7 @@ const HomePage = ({ ...props }) => {
           ))}
         </Carousel>
       </div>
-      <div className="grid lg:grid-cols-4 md:grid-cols-2 xs:grid-cols-1 mx-10 xs:mx-2">
+      <div className="grid md:grid-cols-5 xs:grid-cols-2 mx-auto xs:mx-2 xs:gap-1">
         {data?.Products?.Popular?.map((product) => (
           <ProductCard
             setCurrentAmount={setCurrentAmount}
@@ -134,11 +137,9 @@ const HomePage = ({ ...props }) => {
           ))}
         </div>
       </div>
-      <div>
-        <h1 className="xs:text-center font-bold sm:ml-14">
-          {t('LatestProducts')}
-        </h1>
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 xs:grid-cols-1 mx-10 xs:mx-2">
+      <div className="">
+        <h1 className="xs:text-center font-bold sm:ml-14">{t('LatestProducts')}</h1>
+        <div className="grid md:grid-cols-5 xs:gap-1 mx-auto xs:mx-2 xs:grid-cols-2">
           {data?.Products?.Latest?.map((product) => (
             <ProductCard
               setCurrentAmount={setCurrentAmount}

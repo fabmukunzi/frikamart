@@ -52,18 +52,18 @@ const ProductCard = ({ ...props }) => {
         />
       )}
       <div
-        className={`flex hover:scale-[1.09] transition duration-500	 font-poppins   bg-white font-normal justify-around rounded-md border border-slate-300 hover:border-slate-500 py-6 xs:w-[22rem] w-auto my-8 mx-auto md:mx-3 ${props.className}`}
+        className={`flex flex-col hover:scale-[1.09] transition duration-500	 font-poppins   bg-white font-normal justify-around rounded-md border border-slate-300 hover:border-slate-500 py-1 xs:w-[11rem] xs:my-2 my-8 mx-auto md:mx-3 ${props.className}`}
       >
-        <div className="w-1/2" key={product.uid}>
+        <div className="w-full" key={product.uid}>
           <img
             src={product?.image}
             alt="phone"
-            className="cursor-pointer w-32 h-28 object-contain mx-4"
+            className="cursor-pointer w-full rounded-lg px-1 object-contain"
             onClick={() => {
               navigate(`/products/${product?.uid}`);
             }}
           />
-          <div className="flex justify-center mt-8">
+          {/* <div className="flex justify-center mt-8">
             {product?.more_imgs?.map((image) => (
               <img
                 src={image}
@@ -71,12 +71,12 @@ const ProductCard = ({ ...props }) => {
                 className="w-14 object-contain h-14 mx-3"
               />
             ))}
-          </div>
+          </div> */}
         </div>
-        <div className="w-1/2">
+        <div className="w-full flex  flex-col mx-1">
           <p>{product?.subCategory}</p>
           <h1
-            className="font-bold text-base cursor-pointer  h-[4.5rem] overflow-hidden"
+            className="font-bold text-base cursor-pointer  truncate py-1 xs:py-0"
             onClick={() => {
               navigate(`/products/${product?.uid}`);
             }}
@@ -84,7 +84,7 @@ const ProductCard = ({ ...props }) => {
             {product?.title}
           </h1>
           <p>{product?.category}</p>
-          <div className="flex my-2">
+          <div className="flex my-2 xs:my-1">
             {[...Array(5)].map((_, i) => {
               if (rate > 0) {
                 rate--;
@@ -120,7 +120,7 @@ const ProductCard = ({ ...props }) => {
             <p className="w-full text-sm">{t('CompareProduct')}</p>
           </div>
           <button
-            className="bg-[#08F46C] w-fit px-8 py-2 text-base rounded-md shadow-md mt-4 shadow-slate-500"
+            className="bg-[#08F46C] w-fit px-8 py-2 text-base rounded-md shadow-md mt-4 mb-1 shadow-slate-500"
             onClick={() => {
               setShowModel(true);
             }}

@@ -163,7 +163,7 @@ const ProductsPage = () => {
         {isLoading ? (
           <Loader />
         ) : (
-          <div className="grid lg:grid-cols-4 xs:grid-cols-1 w-full">
+          <div className="grid md:grid-cols-5 xs:grid-cols-2 xs:gap-1 xs:mx-2">
             {products?.data?.length > 0 ? (
               products?.data?.map((product) => {
                 return (
