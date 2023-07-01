@@ -6,6 +6,10 @@ export const addToCart = createAsyncThunk(
   async ({ cart }, { rejectWithValue }) => {
     try {
       const response = await axios.post('/user/cart/add', cart);
+      if (response.data.statusCode === '401') {
+        const { data } = await axios.post('/user/guest/create-session');
+        localStorage.setItem('session', data.session);
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response);

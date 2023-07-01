@@ -5,8 +5,8 @@ export const getCart = createAsyncThunk(
   'cart/getAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/user/cart/view');
-      return response.data;
+      const { data } = await axios.get('/user/cart/view');
+      return data.data;
     } catch (error) {
       return rejectWithValue(error.response);
     }

@@ -22,7 +22,6 @@ const ProductCard = ({ ...props }) => {
   const dispatch = useDispatch();
   const product = props.product;
   let rate = product?.rating;
-  let [pQuantity,setPQuantity]=useState(1)
   const cart={};
   cart.uid=product.uid;
   cart.attributes=[];
@@ -58,7 +57,7 @@ const ProductCard = ({ ...props }) => {
           <img
             src={product?.image}
             alt="phone"
-            className="cursor-pointer w-full rounded-lg px-1 object-contain"
+            className="cursor-pointer w-full h-[200px] rounded-lg px-1 object-contain"
             onClick={() => {
               navigate(`/products/${product?.uid}`);
             }}

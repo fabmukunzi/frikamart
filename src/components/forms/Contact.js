@@ -63,7 +63,7 @@ const Contact = () => {
       </div>
       <div>
         <p className="font-bold">RECENT POST</p>
-        <div className=" border-2 rounded-md p-3">
+        <div className="border-2 rounded-md p-3">
           {Array(3)
             .fill(null)
             .map((_, index) => (

@@ -23,22 +23,9 @@ const Cart = () => {
   const loadingg = useSelector((state) => state.updateCart.isLoading);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const cart=data
   useEffect(() => {
     dispatch(getCart()).unwrap();
   }, [dispatch]);
-  // const convert = () => {
-  //   try {
-  //     const p = convertCurrency(currency, price);
-  //     return p;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   const p = convert();
-  //   setPrice(p);
-  // }, [currency]);
   let items;
   items = data;
   console.log(data, '=======??>>>');
@@ -87,8 +74,8 @@ const Cart = () => {
                 <p className="text-red-500">
                   {convertCurrency(currency, item?.price)
                     ?.toString()
-                    ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  <del className="text-slate-400 hidden">$700</del>
+                    ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}<br/>
+                  <del className="text-slate-400 ">{item.discount_value}</del>
                 </p>
               </div>
               <div className="flex items-center py-1 gap-2 text-lg px-2 justify-between">
@@ -97,10 +84,10 @@ const Cart = () => {
                   className="w-14 xs:w-8 border text-center"
                   defaultValue={count||item?.count}
                   min="1"
-                  onChange={(event) => {
-                    setCount(event.target.value);
-                    setItem(item.uid);
-                  }}
+                  // onChange={(event) => {
+                  //   setCount(event.target.value);
+                  //   setItem(item.uid);
+                  // }}
                 />
                 <button
                   type="submit"

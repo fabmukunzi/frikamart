@@ -16,13 +16,12 @@ const HomePage = ({ ...props }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { data, isLoading } = useSelector((state) => state.homeData);
-  console.log(data?.Products?.Popular, '===========>');
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(homeData());
   }, [dispatch]);
   const sideData = data ? data?.Head?.Sections_001?.More : [];
   const categories = data ? data?.Category?.Popular : [];
-  const navigate = useNavigate();
   const trends = data ? data?.Category?.Latest : [];
 
   return isLoading ? (
@@ -39,7 +38,7 @@ const HomePage = ({ ...props }) => {
               key={i}
               className="w-full flex my-6 items-center justify-around px-4 text-lg h-48 xs:mt-6 bg-[#415871]"
             >
-              <div>
+              <div className='w-1/2'>
                 <p className="mr-3 text-white h-28 overflow-hidden">
                   {data.title}
                 </p>
@@ -50,11 +49,11 @@ const HomePage = ({ ...props }) => {
                   {t('BuyNow')}
                 </button>
               </div>
-              <div className="w-full">
+              <div className="w-1/2">
                 <img
                   src={data.image}
                   alt="sideImage"
-                  className="object-contain h-44"
+                  className="object-contain h-44 md:ml-12"
                 />
               </div>
             </div>

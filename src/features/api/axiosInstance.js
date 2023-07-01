@@ -6,12 +6,12 @@ const axiosInstance = axios.create({
 });
 
 const requestHandler = (request) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    request.headers.Authorization = `${token}`;
+  const session = localStorage.getItem('session');
+  if (session) {
+    request.headers.session = session;
   }
   return request;
-};
+}
 
 const responseHandler = (response) => response;
 
