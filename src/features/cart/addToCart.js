@@ -5,12 +5,13 @@ export const addToCart = createAsyncThunk(
   'cart/add',
   async ({ cart }, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/user/cart/add', cart);
-      if (response.data.statusCode === '401') {
-        const { data } = await axios.post('/user/guest/create-session');
-        localStorage.setItem('session', data.session);
-      }
-      return response.data;
+      // if (!localStorage.getItem('session')) {
+      //   const { data } = await axios.post('/user/guest/create-session');
+      //   localStorage.setItem('session', data.session);
+      // } else {
+        const response = await axios.post('/user/cart/add', cart);
+        return response.data;
+      // }
     } catch (error) {
       return rejectWithValue(error.response);
     }

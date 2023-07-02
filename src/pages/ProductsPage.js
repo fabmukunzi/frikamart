@@ -181,7 +181,8 @@ const ProductsPage = () => {
                 No products found
               </h1>
             )}
-            <div className="w-screen flex items-center -ml-[10rem] justify-end py-3 bg-white rounded-md xs:px-6 xs:mx-6 px-3">
+            {products&&(
+              <div className="w-screen flex items-center -ml-[10rem] justify-end py-3 bg-white rounded-md xs:px-6 xs:mx-6 px-3">
               <CaretLeft
                 onClick={() => {
                   dispatch(getAllProducts({ page: page - 1 }));
@@ -202,6 +203,7 @@ const ProductsPage = () => {
                 weight="fill"
               />
             </div>
+            )}
           </div>
         )}
       </div>

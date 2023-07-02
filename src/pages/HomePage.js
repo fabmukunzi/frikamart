@@ -29,7 +29,7 @@ const HomePage = ({ ...props }) => {
   ) : (
     <div>
       <div className="flex xs:flex-col justify-around">
-        <div className="rounded-md shadow-md xs:h-auto my-3 shadow-black w-2/3 xs:w-screen bg-[#415871]">
+        <div className="rounded-md shadow-md xs:px-2 my-3 lg:mx-2 shadow-black w-2/3 xs:w-screen bg-[#415871]">
           <Slider data={data?.Head?.Sections_001?.Slider} />
         </div>
         <div className="w-1/3 sm:px-6 xs:w-screen">
@@ -101,7 +101,7 @@ const HomePage = ({ ...props }) => {
           ))}
         </Carousel>
       </div>
-      <div className="grid md:grid-cols-5 xs:grid-cols-2 mx-auto xs:mx-2 xs:gap-1">
+      <div className="grid md:grid-cols-5 xs:grid-cols-2 mx-4 xs:mx-2 xs:gap-1">
         {data?.Products?.Popular?.map((product) => (
           <ProductCard
             setCurrentAmount={setCurrentAmount}
@@ -138,7 +138,7 @@ const HomePage = ({ ...props }) => {
       </div>
       <div className="">
         <h1 className="xs:text-center font-bold sm:ml-14">{t('LatestProducts')}</h1>
-        <div className="grid md:grid-cols-5 xs:gap-1 mx-auto xs:mx-2 xs:grid-cols-2">
+        <div className="grid md:grid-cols-5 xs:gap-1 mx-4 xs:mx-2 xs:grid-cols-2">
           {data?.Products?.Latest?.map((product) => (
             <ProductCard
               setCurrentAmount={setCurrentAmount}

@@ -11,12 +11,12 @@ const Model = ({ ...props }) => {
   const [totalPrice, setTotalPrice] = useState(props.product.price);
   const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
   const dispatch = useDispatch();
-  let [pQuantity, setPQuantity] = useState(1);
+  const [pQuantity, setPQuantity] = useState(1);
   const { isLoading } = useSelector((state) => state.cart || state.addToCart);
   const cart = props?.cart;
-  console.log(cart,'carttttt')
+  console.log(cart, 'carttttt');
   cart.count = pQuantity;
-  const handleQuantityChange = (event) => {
+  const handleQuantityChange = async (event) => {
     const value = event.target.value;
     let price = '';
     const currency = totalPrice?.split(' ')[0];
@@ -26,11 +26,11 @@ const Model = ({ ...props }) => {
     }
     if (event.target.value === '') {
       setPQuantity(1);
-      return setTotalPrice('');
+      return setTotalPrice(props.product.price);
     }
     setPQuantity(event.target.value);
-    price = totalPrice && totalPrice?.split(' ')[1];
-    price = price * value;
+    const p = props?.product?.price?.split(' ')[1];
+    price = p * value;
     setTotalPrice(`${currency} ${price}`);
   };
   return (
@@ -44,20 +44,28 @@ const Model = ({ ...props }) => {
               </div>
               <div className="flex relative px-6 py-3 flex-col gap-5 font-bold">
                 <h1>Product name: {props.product.title}</h1>
-                <h1>Price: {convertCurrency(currency,props?.product.price)?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</h1>
+                <h1>
+                  Price:{' '}
+                  {convertCurrency(currency, props?.product?.price)
+                    ?.toString()
+                    ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                </h1>
                 <input
                   type="number"
                   placeholder="Number of items"
-                  // min={1}
+                  min={1}
                   className="border-2  py-2 px-1 my-4 rounded-sm  border-slate-400"
-                  onInput={(event) => {
-                    if (event.target.value === '')
-                      return (event.target.defaultValue = 1);
+                  onChange={(event) => {
                     handleQuantityChange(event);
                   }}
                   required
                 />
-                <h1>Total price : {convertCurrency(currency,totalPrice)?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</h1>
+                <h1>
+                  Total price :{' '}
+                  {convertCurrency(currency, totalPrice)
+                    ?.toString()
+                    ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                </h1>
               </div>
               <div className="flex items-center justify-end gap-x-5 p-3 py-4">
                 <button
@@ -71,15 +79,14 @@ const Model = ({ ...props }) => {
                 <button
                   className="bg-[#0fc65b] border-[#0fca5d] py-2 border-2 font-bold text-white px-6 text-sm hover:bg-[#08F46C] hover:border-[#08F46C]"
                   type="button"
-                  onClick={async() => {
+                  onClick={async () => {
                     try {
                       props.setShowModel(false);
                       dispatch(addToCart({ cart })).unwrap();
-                      showSuccessMessage('Added to card');
+                      showSuccessMessage('Added to cart');
                       await dispatch(getCart()).unwrap();
-                      
                     } catch (error) {
-                      console.log(error);
+                      console.log(error, 'error');
                       showErrorMessage('Failed to add to cart');
                     }
                   }}

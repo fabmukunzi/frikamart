@@ -28,7 +28,6 @@ const Cart = () => {
   }, [dispatch]);
   let items;
   items = data;
-  console.log(data, '=======??>>>');
   return (
     <div>
       {isLoading || load || loadingg || loading ? (
@@ -82,12 +81,12 @@ const Cart = () => {
                 <input
                   type="number"
                   className="w-14 xs:w-8 border text-center"
-                  defaultValue={count||item?.count}
+                  defaultValue={item?.count}
                   min="1"
-                  // onChange={(event) => {
-                  //   setCount(event.target.value);
-                  //   setItem(item.uid);
-                  // }}
+                  onChange={(event) => {
+                    setCount(event.target.value);
+                    setItem(item.uid);
+                  }}
                 />
                 <button
                   type="submit"

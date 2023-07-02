@@ -51,7 +51,7 @@ const Categories = ({ scale }) => {
         show
           ? 'md:-translate-y-[3.7rem]'
           : 'opacity-0 -translate-y-[3.7rem] xs:hidden -translate-x-[100%]'
-      } w-full transition duration-500 transform md:w-1/4 md:absolute bg-white h-fit bg- z-[999] text-xl font-poppins`}
+      } w-full transition mt-16 absolute duration-500 transform md:w-1/4 md:absolute bg-white h-fit bg- z-[999] text-xl font-poppins`}
     >
       <ul>
         {categories?.map((category) => (

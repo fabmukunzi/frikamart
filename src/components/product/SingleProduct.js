@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import convertCurrency from '../../utils/convertCurrency';
 import Loader from '../Loader';
 import QuoteRequestForm from '../quoteModel';
+import TextRenderer from '../textrender';
 
 const SingleProduct = () => {
   const { product, isLoading } = useSelector((state) => state.singleProduct);
@@ -286,7 +287,7 @@ const SingleProduct = () => {
           <p className="text-lg font-bold cursor-pointer">FAQS</p>
         </div>
         <div className="py-[1px] bg-black w-full my-2"></div>
-        <p>{product?.data?.description}</p>
+        <TextRenderer text={product?.data?.description}></TextRenderer>
       </div>
       <div className="flex items-center my-4 mx-8 font-bold">
         <img src={guides} alt="guides" className="w-10" />

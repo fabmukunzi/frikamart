@@ -2,24 +2,30 @@ import axios from 'axios';
 
 const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_PRODUCTS_API,
-  timeout: 5000, 
+  timeout: 5000,
 });
 
-const requestHandler = (request) => {
-  const session = localStorage.getItem('session');
-  if (session) {
-    request.headers.session = session;
+const requestHandler = async (request) => {
+  let session = localStorage.getItem('session');
+  if (!session) {
+    const { data } = await axios.post(
+      `${process.env.REACT_APP_PRODUCTS_API}user/guest/create-session`
+    );
+    session = data.session;
+    localStorage.setItem('session', session);
   }
+  request.headers.session = session;
   return request;
-}
+};
 
 const responseHandler = (response) => response;
 
-const errorHandler = (error) => {
+const errorHandler = async (error) => {
   if (error?.response?.status === 401) {
-    localStorage.clear();
-    // Uncomment the line below if you want to redirect to the login page
-    // window.location.href = '/auth/login';
+    const { data } = await axios.post(
+      `${process.env.REACT_APP_PRODUCTS_API}user/guest/create-session`
+    );
+    localStorage.setItem('session', data.session);
   }
   return Promise.reject(error);
 };

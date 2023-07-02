@@ -38,7 +38,7 @@ export default function Slider({ ...props }) {
               <img
                 src={product?.image}
                 alt="dress"
-                className="xs:w-40 xs:absolute object-contain xs:h-auto w-80 h-80"
+                className="xs:w-40 object-contain xs:h-40 w-80 h-80"
               />
             </div>
           </div>
