@@ -1,31 +1,26 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
 const Categories = ({ scale }) => {
-  const [show, setShow] = useState(scale);
   const { categories } = useSelector((state) => state.categories);
-  console.log(categories,'========>')
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   // window.addEventListener('resize', () => {
-  //   //   if (window.screen.width > 500) navigate('/products');
-  //   //   else navigate('/categories');
-  //   // });
-  //   dispatch(getCategories());
-  // }, [dispatch, window.onresize]);
-
-  useEffect(() => {
-    setShow(scale);
-  }, [scale]);
-
   const [showSubCategory, setShowSubCategory] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [showSubSubCategory, setShowSubSubCategory] = useState(false);
   const [currentSubCategory, setCurrentSubCategory] = useState(null);
-
+  // const handleResize = () => {
+  //   if (window.innerWidth < 720) {
+  //       navigate(`/categories`)
+  //   } else {
+  //     navigate(`/`)
+  //   }
+  // }
+  // useEffect(() => {
+  //   window.addEventListener("resize", handleResize)
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize);
+  // }
+  // },[])
   const handleCategoryClick = (categoryId) => {
     if (currentCategory === categoryId) {
       setShowSubCategory(!showSubCategory);
@@ -46,12 +41,11 @@ const Categories = ({ scale }) => {
 
   return (
     <div
-      // onMouseLeave={()=>setShow(false)}
       className={`${
-        show
+        scale
           ? 'md:-translate-y-[3.7rem]'
-          : 'opacity-0 -translate-y-[3.7rem] xs:hidden -translate-x-[100%]'
-      } w-full transition mt-16 absolute duration-500 transform md:w-1/4 md:absolute bg-white h-fit bg- z-[999] text-xl font-poppins`}
+          : 'opacity-0 -translate-y-[3.7rem] md:hidden -translate-x-[100%]'
+      } w-full border-2 transition md:ml-10 md:mt-[3.7rem] mduration-500 transform xs:w-full md:w-1/4 md:absolute bg-white z-[999] h-fit text-xl font-poppins`}
     >
       <ul>
         {categories?.map((category) => (
@@ -70,7 +64,6 @@ const Categories = ({ scale }) => {
               <span
                 className="py-2 cursor-pointer"
                 onClick={() => {
-                  // setShow(false);
                   navigate(`/search/${category.category_name}`);
                 }}
               >
@@ -99,9 +92,8 @@ const Categories = ({ scale }) => {
                         : ''}
                     </span>
                     <span
-                      className="py-2 text-lg cursor-pointer"
+                      className="py-2 text-lg cursor-pointer ml-5"
                       onClick={() => {
-                        // setShow(false);
                         navigate(`/search/${subcategory.category_name}`);
                       }}
                     >
@@ -119,9 +111,8 @@ const Categories = ({ scale }) => {
                     {subcategory?.subCategories?.map((subsubcategory) => (
                       <li
                         key={subsubcategory.category_name}
-                        className="border-b hover:bg-[#D9D9D9] cursor-pointer w-full px-4 py-2"
+                        className="border-b hover:bg-[#D9D9D9] ml-10 cursor-pointer w-full px-4 py-2"
                         onClick={() => {
-                          // setShow(true);
                           navigate(`/search/${subsubcategory.category_name}`);
                         }}
                       >

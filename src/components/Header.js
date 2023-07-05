@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import searchIcon from '../assets/images/material-symbols_search.svg';
 import compareProducts from '../assets/images/fluent_branch-compare-20-filled.png';
+import home from '../assets/images/majesticons_home.svg';
+import profile from '../assets/images/codicon_account.svg';
 // import wishList from '../assets/images/Vector (4).svg';
 import account from '../assets/images/fluent-mdl2_profile-search.svg';
 import cartImage from '../assets/images/ic_baseline-add-shopping-cart.svg';
@@ -29,8 +31,8 @@ const Header = ({ onCurrencyChange, currency }) => {
     i18n.changeLanguage(lng);
   };
   const { products } = useSelector((state) => state.searchProducts);
-  const { data,totalprice } = useSelector((state) => state.cart.cart);
-  const cart=data;
+  const { data, totalprice } = useSelector((state) => state.cart.cart);
+  const cart = data;
   useEffect(() => {
     dispatch(getCart()).unwrap();
   }, [dispatch]);
@@ -107,7 +109,7 @@ const Header = ({ onCurrencyChange, currency }) => {
             />
             <input
               type="search"
-              placeholder={t('SearchProduct')}
+              placeholder={t('What are you looking for')}
               onChange={(event) => {
                 setSearchItem(event.target.value);
                 if (event.target.value.length > 3)
@@ -150,7 +152,27 @@ const Header = ({ onCurrencyChange, currency }) => {
               ))}
           </div>
         </div>
-        <div className="flex xs:text-xs">
+        <div className="flex xs:text-xs xs:fixed xs:bg-black z-50 w-full xs:py-4 xs:justify-around rounded-tl-lg rounded-tr-lg bottom-0">
+          <div
+            className="flex items-center md:hidden mx-4 xs:mx-2 cursor-pointer"
+            onClick={() => navigate('/')}
+          >
+            <img
+              src={home}
+              alt="compare"
+              className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
+            />
+          </div>
+          <div
+            className="flex items-center md:hidden mx-4 xs:mx-2 cursor-pointer"
+            onClick={() => navigate('/categories')}
+          >
+            <img
+              src={category}
+              alt="compare"
+              className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
+            />
+          </div>
           <div
             className="flex items-center cursor-pointer"
             onClick={() => navigate('/compare')}
@@ -179,19 +201,6 @@ const Header = ({ onCurrencyChange, currency }) => {
           </div> */}
           <div
             className="flex items-center mx-4 xs:mx-2 cursor-pointer"
-            onClick={() => navigate('/auth/login')}
-          >
-            <img
-              src={account}
-              alt="compare"
-              className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
-            />
-            <span className="xs:hidden">
-              {t('Login')} <br /> {t('my account')}
-            </span>
-          </div>
-          <div
-            className="flex items-center mx-4 xs:mx-2 cursor-pointer"
             onClick={() => navigate('/cart')}
           >
             <img
@@ -211,9 +220,22 @@ const Header = ({ onCurrencyChange, currency }) => {
               </span>
             </p>
           </div>
+          <div
+            className="flex items-center mx-4 xs:mx-2 cursor-pointer"
+            onClick={() => navigate('/auth/login')}
+          >
+            <img
+              src={profile}
+              alt="compare"
+              className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
+            />
+            <span className="xs:hidden">
+              {t('Login')} <br /> {t('my account')}
+            </span>
+          </div>
         </div>
       </div>
-      <div className="bg-[#678385] xs:hidden flex justify-around py-4 text-white font-semibold text-xs items-center w-screen">
+      <div className="bg-[#678385] z-[999] xs:hidden flex justify-around py-4 text-white font-semibold text-xs items-center w-screen">
         <div className="flex w-1/6">
           <img src={category} alt="categories" className="w-7 h-7 mx-3" />
           <button
@@ -249,7 +271,7 @@ const Header = ({ onCurrencyChange, currency }) => {
       </div>
       {showMenu && (
         <div className="bg-[#678385] translate-x-0 absolute z-[1] sm:hidden text-center py-4 text-white font-normal text-lg items-center w-screen">
-          <div className="block">
+          {/* <div className="block">
             <button
               className="bg-inherit"
               onClick={() => {
@@ -260,21 +282,26 @@ const Header = ({ onCurrencyChange, currency }) => {
             >
               {t('ShopByCategory')}
             </button>
-          </div>
+          </div> */}
           <div className="main-nav">
             <ul className="block">
-              {navItems.map((item) => (
-                <li key={item.name} className="pb-4">
-                  <Link
-                    to={item.path}
-                    onClick={() => {
-                      setShowMenu(false);
-                    }}
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
+              {navItems.map((item) => {
+                if (item.name === 'HOME') {
+                  return null;
+                }
+                return (
+                  <li key={item.name} className="pb-4">
+                    <Link
+                      to={item.path}
+                      onClick={() => {
+                        setShowMenu(false);
+                      }}
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
           <div>

@@ -29,10 +29,10 @@ const HomePage = ({ ...props }) => {
   ) : (
     <div>
       <div className="flex xs:flex-col justify-around">
-        <div className="rounded-md shadow-md xs:px-2 my-3 lg:mx-2 shadow-black w-2/3 xs:w-screen bg-[#415871]">
+        <div className="rounded-md shadow-md  my-3 lg:mx-2 shadow-[#415871] w-2/3 xs:w-[95%] xs:rounded-xl mx-auto">
           <Slider data={data?.Head?.Sections_001?.Slider} />
         </div>
-        <div className="w-1/3 sm:px-6 xs:w-screen">
+        <div className="w-1/3 sm:px-6 xs:hidden">
           {sideData?.map((data, i) => (
             <div
               key={i}
@@ -53,7 +53,7 @@ const HomePage = ({ ...props }) => {
                 <img
                   src={data.image}
                   alt="sideImage"
-                  className="object-contain h-44 md:ml-12"
+                  className="object-contain h-44 md:ml-6"
                 />
               </div>
             </div>
