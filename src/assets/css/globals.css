@@ -8,3 +8,7 @@ html{
     padding: 0;
     /* overflow-x: hidden; */
 }
+
+.custom-rating .jrating .jrating-selected {
+    background-image: url("data:image/svg+xml,%0A%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27yellow%27%3E%3Cpath d=%27M0 0h24v24H0z%27 fill=%27none%27/%3E%3Cpath d=%27M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z%27/%3E%3Cpath d=%27M0 0h24v24H0z%27 fill=%27none%27/%3E%3C/svg%3E");
+}

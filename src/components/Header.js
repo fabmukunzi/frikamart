@@ -9,7 +9,7 @@ import cartImage from '../assets/images/ic_baseline-add-shopping-cart.svg';
 import category from '../assets/images/bxs_category.svg';
 import menu from '../assets/images/icons8-menu.svg';
 import close from '../assets/images/icons8-close-120.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Categories from './Categories';
 import { searchProducts } from '../features/products/Search';
@@ -25,6 +25,7 @@ const Header = ({ onCurrencyChange, currency }) => {
   const [scale, setScale] = useState(false);
   // const location = useLocation();
   const navigate = useNavigate();
+  const location=useLocation();
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const changeLanguage = (lng) => {
@@ -36,6 +37,20 @@ const Header = ({ onCurrencyChange, currency }) => {
   useEffect(() => {
     dispatch(getCart()).unwrap();
   }, [dispatch]);
+  useEffect(() => {
+    // console.log(location.pathname,'location')
+    // window.addEventListener("resize", ()=>{
+      if ((window.innerWidth < 426)&&(location.pathname==='/categories')) {
+        dispatch(getCategories());
+        setScale(true);
+      }
+      if ((window.innerWidth > 426)&&(location.pathname==='/categories')) {
+        setScale(false);
+        navigate('/')
+      }
+    // })
+    
+  },[scale,dispatch,location.pathname,navigate])
   const navItems = [
     { name: `${t('Home')}`, path: '/' },
     { name: `${t('Stores')}`, path: '/stores' },
@@ -97,7 +112,7 @@ const Header = ({ onCurrencyChange, currency }) => {
         >
           FRIKAMART
         </h1>
-        <div className="md:w-[36%]">
+        <div className="mx-44">
           <div className="flex xs:absolute left-0 top-14">
             <img
               src={!showMenu ? menu : close}

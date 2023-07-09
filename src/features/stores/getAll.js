@@ -5,8 +5,8 @@ export const getAllStores = createAsyncThunk(
   'stores/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/store');
-      return response.data;
+      const response = await axios.get('/stores');
+      return response.data.data;
       
     } catch (error) {
       return rejectWithValue(error.response);

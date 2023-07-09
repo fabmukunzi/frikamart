@@ -5,7 +5,7 @@ export const getSingleStore = createAsyncThunk(
   'stores/getSingle',
   async ({id}, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/store/${id}`);
+      const response = await axios.get(`/stores/${id}/products`);
       return response.data;
       
     } catch (error) {

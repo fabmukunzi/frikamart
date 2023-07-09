@@ -11,8 +11,7 @@ const SingleShop = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { store } = useSelector((state) => state.store);
-  const Store=store?.Store
+  const { store,products } = useSelector((state) => state.store.store);
   useEffect(() => {
     dispatch(getSingleStore({ id: id }));
   }, [dispatch, id]);
@@ -20,24 +19,24 @@ const SingleShop = () => {
     <div className="mx-2">
       <div className="flex xs:flex-col xs:w-full mx-auto font-bold justify-end bg-[#D9D9D9] w-2/3 my-6">
         <img
-          src={Store?.image}
+          src={store?.config_logo}
           alt="image0"
           className="w-[25rem] object-contain"
         />
         <div className="px-4 py-3 bg-white w-2/3 xs:w-full">
           <div className="flex items-center justify-between">
             <div className="">
-              <h1>{Store?.store_name}</h1>
-              <h1 className="my-2 text-blue-900 w-full">{Store?.rank}</h1>
+              <h1>{store?.store_name}</h1>
+              <h1 className="my-2 text-blue-900 w-full">{store?.rank}</h1>
             </div>
             <div className="flex py-2 xs:mb-16">
               <p>Domain:</p>
               <a href="#" className="text-blue-900 ml-3">
-                {Store?.store_url}
+                {store?.config_url}
               </a>
             </div>
           </div>
-          <p className="my-2">{Store?.description}</p>
+          <p className="my-2">{store?.config_meta_description}</p>
         </div>
       </div>
       <div className="flex xs:w-full justify-between rounded-lg md:mx-10 px-3 my-6 items-center bg-[#D9D9D9]">
@@ -56,7 +55,7 @@ const SingleShop = () => {
         </div>
       </div>
       <div className="grid grid-cols-4 xs:grid-cols-1 justify-center">
-        {store?.Products?.map((product) => (
+        {products?.map((product) => (
           <ProductCard product={product} />
         ))}
       </div>

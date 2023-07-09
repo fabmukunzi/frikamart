@@ -23,6 +23,7 @@ import convertCurrency from '../../utils/convertCurrency';
 import Loader from '../Loader';
 import QuoteRequestForm from '../quoteModel';
 import TextRenderer from '../textrender';
+import Rating from '../Rating';
 
 const SingleProduct = () => {
   const { product, isLoading } = useSelector((state) => state.singleProduct);
@@ -35,12 +36,19 @@ const SingleProduct = () => {
   const { id } = useParams();
   const [cart, setCart] = useState({ uid: id, attributes: [] });
   const [bg, setBg] = useState(false);
+  const [currentData, setCurrentData] = useState('desc');
   const { t } = useTranslation();
   const dispatch = useDispatch();
   let rate = product?.data?.rating;
+  const [ratingValue, setRatingValue] = useState(0);
+  const [feedback, setFeedback]=useState('')
+
+  const handleRatingChange = (element, value) => {
+    setRatingValue(parseInt(value, 10));
+  };
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  });
+  }, [dispatch]);
   const handleRequestQuote = () => {
     setShowForm(true);
   };
@@ -137,7 +145,7 @@ const SingleProduct = () => {
               <p className="flex items-center">
                 <img src={store} alt="whatsapp" className="w-10 mx-2" />
                 <a href="/" className="text-blue-900">
-                  {product?.data?.slug}
+                  {product?.data?.store_name}
                 </a>
               </p>
               <p className="text-xl my-2 text-red-600">
@@ -280,14 +288,66 @@ const SingleProduct = () => {
       </div>
       <div className="mx-8 xs:mx-4">
         <div className="flex justify-start">
-          <p className="text-lg font-bold cursor-pointer">DESCRIPTION</p>
-          <p className="text-lg font-bold cursor-pointer mx-32 xs:mx-10">
+          <p
+            className="text-lg font-bold cursor-pointer"
+            onClick={() => setCurrentData('desc')}
+          >
+            DESCRIPTION
+          </p>
+          <p
+            className="text-lg font-bold cursor-pointer mx-32 xs:mx-10"
+            onClick={() => setCurrentData('reviews')}
+          >
             REVIEWS
           </p>
-          <p className="text-lg font-bold cursor-pointer">FAQS</p>
+          <p
+            className="text-lg font-bold cursor-pointer"
+            onClick={() => setCurrentData('faqs')}
+          >
+            FAQS
+          </p>
         </div>
         <div className="py-[1px] bg-black w-full my-2"></div>
-        <TextRenderer text={product?.data?.description}></TextRenderer>
+        {currentData === 'desc' ? (
+          <TextRenderer text={product?.data?.description}></TextRenderer>
+        ) : (
+          ''
+        )}
+        {currentData === 'reviews' ? (
+          <div className='flex justify-between gap-20'>
+            <div className='w-full'>
+            <p className="py-3 font-bold underline">
+              {product?.data?.reviews?.length} Reviews
+            </p>
+            <div>
+              {product?.data?.reviews?.map((review) => (
+              <div className="border">
+                <div className="text-lg font-bold bg-[#D9D9D9]">
+                  Author: {review.author}
+                </div>
+                <p>{review.review_description}</p>
+              </div>
+            ))}
+            </div>
+            </div>
+            <div className='w-full'>
+              <p>Submit Your review</p>
+              <p>your rating of this product</p>
+              <Rating
+              className="custom-rating"
+                options={{
+                  value: ratingValue,
+                  onchange: handleRatingChange,
+                  number: 5,
+                }}
+              />
+              <textarea className='border-2 p-2 border-black rounded-md w-60 h-20' onChange={()=>setFeedback(this.target.value)}></textarea>
+              <button className='bg-[#08F46C] px-8 py-2 text-md w-fit xs:p-4 rounded-md ml-3 shadow-md shadow-slate-500' onClick={()=>console.log(ratingValue,'feeed')}>Submit</button>
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
       <div className="flex items-center my-4 mx-8 font-bold">
         <img src={guides} alt="guides" className="w-10" />

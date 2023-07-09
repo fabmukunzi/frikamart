@@ -8,10 +8,13 @@ const Categories = ({ scale }) => {
   const [currentCategory, setCurrentCategory] = useState(null);
   const [showSubSubCategory, setShowSubSubCategory] = useState(false);
   const [currentSubCategory, setCurrentSubCategory] = useState(null);
+  // const [scalee,setScalee]=useState(scale)
   // const handleResize = () => {
-  //   if (window.innerWidth < 720) {
+  //   if (window.innerWidth < 426) {
+  //     setScalee(true);
   //       navigate(`/categories`)
   //   } else {
+  //     setScalee(false);
   //     navigate(`/`)
   //   }
   // }
@@ -38,6 +41,7 @@ const Categories = ({ scale }) => {
     }
     setCurrentSubCategory(subcategoryId);
   };
+  console.log(scale,'scale')
 
   return (
     <div
