@@ -24,6 +24,8 @@ import Loader from '../Loader';
 import QuoteRequestForm from '../quoteModel';
 import TextRenderer from '../textrender';
 import Rating from '../Rating';
+import { rating } from '../../features/products/rating';
+import { showSuccessMessage } from '../../utils/toast';
 
 const SingleProduct = () => {
   const { product, isLoading } = useSelector((state) => state.singleProduct);
@@ -41,11 +43,17 @@ const SingleProduct = () => {
   const dispatch = useDispatch();
   let rate = product?.data?.rating;
   const [ratingValue, setRatingValue] = useState(0);
-  const [feedback, setFeedback]=useState('')
+  const [feedback, setFeedback] = useState('');
 
   const handleRatingChange = (element, value) => {
     setRatingValue(parseInt(value, 10));
   };
+  const extractTextFromHtml = (html) => {
+    const temporaryElement = document.createElement('div');
+    temporaryElement.innerHTML = html;
+    return temporaryElement.textContent;
+  };  
+  const textRender=extractTextFromHtml(product?.data?.description)
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }, [dispatch]);
@@ -54,6 +62,18 @@ const SingleProduct = () => {
   };
   const handleCloseForm = () => {
     setShowForm(false);
+  };
+  const handleSubmit = async () => {
+    const review = { rating: ratingValue, description: feedback };
+    const data = { uid: uid, ...review };
+    try {
+      const res =await dispatch(rating({ data })).unwrap();
+      console.log(res,'jhggggfffdddd')
+      setRatingValue(0);
+      showSuccessMessage(res.msg)
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleAttributeChange = (attribute, value) => {
     const isSelected = cart.attributes.some((attr) => attr.name === attribute);
@@ -309,40 +329,50 @@ const SingleProduct = () => {
         </div>
         <div className="py-[1px] bg-black w-full my-2"></div>
         {currentData === 'desc' ? (
-          <TextRenderer text={product?.data?.description}></TextRenderer>
+          <TextRenderer text={textRender}></TextRenderer>
         ) : (
           ''
         )}
         {currentData === 'reviews' ? (
-          <div className='flex justify-between gap-20'>
-            <div className='w-full'>
-            <p className="py-3 font-bold underline">
-              {product?.data?.reviews?.length} Reviews
-            </p>
-            <div>
-              {product?.data?.reviews?.map((review) => (
-              <div className="border">
-                <div className="text-lg font-bold bg-[#D9D9D9]">
-                  Author: {review.author}
-                </div>
-                <p>{review.review_description}</p>
+          <div className="flex xs:flex-col justify-between gap-20">
+            <div className="w-full">
+              <p className="py-3 font-bold underline">
+                {product?.data?.reviews?.length} Reviews
+              </p>
+              <div>
+                {product?.data?.reviews?.map((review) => (
+                  <div className="border">
+                    <div className="text-lg font-bold bg-[#D9D9D9]">
+                      Author: {review.author}
+                    </div>
+                    <p>{review.review_description}</p>
+                  </div>
+                ))}
               </div>
-            ))}
             </div>
-            </div>
-            <div className='w-full'>
+            <div className="w-full">
               <p>Submit Your review</p>
               <p>your rating of this product</p>
               <Rating
-              className="custom-rating"
+                className="custom-rating"
                 options={{
                   value: ratingValue,
                   onchange: handleRatingChange,
                   number: 5,
                 }}
               />
-              <textarea className='border-2 p-2 border-black rounded-md w-60 h-20' onChange={()=>setFeedback(this.target.value)}></textarea>
-              <button className='bg-[#08F46C] px-8 py-2 text-md w-fit xs:p-4 rounded-md ml-3 shadow-md shadow-slate-500' onClick={()=>console.log(ratingValue,'feeed')}>Submit</button>
+              <textarea
+                className="border-2 p-2 border-black rounded-md w-60 h-20"
+                onChange={(event) => {
+                  setFeedback(event.target.value)
+                }}
+              ></textarea><br />
+              <button
+                className="bg-[#08F46C] px-8 py-2 text-md w-fit  rounded-md ml-3 shadow-md shadow-slate-500"
+                onClick={()=>handleSubmit()}
+              >
+                Submit
+              </button>
             </div>
           </div>
         ) : (

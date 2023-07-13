@@ -17,6 +17,7 @@ import ContactPage from '../pages/ContactPage';
 import MadeInAfrica from '../pages/MadeInAfrica';
 
 const AppRoutes = () => {
+  const isMobile = window.innerWidth < 426;
   return (
     <Routes>
       <Route element={<PageLayout />}>

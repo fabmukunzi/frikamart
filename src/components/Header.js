@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import searchIcon from '../assets/images/material-symbols_search.svg';
 import compareProducts from '../assets/images/fluent_branch-compare-20-filled.png';
 import home from '../assets/images/majesticons_home.svg';
-import profile from '../assets/images/codicon_account.svg';
+import defaultAvatar from '../assets/images/codicon_account.svg';
 // import wishList from '../assets/images/Vector (4).svg';
 import account from '../assets/images/fluent-mdl2_profile-search.svg';
 import cartImage from '../assets/images/ic_baseline-add-shopping-cart.svg';
@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCart } from '../features/cart/getCart';
 import { getCategories } from '../features/products/category';
 import convertCurrency from '../utils/convertCurrency';
+import { getProfile } from '../features/auth/profile';
 
 const Header = ({ onCurrencyChange, currency }) => {
   const [showMenu, setShowMenu] = useState(false);
@@ -32,25 +33,23 @@ const Header = ({ onCurrencyChange, currency }) => {
     i18n.changeLanguage(lng);
   };
   const { products } = useSelector((state) => state.searchProducts);
+  const profile = useSelector((state) => state.profile.data);
   const { data, totalprice } = useSelector((state) => state.cart.cart);
   const cart = data;
   useEffect(() => {
+    dispatch(getProfile()).unwrap();
     dispatch(getCart()).unwrap();
   }, [dispatch]);
-  useEffect(() => {
-    // console.log(location.pathname,'location')
-    // window.addEventListener("resize", ()=>{
-      if ((window.innerWidth < 426)&&(location.pathname==='/categories')) {
-        dispatch(getCategories());
-        setScale(true);
-      }
-      if ((window.innerWidth > 426)&&(location.pathname==='/categories')) {
-        setScale(false);
-        navigate('/')
-      }
-    // })
-    
-  },[scale,dispatch,location.pathname,navigate])
+useEffect(() => {
+  if (window.innerWidth < 426 && location.pathname === '/categories') {
+    dispatch(getCategories());
+    setScale(true);
+  } else if (window.innerWidth > 426 && location.pathname === '/categories') {
+    setScale(false);
+    navigate('/');
+  }
+}, [dispatch, location.pathname, navigate]);
+
   const navItems = [
     { name: `${t('Home')}`, path: '/' },
     { name: `${t('Stores')}`, path: '/stores' },
@@ -237,15 +236,18 @@ const Header = ({ onCurrencyChange, currency }) => {
           </div>
           <div
             className="flex items-center mx-4 xs:mx-2 cursor-pointer"
-            onClick={() => navigate('/auth/login')}
+            onClick={() => {
+              if(!profile.data)
+              navigate('/auth/login')
+            }}
           >
             <img
-              src={profile}
+              src={profile.data?profile.data?.avatar:defaultAvatar}
               alt="compare"
               className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
             />
             <span className="xs:hidden">
-              {t('Login')} <br /> {t('my account')}
+              {profile.data?profile.data.firstname:(<div>{t('Login')} <br /> {t('my account')}</div>)}
             </span>
           </div>
         </div>

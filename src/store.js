@@ -13,6 +13,8 @@ import getStoresReducer from './features/stores/getAll';
 import getSingleStoreReducer from './features/stores/getSingle';
 import updateCartReducer from './features/cart/updateCart';
 import clearCartReducer from './features/cart/clearCart';
+import ratingReducer from './features/products/rating';
+import profileReducer from './features/auth/profile';
 
 const store = configureStore({
   reducer: {
@@ -30,6 +32,8 @@ const store = configureStore({
     store: getSingleStoreReducer,
     updateCart: updateCartReducer,
     clearCart: clearCartReducer,
+    rating: ratingReducer,
+    profile: profileReducer,
   },
 });
 

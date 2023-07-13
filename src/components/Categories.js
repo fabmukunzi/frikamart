@@ -8,22 +8,22 @@ const Categories = ({ scale }) => {
   const [currentCategory, setCurrentCategory] = useState(null);
   const [showSubSubCategory, setShowSubSubCategory] = useState(false);
   const [currentSubCategory, setCurrentSubCategory] = useState(null);
-  // const [scalee,setScalee]=useState(scale)
-  // const handleResize = () => {
-  //   if (window.innerWidth < 426) {
-  //     setScalee(true);
-  //       navigate(`/categories`)
-  //   } else {
-  //     setScalee(false);
-  //     navigate(`/`)
-  //   }
-  // }
-  // useEffect(() => {
-  //   window.addEventListener("resize", handleResize)
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize);
-  // }
-  // },[])
+  const [scalee,setScalee]=useState(scale)
+  const handleResize = () => {
+    if (window.innerWidth < 426) {
+      setScalee(true);
+        navigate(`/categories`)
+    } else {
+      setScalee(false);
+      navigate(`/`)
+    }
+  }
+  useEffect(() => {
+    window.addEventListener("resize", handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize);
+  }
+  },[window.onresize])
   const handleCategoryClick = (categoryId) => {
     if (currentCategory === categoryId) {
       setShowSubCategory(!showSubCategory);
@@ -41,12 +41,11 @@ const Categories = ({ scale }) => {
     }
     setCurrentSubCategory(subcategoryId);
   };
-  console.log(scale,'scale')
 
   return (
     <div
       className={`${
-        scale
+        scalee
           ? 'md:-translate-y-[3.7rem]'
           : 'opacity-0 -translate-y-[3.7rem] md:hidden -translate-x-[100%]'
       } w-full border-2 transition md:ml-10 md:mt-[3.7rem] mduration-500 transform xs:w-full md:w-1/4 md:absolute bg-white z-[999] h-fit text-xl font-poppins`}

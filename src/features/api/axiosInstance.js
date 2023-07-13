@@ -7,6 +7,7 @@ const axiosInstance = axios.create({
 
 const requestHandler = async (request) => {
   let session = localStorage.getItem('session');
+  let token = localStorage.getItem('token');
   if (!session) {
     const { data } = await axios.post(
       `${process.env.REACT_APP_PRODUCTS_API}user/guest/create-session`
@@ -15,6 +16,7 @@ const requestHandler = async (request) => {
     localStorage.setItem('session', session);
   }
   request.headers.session = session;
+  request.headers.token = token;
   return request;
 };
 
