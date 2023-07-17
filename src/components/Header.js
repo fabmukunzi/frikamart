@@ -239,10 +239,12 @@ useEffect(() => {
             onClick={() => {
               if(!profile.data)
               navigate('/auth/login')
+              else
+              navigate('/user/profile')
             }}
           >
             <img
-              src={profile.data?profile.data?.avatar:defaultAvatar}
+              src={profile.data?profile?.data?.avatar:defaultAvatar}
               alt="compare"
               className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
             />

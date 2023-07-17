@@ -15,9 +15,9 @@ import Categories from '../components/Categories';
 import SearchPage from '../pages/SearchPage';
 import ContactPage from '../pages/ContactPage';
 import MadeInAfrica from '../pages/MadeInAfrica';
+import Profile from '../pages/Profile';
 
 const AppRoutes = () => {
-  const isMobile = window.innerWidth < 426;
   return (
     <Routes>
       <Route element={<PageLayout />}>
@@ -32,6 +32,7 @@ const AppRoutes = () => {
         <Route path="/categories" element={<Categories />} />
         <Route path="/search/:item" element={<SearchPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/user/profile" element={<Profile />} />
         <Route path="/madeinafrica" element={<MadeInAfrica />} />
       </Route>
       <Route path='/auth'>
