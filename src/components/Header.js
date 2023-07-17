@@ -44,7 +44,8 @@ useEffect(() => {
   if (window.innerWidth < 426 && location.pathname === '/categories') {
     dispatch(getCategories());
     setScale(true);
-  } else if (window.innerWidth > 426 && location.pathname === '/categories') {
+  }
+   else if (window.innerWidth > 426 && location.pathname === '/categories') {
     setScale(false);
     navigate('/');
   }
@@ -261,7 +262,7 @@ useEffect(() => {
             className="bg-inherit"
             onClick={() => {
               setScale(!scale);
-              dispatch(getCategories());
+              // dispatch(getCategories());
             }}
           >
             {t('Category')}

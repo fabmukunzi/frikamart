@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 const ShopCard = ({ data }) => {
   const navigate = useNavigate();
   return (
-    <div className="w-full bg-white mx-auto rounded-lg font-bold my-2">
-      <img src={data?.config_url} alt="image1" className="w-full" />
+    <div className="w-full bg-white mx-auto border-3 border rounded-lg font-bold my-2">
+      <img src={data?.config_logo} alt="image1" className="w-full h-48 object-cover" />
       <div className="px-4 py-3">
         <div className="flex justify-between my-4">
           <h1 className='uppercase'>{data?.store_name}</h1>
