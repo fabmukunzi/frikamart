@@ -1,7 +1,9 @@
 import { Autocomplete, TextField, } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import { countries, paymentMethods } from './../utils/data'
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import * as Yup from 'yup';
+import { countries, paymentMethods } from './../utils/data';
+import { Link } from 'react-router-dom';
 
 const CheckoutPage = () => {
 
@@ -28,11 +30,36 @@ const CheckoutPage = () => {
         orderNotes: "",
         companyInvoiceRequired: false,
     })
+
     const [billingSimilarToShipping, setBillingSimilarToShipping] = useState(true)
+
+    const validationSchema = Yup.object({
+        shippingInformation: {
+            fullName: Yup.string().required("Required"),
+            email: Yup.string().email("Invalid email").required("Required"),
+            phone: Yup.string().required("Required"),
+            country: Yup.string().required("Required"),
+            state: Yup.string().required("Required"),
+            city: Yup.string().required("Required"),
+            address: Yup.string().required("Required"),
+        },
+        billingInformation: {
+            fullName: Yup.string().required("Required"),
+            email: Yup.string().email("Invalid email").required("Required"),
+            phone: Yup.string().required("Required"),
+            country: Yup.string().required("Required"),
+            state: Yup.string().required("Required"),
+            city: Yup.string().required("Required"),
+            address: Yup.string().required("Required"),
+        },
+        paymentMethod: Yup.string().required("Required"),
+        orderNotes: Yup.string(),
+        companyInvoiceRequired: Yup.boolean(),
+    })
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        console.log(checkoutData)
     }
 
     const { data } = useSelector(
@@ -42,24 +69,27 @@ const CheckoutPage = () => {
     useEffect(() => {
         document.title = 'Checkout'
     }, [])
-    console.log(data)
     return (
         <div className='w-full flex min-h-screen justify-center px-32 pb-8'>
             <div className='border-r border-black flex flex-col w-3/6 pb-8'>
                 <span className='font-bold text-3xl'>Checkout.</span>
                 <hr className='my-6' />
-                <form className='flex flex-col w-full px-4'>
+                <form onSubmit={handleSubmit} className='flex flex-col w-full px-4'>
                     <div className='flex flex-col'>
                         <span className='text-2xl font-bold mb-6'>Shipping Information</span>
-                        <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Full Name" className='w-full mb-4' size='small' focused variant="outlined" value={checkoutData.shippingInformation.fullName} required />
+                        <TextField
+                            onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Full Name" className='w-full mb-4' size='small' focused variant="outlined" value={checkoutData.shippingInformation.fullName} required />
                         <div className='w-full flex items-center my-6 justify-between'>
                             <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, email: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Email" className='w-[62%] mr-4' type='email' size='small' focused variant="outlined" value={checkoutData.shippingInformation.email} required />
                             <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, phone: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Phone" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.shippingInformation.phone} required />
                         </div>
                         <Autocomplete
                             disablePortal
-                            sx={{ '& fieldset': { borderRadius: 33 }}}
-                            // sx={{ borderRadius: 4, }}
+                            sx={{ '& fieldset': { borderRadius: 4 } }}
+                            onChange={(event, newValue) => {
+                                setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, country: newValue } });
+                                setOpen(false);
+                            }}
                             options={countries}
                             renderInput={(params) => <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} focused className='w-full' {...params} label="Country" />}
                             className='w-full outline-none'
@@ -124,7 +154,11 @@ const CheckoutPage = () => {
                     </div>
                     <div className='flex flex-col'>
                         <span className='font-semibold text-lg my-2'>Order Notes</span>
-                        <textarea value={checkoutData.orderNotes} onChange={(e) => checkoutData.orderNotes} className='w-full p-3 rounded-md border outline-none' placeholder="Notes about your order, e.g. special notes for delivery" rows={3}></textarea>
+                        <textarea value={checkoutData.orderNotes} onChange={(e) => setCheckoutData({ ...checkoutData, orderNotes: e.target.value })} className='w-full p-3 rounded-md border outline-none' placeholder="Notes about your order, e.g. special notes for delivery" rows={3}></textarea>
+                    </div>
+                    <div className="w-full flex justify-between mt-4 items-center">
+                        <Link to="/cart" className="text-blue-600">Back to Cart</Link>
+                        <button className='px-4 py-3 rounded bg-blue-600 text-white' type="submit">Submit</button>
                     </div>
                 </form>
             </div>
@@ -153,9 +187,9 @@ const CheckoutPage = () => {
                                     </div>
                                     <span>{data.price}</span>
                                 </div>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col my-4'>
                                     <span className='font-bold text-lg'>Shipping method</span>
-                                    <label className='py-3 px-3 border-b w-full flex flex-col'>
+                                    <label className='py-3 px-3 w-full flex flex-col'>
                                         <div className='flex'>
                                             <input type={"radio"} className='w-5' name="payment-method" />
                                             <span className='ml-2 flex'>Free delivery - &nbsp;<span className='font-bold'>Free shipping</span> </span>
