@@ -11,7 +11,7 @@ import LoginForm from '../components/forms/LoginForm';
 import RegisterForm from '../components/forms/Register';
 import ShopsPage from '../pages/ShopsPage';
 import SingleShop from '../pages/SingleShop';
-import Categories from '../components/Categories';
+import Categories, { MobileCategories } from '../components/Categories';
 import SearchPage from '../pages/SearchPage';
 import ContactPage from '../pages/ContactPage';
 import MadeInAfrica from '../pages/MadeInAfrica';
@@ -31,7 +31,7 @@ const AppRoutes = () => {
         <Route path="/compare" element={<ComparePage />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/store/:id" element={<SingleShop />} />
-        <Route path="/categories" element={<Categories />} />
+        <Route path="/categories" element={<MobileCategories />} />
         <Route path="/search/:item" element={<SearchPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/user/profile" element={<Profile />} />

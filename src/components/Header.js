@@ -11,7 +11,7 @@ import menu from '../assets/images/icons8-menu.svg';
 import close from '../assets/images/icons8-close-120.png';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Categories from './Categories';
+import Categories, { DesktopCategories } from './Categories';
 import { searchProducts } from '../features/products/Search';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart } from '../features/cart/getCart';
@@ -41,13 +41,15 @@ const Header = ({ onCurrencyChange, currency }) => {
     dispatch(getCart()).unwrap();
   }, [dispatch]);
 useEffect(() => {
-  if (window.innerWidth < 426 && location.pathname === '/categories') {
-    dispatch(getCategories());
-    setScale(true);
-  } else if (window.innerWidth > 426 && location.pathname === '/categories') {
-    setScale(false);
-    navigate('/');
-  }
+  window.addEventListener('resize',()=>{
+    if (window.innerWidth < 426 && location.pathname === '/categories') {
+      setScale(true);
+    }
+    else if (window.innerWidth > 426 && location.pathname === '/categories') {
+      setScale(false);
+      window.location.href = '/'; // Redirect to the root path '/'
+    }
+  })
 }, [dispatch, location.pathname, navigate]);
 
   const navItems = [
@@ -179,7 +181,10 @@ useEffect(() => {
           </div>
           <div
             className="flex items-center md:hidden mx-4 xs:mx-2 cursor-pointer"
-            onClick={() => navigate('/categories')}
+            onClick={() => {
+              setScale(true)
+              navigate('/categories')
+            }}
           >
             <img
               src={category}
@@ -261,7 +266,7 @@ useEffect(() => {
             className="bg-inherit"
             onClick={() => {
               setScale(!scale);
-              dispatch(getCategories());
+              // dispatch(getCategories());
             }}
           >
             {t('Category')}
@@ -373,7 +378,9 @@ useEffect(() => {
             : ''
         }`}</h1>
       </div> */}
+      <div className='xs:hidden'>
       {<Categories scale={scale} />}
+      </div>
     </div>
   );
 };

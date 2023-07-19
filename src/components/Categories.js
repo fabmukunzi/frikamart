@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { getCategories } from '../features/products/category';
 const Categories = ({ scale }) => {
   const { categories } = useSelector((state) => state.categories);
-  console.log(categories,'catttt')
-  console.log('shsgdg')
   const navigate = useNavigate();
+  const dispatch=useDispatch();
   const [showSubCategory, setShowSubCategory] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [showSubSubCategory, setShowSubSubCategory] = useState(false);
@@ -27,17 +27,17 @@ const Categories = ({ scale }) => {
     }
     setCurrentSubCategory(subcategoryId);
   };
-// ${
-        // scale
-        //   ? 'md:-translate-y-[3.7rem]'
-        //   : 'opacity-0 -translate-y-[3.7rem] lg:hidden -translate-x-[100%]'
-      // }
+  useEffect(()=>{
+    dispatch(getCategories())
+  },[dispatch])
   return (
     <div
-      className={`
-       
-      w-full border-2 transition md:ml-10 md:mt-[3.7rem] duration-500 transform xs:w-full md:w-1/4 md:absolute bg-white z-[999] h-fit text-xl font-poppins`}
-    >
+  className={
+    scale
+      ? 'md:-translate-y-[3.7rem] w-full border-2 transition md:ml-10 md:mt-[3.7rem] duration-500 transform xs:w-full md:w-1/4 md:absolute bg-white text-green z-[999] h-fit text-xl font-poppins'
+      : `opacity-0 -translate-y-[3.7rem] -translate-x-[100%] w-full border-2 transition md:ml-10 md:mt-[3.7rem] duration-500 transform xs:w-full md:w-1/4 md:absolute bg-white text-green z-[999] h-fit text-xl font-poppins`
+  }
+>
       <ul>
         {categories?.map((category) => (
           <li key={category.uid} className="">
@@ -120,38 +120,12 @@ const Categories = ({ scale }) => {
     </div>
   );
 };
-const CategoriesWrapper = () => {
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-  const navigate = useNavigate();
+export default Categories;
 
-  const handleResize = () => {
-    setIsSmallScreen(window.innerWidth < 768);
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  return (
+export const MobileCategories=()=>{
+  return(
     <div>
-      {isSmallScreen ? (
-        <Categories show={true} />
-      ) : (
-        <div
-          style={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-          }}
-        >
-          <Categories show={false} />
-        </div>
-      )}
+      <Categories scale={true} />
     </div>
-  );
-};
-
-export default CategoriesWrapper;
+  )
+}
