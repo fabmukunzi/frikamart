@@ -88,7 +88,6 @@ const CheckoutPage = () => {
                             sx={{ '& fieldset': { borderRadius: 4 } }}
                             onChange={(event, newValue) => {
                                 setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, country: newValue } });
-                                setOpen(false);
                             }}
                             options={countries}
                             renderInput={(params) => <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} focused className='w-full' {...params} label="Country" />}
