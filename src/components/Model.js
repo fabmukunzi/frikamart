@@ -97,7 +97,7 @@ const Model = ({ ...props }) => {
               </div>
             </div>
           </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-[#2C3E50]" />
+          <div className="opacity-25 fixed inset-0 z-40 bg-app-slate" />
         </>
       ) : null}
     </>

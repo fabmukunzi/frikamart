@@ -73,7 +73,7 @@ useEffect(() => {
   ];
   return (
     <div className="w-screen">
-      <div className="top-nav flex justify-between bg-[#2C3E50] text-white">
+      <div className="top-nav flex justify-between bg-app-slate text-white">
         <h1 className="ml-6 xs:hidden">{t('paragraph')}</h1>
         <div className="flex mx-10 xs:hidden">
           <h1>{t('HOTLINE')}:(+250) 788 679 903</h1>
@@ -106,7 +106,7 @@ useEffect(() => {
           </select>
         </div>
       </div>
-      <div className="top-nav1 flex xs:flex-wrap justify-between xs:pb-14 bg-[#2C3E50] text-white text-sm py-4">
+      <div className="top-nav1 flex xs:flex-wrap justify-between xs:pb-14 bg-app-slate text-white text-sm py-4">
         <h1
           className="md:text-xl md:ml-6 font-bold cursor-pointer text-lg xs:ml-4"
           onClick={() => navigate('/')}

@@ -6,6 +6,9 @@ module.exports = {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
       },
+      colors: {
+        'app-slate': "#2C3E50"
+      }
     },
     screens: {
       xs: { max: '425px' },
