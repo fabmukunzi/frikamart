@@ -16,6 +16,7 @@ import SearchPage from '../pages/SearchPage';
 import ContactPage from '../pages/ContactPage';
 import MadeInAfrica from '../pages/MadeInAfrica';
 import Profile from '../pages/Profile';
+import CheckoutPage from '../pages/CheckoutPage';
 
 const AppRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const AppRoutes = () => {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/products/:id" element={<SingleProduct />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/compare" element={<ComparePage />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/store/:id" element={<SingleShop />} />

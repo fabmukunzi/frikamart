@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart } from '../../features/cart/getCart';
 import close from '../../assets/images/icons8-close.svg';
@@ -73,7 +73,7 @@ const Cart = () => {
                 <p className="text-red-500">
                   {convertCurrency(currency, item?.price)
                     ?.toString()
-                    ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}<br/>
+                    ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}<br />
                   <del className="text-slate-400 ">{item.discount_value}</del>
                 </p>
               </div>
@@ -104,8 +104,8 @@ const Cart = () => {
                   {convertCurrency(
                     currency,
                     item?.price.split(' ')[0] +
-                      ' ' +
-                      item?.price.split(' ')[1] * item.count
+                    ' ' +
+                    item?.price.split(' ')[1] * item.count
                   )
                     ?.toString()
                     ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -123,7 +123,7 @@ const Cart = () => {
                         await dispatch(getCart()).unwrap();
                         showSuccessMessage('Product removed from cart');
                       } catch (error) {
-                        showErrorMessage(error?.data?.error||'Failed to remove item');
+                        showErrorMessage(error?.data?.error || 'Failed to remove item');
                       }
                     }}
                   />
@@ -175,16 +175,19 @@ const Cart = () => {
                   >
                     Clear cart
                   </button>
-                  <button className="bg-[#08F46C] w-fit xs:w-full py-3 text-lg px-8 rounded-sm shadow-md mx-4 mt-4 shadow-black">
-                    Proceed to checkout
-                  </button>
+                  <Link to={"/checkout"}>
+                    <button className="bg-[#08F46C] w-fit xs:w-full py-3 text-lg px-8 rounded-sm shadow-md mx-4 mt-4 shadow-black">
+                      Proceed to checkout
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
           )}
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 };
 

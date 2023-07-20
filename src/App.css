@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: rgb(79, 81, 81) !important;
+  border-width: 1.5px !important;
+}
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused{
+  color: rgb(79, 81, 81) !important;
+}

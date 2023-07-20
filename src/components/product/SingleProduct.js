@@ -92,7 +92,7 @@ const SingleProduct = () => {
       }));
     }
   };
-
+console.log(product?.data?.options?.Color?.values,'hello')
   useEffect(() => {
     dispatch(getSingleProduct({ productId: id }));
   }, [id]);
@@ -179,7 +179,7 @@ const SingleProduct = () => {
               </p>
               <div className="py-[1px] bg-gray-300 w-1/2 my-4"></div>
               <div>
-                {product?.data?.attributes?.map((attribute) => (
+                {product?.data?.options?.Color?.values?.map((attribute) => (
                   <div
                     className="flex my-4 text-sm font-bold"
                     key={attribute.name}

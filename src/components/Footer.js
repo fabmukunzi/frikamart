@@ -19,7 +19,7 @@ const Footer = () => {
   ];
   const digital = [t('FreeHosting'), t('YourOnlineShop'), t('API')];
   return (
-    <div className="flex xs:flex-col xs:pl-4 font-poppins justify-around relative bottom-0 bg-[#2C3E50] w-screen text-white">
+    <div className="flex xs:flex-col xs:pl-4 font-poppins justify-around relative bottom-0 bg-app-slate w-screen text-white">
       <div className="mt-5">
         <h1 className="font-bold text-lg">FRIKAMART</h1>
         <p>
