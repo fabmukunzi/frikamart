@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import searchIcon from '../assets/images/material-symbols_search.svg';
+import defaultAvatar from '../assets/images/codicon_account.svg';
 import compareProducts from '../assets/images/fluent_branch-compare-20-filled.png';
 import home from '../assets/images/majesticons_home.svg';
-import defaultAvatar from '../assets/images/codicon_account.svg';
+import searchIcon from '../assets/images/material-symbols_search.svg';
 // import wishList from '../assets/images/Vector (4).svg';
-import account from '../assets/images/fluent-mdl2_profile-search.svg';
-import cartImage from '../assets/images/ic_baseline-add-shopping-cart.svg';
-import category from '../assets/images/bxs_category.svg';
-import menu from '../assets/images/icons8-menu.svg';
-import close from '../assets/images/icons8-close-120.png';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Categories, { DesktopCategories } from './Categories';
-import { searchProducts } from '../features/products/Search';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCart } from '../features/cart/getCart';
-import { getCategories } from '../features/products/category';
-import convertCurrency from '../utils/convertCurrency';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import category from '../assets/images/bxs_category.svg';
+import cartImage from '../assets/images/ic_baseline-add-shopping-cart.svg';
+import close from '../assets/images/icons8-close-120.png';
+import menu from '../assets/images/icons8-menu.svg';
 import { getProfile } from '../features/auth/profile';
+import { getCart } from '../features/cart/getCart';
+import { searchProducts } from '../features/products/Search';
+import convertCurrency from '../utils/convertCurrency';
+import Categories from './Categories';
 
 const Header = ({ onCurrencyChange, currency }) => {
   const [showMenu, setShowMenu] = useState(false);
@@ -106,14 +104,14 @@ useEffect(() => {
           </select>
         </div>
       </div>
-      <div className="top-nav1 flex xs:flex-wrap justify-between xs:pb-14 bg-app-slate text-white text-sm py-4">
+      <div className="flex xs:flex-wrap justify-between xs:pb-14 bg-app-slate text-white text-sm py-4">
         <h1
           className="md:text-xl md:ml-6 font-bold cursor-pointer text-lg xs:ml-4"
           onClick={() => navigate('/')}
         >
           FRIKAMART
         </h1>
-        <div className="mx-44">
+        <div className="mx-10 mlg:mx-24 lg:mx-44">
           <div className="flex xs:absolute left-0 top-14">
             <img
               src={!showMenu ? menu : close}
@@ -132,7 +130,7 @@ useEffect(() => {
                   dispatch(searchProducts({ product: event.target.value }));
                 setShowSearchItem(true);
               }}
-              className="w-[35rem] outline-none text-black pl-3 xs:w-60 xs:ml-3 text-left rounded-md"
+              className="w-[20rem] mlg:w-[30rem] lg:w-[35rem] outline-none text-black pl-3 xs:w-60 xs:ml-3 text-left rounded-md"
             />
             <span className="ml-[-35px] rounded-md">
               <img
@@ -141,10 +139,8 @@ useEffect(() => {
                 onClick={() => {
                   searchItem &&
                     dispatch(searchProducts({ product: searchItem }));
-                  // onSearch(products);
                   navigate(`/search/${searchItem}`);
                   setShowSearchItem(false);
-                  // navigate(`/products`);
                 }}
                 className="bg-[#08F46C] rounded-md xs:h-8 xs:w-10 cursor-pointer"
               />
@@ -200,6 +196,7 @@ useEffect(() => {
               src={compareProducts}
               alt="compare"
               className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
+              title="Compare Products"
             />
             <span className="xs:hidden">
               {t('Compare')} <br /> {t('Product')}

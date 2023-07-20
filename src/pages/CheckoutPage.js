@@ -70,8 +70,8 @@ const CheckoutPage = () => {
         document.title = 'Checkout'
     }, [])
     return (
-        <div className='w-full flex min-h-screen justify-center px-32 pb-8'>
-            <div className='border-r border-black flex flex-col w-3/6 pb-8'>
+        <div className='w-full flex md:flex-row flex-col-reverse min-h-screen justify-center px-2 smd:px-12 lg:px-32 pb-8'>
+            <div className='md:border-r border-black flex flex-col w-full md:w-7/12 smd:w-3/6 pb-8'>
                 <span className='font-bold text-3xl'>Checkout.</span>
                 <hr className='my-6' />
                 <form onSubmit={handleSubmit} className='flex flex-col w-full px-4'>
@@ -161,7 +161,7 @@ const CheckoutPage = () => {
                     </div>
                 </form>
             </div>
-            <div className='w-2/6 pt-4 px-6 flex flex-col'>
+            <div className='w-full md:w-4/12 smd:w-2/6 md:pt-4 px-2 smd:px-6 flex flex-row overflow-auto md:flex-col'>
                 {
                     data.map((data, index) => {
                         const subtotal = data.count * parseInt(data.price.split(" ")[1])
@@ -169,7 +169,7 @@ const CheckoutPage = () => {
                         const shipping = 10
 
                         return (
-                            <div className="rounded-lg my-8 w-full flex flex-col" key={index}>
+                            <div className="rounded-lg my-8 w-[40rem] md:mx-0 mx-2 md:w-full flex flex-col" key={index}>
                                 <div className='bg-slate-400 mb-4 p-4'>
                                     <p>Go Pro</p>
                                 </div>
