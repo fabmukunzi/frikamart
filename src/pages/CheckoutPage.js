@@ -157,7 +157,7 @@ const CheckoutPage = () => {
                     </div>
                     <div className="w-full flex justify-between mt-4 items-center">
                         <Link to="/cart" className="text-app-slate">Back to Cart</Link>
-                        <button className='px-4 py-3 rounded bg-app-slate text-white' type="submit">Submit</button>
+                        <button className='px-4 py-3 rounded bg-green-600 text-white' type="submit">Submit</button>
                     </div>
                 </form>
             </div>
