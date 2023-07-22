@@ -161,7 +161,7 @@ const CheckoutPage = () => {
                     </div>
                 </form>
             </div>
-            <div className='w-full md:w-4/12 smd:w-2/6 md:pt-4 px-2 smd:px-6 flex flex-row overflow-auto md:flex-col'>
+            <div className='w-full md:w-4/12 smd:w-2/6 md:pt-4 px-2 smd:px-6 flex flex-row overflow-x-scroll whitespace-nowrap md:flex-col'>
                 {
                     data.map((data, index) => {
                         const subtotal = data.count * parseInt(data.price.split(" ")[1])
@@ -169,15 +169,15 @@ const CheckoutPage = () => {
                         const shipping = 10
 
                         return (
-                            <div className="rounded-lg my-8 w-[40rem] md:mx-0 mx-2 md:w-full flex flex-col" key={index}>
+                            <div className="rounded-lg my-8 w-10/12 md:mx-0 mx-2 md:w-full flex flex-col" key={index}>
                                 <div className='bg-slate-400 mb-4 p-4'>
                                     <p>Go Pro</p>
                                 </div>
-                                <div className='flex px-4 w-full justify-between'>
-                                    <div className='flex'>
+                                <div className='flex px-4 w-full justify-between md:flex-row flex-col'>
+                                    <div className='flex md:w-fit w-full'>
                                         <div className='relative'>
                                             <span className='rounded-full bg-slate-300 text-black w-6 h-6 text-center top-0 -right-2 absolute'>{data.count}</span>
-                                            <img src={data.image} className="w-20 h-20 rounded-lg object-cover" alt={data.title} />
+                                            <img src={data.image} className="w-28 h-28 md:w-20 md:h-20 rounded-lg object-cover" alt={data.title} />
                                         </div>
                                         <div className='flex flex-col ml-4'>
                                             <span className='font-semibold'>{data.title}</span>
