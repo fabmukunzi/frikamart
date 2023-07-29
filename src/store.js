@@ -15,6 +15,8 @@ import updateCartReducer from './features/cart/updateCart';
 import clearCartReducer from './features/cart/clearCart';
 import ratingReducer from './features/products/rating';
 import profileReducer from './features/auth/profile';
+import searchCategoryReducer from './features/products/filter';
+import checkoutReducer from './features/products/checkout';
 
 const store = configureStore({
   reducer: {
@@ -34,6 +36,8 @@ const store = configureStore({
     clearCart: clearCartReducer,
     rating: ratingReducer,
     profile: profileReducer,
+    searchCategories:searchCategoryReducer,
+    checkout:checkoutReducer,
   },
 });
 
