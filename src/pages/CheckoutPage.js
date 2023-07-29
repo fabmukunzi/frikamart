@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { countries, paymentMethods } from './../utils/data';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
+import convertCurrency from '../utils/convertCurrency';
 
 const CheckoutPage = () => {
-
+    const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
     const [checkoutData, setCheckoutData] = useState({
         shippingInformation: {
             fullName: '',
@@ -141,7 +142,7 @@ const CheckoutPage = () => {
                                                 <input onChange={(e) => setCheckoutData({ ...checkoutData, paymentMethod: e.target.value })} type={"radio"} className='w-5' name="payment-method" value={method.value} />
                                                 <span className='ml-2'>{method.name}</span>
                                             </div>
-                                            {checkoutData.paymentMethod == method.value &&
+                                            {checkoutData.paymentMethod === method.value &&
                                                 <span className='ml-8 mt-2'>
                                                     {method.description}
                                                 </span>}
@@ -164,9 +165,14 @@ const CheckoutPage = () => {
             <div className='w-full md:w-4/12 smd:w-2/6 md:pt-4 px-2 smd:px-6 flex flex-row overflow-auto md:flex-col'>
                 {
                     data.map((data, index) => {
-                        const subtotal = data.count * parseInt(data.price.split(" ")[1])
-                        const tax = 18 / 100 * subtotal
-                        const shipping = 10
+                        let subtotal = data.count * parseInt(data.price.split(" ")[1])
+                        let tax = 18 / 100 * subtotal
+                        let shipping = 10
+                        let total=subtotal+tax+shipping
+                        shipping='RWF 10'
+                        subtotal=data.price.split(" ")[0]+" "+subtotal
+                        tax=data.price.split(" ")[0]+" "+tax
+                        total=data.price.split(" ")[0]+" "+total
 
                         return (
                             <div className="rounded-lg my-8 w-[40rem] md:mx-0 mx-2 md:w-full flex flex-col" key={index}>
@@ -184,7 +190,7 @@ const CheckoutPage = () => {
                                             <span>(Size: S, Color: Black)</span>
                                         </div>
                                     </div>
-                                    <span>{data.price}</span>
+                                    <span>{convertCurrency(currency,data.price)}</span>
                                 </div>
                                 <div className='flex flex-col my-4'>
                                     <span className='font-bold text-lg'>Shipping method</span>
@@ -199,19 +205,19 @@ const CheckoutPage = () => {
                                 <div className='w-full flex flex-col'>
                                     <div className="my-2 w-full flex justify-between">
                                         <span>Subtotal:</span>
-                                        <span>{subtotal} {data.price.split(" ")[0]}</span>
+                                        <span>{convertCurrency(currency,subtotal)}</span>
                                     </div>
                                     <div className="my-2 w-full flex justify-between">
                                         <span>Tax:</span>
-                                        <span>{tax} {data.price.split(" ")[0]}</span>
+                                        <span>{convertCurrency(currency,tax)}</span>
                                     </div>
                                     <div className="my-2 w-full flex justify-between">
                                         <span>Shipping Fee:</span>
-                                        <span>{shipping} {data.price.split(" ")[0]}</span>
+                                        <span>{convertCurrency(currency,shipping)}</span>
                                     </div>
                                     <div className="my-2 w-full flex justify-between">
                                         <span>Total:</span>
-                                        <span className='font-bold text-2xl'>{shipping + tax + subtotal} {data.price.split(" ")[0]}</span>
+                                        <span className='font-bold text-2xl'>{convertCurrency(currency,total)}</span>
                                     </div>
                                 </div>
                             </div>
