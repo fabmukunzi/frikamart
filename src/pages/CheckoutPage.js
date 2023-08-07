@@ -1,15 +1,20 @@
+/* eslint-disable no-unused-vars */
 import { Autocomplete, TextField, } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { countries, paymentMethods } from './../utils/data';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import convertCurrency from '../utils/convertCurrency';
+import { showErrorMessage } from '../utils/toast';
+import { checkout } from '../features/products/checkout';
 
 const CheckoutPage = () => {
     const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
+    const navigate=useNavigate()
+    const dispatch=useDispatch()
     const [checkoutData, setCheckoutData] = useState({
-        shippingInformation: {
+        shipping: {
             fullName: '',
             email: "",
             phone: "",
@@ -18,7 +23,7 @@ const CheckoutPage = () => {
             city: "",
             address: ""
         },
-        billingInformation: {
+        payment: {
             fullName: '',
             email: "",
             phone: "",
@@ -28,14 +33,14 @@ const CheckoutPage = () => {
             address: ""
         },
         paymentMethod: "",
-        orderNotes: "",
+        comment: "",
         companyInvoiceRequired: false,
     })
 
     const [billingSimilarToShipping, setBillingSimilarToShipping] = useState(true)
 
     const validationSchema = Yup.object({
-        shippingInformation: {
+        shipping: {
             fullName: Yup.string().required("Required"),
             email: Yup.string().email("Invalid email").required("Required"),
             phone: Yup.string().required("Required"),
@@ -44,7 +49,7 @@ const CheckoutPage = () => {
             city: Yup.string().required("Required"),
             address: Yup.string().required("Required"),
         },
-        billingInformation: {
+        payment: {
             fullName: Yup.string().required("Required"),
             email: Yup.string().email("Invalid email").required("Required"),
             phone: Yup.string().required("Required"),
@@ -54,13 +59,20 @@ const CheckoutPage = () => {
             address: Yup.string().required("Required"),
         },
         paymentMethod: Yup.string().required("Required"),
-        orderNotes: Yup.string(),
+        comment: Yup.string(),
         companyInvoiceRequired: Yup.boolean(),
     })
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log(checkoutData)
+        try {
+            e.preventDefault();
+            dispatch(await checkout(checkoutData).unwrap())
+            console.log(checkoutData)
+            navigate('/')
+        } catch (error) {
+            console.log(error,'errr')
+        showErrorMessage('Something went wrong try again')
+        }
     }
 
     const { data } = useSelector(
@@ -79,27 +91,27 @@ const CheckoutPage = () => {
                     <div className='flex flex-col'>
                         <span className='text-2xl font-bold mb-6'>Shipping Information</span>
                         <TextField
-                            onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Full Name" className='w-full mb-4' size='small' focused variant="outlined" value={checkoutData.shippingInformation.fullName} required />
+                            onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Full Name" className='w-full mb-4' size='small' focused variant="outlined" value={checkoutData.shipping.fullName} required />
                         <div className='w-full flex items-center my-6 justify-between'>
-                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, email: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Email" className='w-[62%] mr-4' type='email' size='small' focused variant="outlined" value={checkoutData.shippingInformation.email} required />
-                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, phone: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Phone" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.shippingInformation.phone} required />
+                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, email: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Email" className='w-[62%] mr-4' type='email' size='small' focused variant="outlined" value={checkoutData.shipping.email} required />
+                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, phone: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Phone" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.shipping.phone} required />
                         </div>
                         <Autocomplete
                             disablePortal
                             sx={{ '& fieldset': { borderRadius: 4 } }}
                             onChange={(event, newValue) => {
-                                setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, country: newValue } });
+                                setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, country: newValue } });
                             }}
                             options={countries}
-                            renderInput={(params) => <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} focused className='w-full' {...params} label="Country" />}
+                            renderInput={(params) => <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} focused className='w-full' {...params} label="Country" />}
                             className='w-full outline-none'
                             size='small'
                         />
                         <div className='w-full flex items-center my-6 justify-between'>
-                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, state: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="State" className='w-[62%] mr-4' size='small' focused variant="outlined" value={checkoutData.shippingInformation.state} required />
-                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, city: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="City" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.shippingInformation.city} required />
+                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, state: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="State" className='w-[62%] mr-4' size='small' focused variant="outlined" value={checkoutData.shipping.state} required />
+                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, city: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="City" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.shipping.city} required />
                         </div>
-                        <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, address: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Address" className='my-6' size='small' focused variant="outlined" value={checkoutData.shippingInformation.add} required />
+                        <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, address: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Address" className='my-6' size='small' focused variant="outlined" value={checkoutData.shipping.add} required />
                     </div>
                     <div className='flex flex-col'>
                         <span className='text-2xl font-bold mt-10'>Billing Information</span>
@@ -109,24 +121,24 @@ const CheckoutPage = () => {
                         </label>
                         {!billingSimilarToShipping &&
                             <div className='flex flex-col'>
-                                <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Full Name" className='w-full mb-4' size='small' focused variant="outlined" value={checkoutData.billingInformation.fullName} required />
+                                <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Full Name" className='w-full mb-4' size='small' focused variant="outlined" value={checkoutData.payment.fullName} required />
                                 <div className='w-full flex items-center my-6 justify-between'>
-                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, email: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Email" className='w-[62%] mr-4' type='email' size='small' focused variant="outlined" value={checkoutData.billingInformation.email} required />
-                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, phone: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Phone" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.billingInformation.phone} required />
+                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, email: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Email" className='w-[62%] mr-4' type='email' size='small' focused variant="outlined" value={checkoutData.payment.email} required />
+                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, phone: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Phone" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.payment.phone} required />
                                 </div>
                                 <Autocomplete
                                     disablePortal
                                     sx={{ borderRadius: 4, }}
                                     options={countries}
-                                    renderInput={(params) => <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} focused className='w-full' {...params} label="Country" />}
+                                    renderInput={(params) => <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} focused className='w-full' {...params} label="Country" />}
                                     className='w-full outline-none'
                                     size='small'
                                 />
                                 <div className='w-full flex items-center my-6 justify-between'>
-                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, state: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="State" className='w-[62%] mr-4' size='small' focused variant="outlined" value={checkoutData.billingInformation.state} required />
-                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, city: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="City" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.billingInformation.city} required />
+                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, state: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="State" className='w-[62%] mr-4' size='small' focused variant="outlined" value={checkoutData.payment.state} required />
+                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, city: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="City" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.payment.city} required />
                                 </div>
-                                <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, address: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Address" className='my-6' size='small' focused variant="outlined" value={checkoutData.shippingInformation.add} required />
+                                <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, address: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Address" className='my-6' size='small' focused variant="outlined" value={checkoutData.shipping.add} required />
                             </div>
                         }
                     </div>
@@ -154,7 +166,7 @@ const CheckoutPage = () => {
                     </div>
                     <div className='flex flex-col'>
                         <span className='font-semibold text-lg my-2'>Order Notes</span>
-                        <textarea value={checkoutData.orderNotes} onChange={(e) => setCheckoutData({ ...checkoutData, orderNotes: e.target.value })} className='w-full p-3 rounded-md border outline-none' placeholder="Notes about your order, e.g. special notes for delivery" rows={3}></textarea>
+                        <textarea value={checkoutData.comment} onChange={(e) => setCheckoutData({ ...checkoutData, comment: e.target.value })} className='w-full p-3 rounded-md border outline-none' placeholder="Notes about your order, e.g. special notes for delivery" rows={3}></textarea>
                     </div>
                     <div className="w-full flex justify-between mt-4 items-center">
                         <Link to="/cart" className="text-app-slate">Back to Cart</Link>
