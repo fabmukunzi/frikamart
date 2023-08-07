@@ -8,6 +8,7 @@ import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import convertCurrency from '../utils/convertCurrency';
 import { showErrorMessage } from '../utils/toast';
 import { checkout } from '../features/products/checkout';
+import { Slide } from 'react-awesome-reveal';
 
 const CheckoutPage = () => {
     const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
@@ -83,7 +84,7 @@ const CheckoutPage = () => {
         document.title = 'Checkout'
     }, [])
     return (
-        <div className='w-full flex md:flex-row flex-col-reverse min-h-screen justify-center px-2 smd:px-12 lg:px-32 pb-8'>
+        <Slide className='w-full flex md:flex-row flex-col-reverse min-h-screen justify-center px-2 smd:px-12 lg:px-32 pb-8'>
             <div className='md:border-r border-black flex flex-col w-full md:w-7/12 smd:w-3/6 pb-8'>
                 <span className='font-bold text-3xl'>Checkout.</span>
                 <hr className='my-6' />
@@ -237,7 +238,7 @@ const CheckoutPage = () => {
                     })
                 }
             </div>
-        </div>
+        </Slide>
     )
 }
 

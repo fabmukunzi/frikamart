@@ -10,6 +10,7 @@ import Loader from '../Loader';
 import { updateCart } from '../../features/cart/updateCart';
 import { clearCart } from '../../features/cart/clearCart';
 import convertCurrency from '../../utils/convertCurrency';
+import { Slide } from 'react-awesome-reveal';
 
 const Cart = () => {
   const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
@@ -29,7 +30,7 @@ const Cart = () => {
   let items;
   items = data;
   return (
-    <div>
+    <Slide>
       {isLoading || load || loadingg || loading ? (
         <Loader />
       ) : (
@@ -187,7 +188,7 @@ const Cart = () => {
         </div>
       )
       }
-    </div >
+    </Slide>
   );
 };
 

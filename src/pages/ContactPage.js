@@ -1,9 +1,10 @@
 import React from 'react';
 import Contact from '../components/forms/Contact';
+import { Slide } from 'react-awesome-reveal';
 
 const ContactPage = () => {
   return (
-    <div>
+    <Slide className=''>
       <div className='flex justify-center w-screen'>
       <iframe title='frikamart map' src="https://www.google.com/maps/d/u/0/embed?mid=1OYrkuy3oRZfd8ijveDLxuvEZN3K5xAA&ehbc=2E312F" width="640" height="480"></iframe>
       </div>
@@ -31,7 +32,7 @@ const ContactPage = () => {
             </div>
         </div>
       <Contact />
-    </div>
+    </Slide>
   );
 };
 

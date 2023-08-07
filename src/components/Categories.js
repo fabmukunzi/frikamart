@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getCategories } from '../features/products/category';
+import { Slide } from 'react-awesome-reveal';
 const Categories = ({ scale }) => {
   const { categories } = useSelector((state) => state.categories);
   const navigate = useNavigate();
@@ -124,8 +125,8 @@ export default Categories;
 
 export const MobileCategories=()=>{
   return(
-    <div>
+    <Slide>
       <Categories scale={true} />
-    </div>
+    </Slide>
   )
 }
