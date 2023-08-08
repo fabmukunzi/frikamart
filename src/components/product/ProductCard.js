@@ -12,6 +12,7 @@ import { addProduct } from '../../features/products/compareProducts';
 import { useDispatch } from 'react-redux';
 import convertCurrency from '../../utils/convertCurrency';
 import { showSuccessMessage } from '../../utils/toast';
+import { motion } from 'framer-motion';
 
 const ProductCard = ({ ...props }) => {
   const [showModel, setShowModel] = useState(false);
@@ -22,9 +23,9 @@ const ProductCard = ({ ...props }) => {
   const dispatch = useDispatch();
   const product = props.product;
   let rate = product?.rating;
-  const cart={};
-  cart.uid=product.uid;
-  cart.attributes=[];
+  const cart = {};
+  cart.uid = product.uid;
+  cart.attributes = [];
 
   const convert = () => {
     try {
@@ -50,8 +51,13 @@ const ProductCard = ({ ...props }) => {
           product={props.product}
         />
       )}
-      <div
-        className={`flex flex-col hover:scale-[1.09] transition duration-500	 font-poppins   bg-white font-normal justify-around rounded-md border border-slate-300 hover:border-slate-500 py-1 xs:w-[11rem] xs:my-2 my-8 mx-auto md:mx-3 ${props.className}`}
+      <motion.div
+        transition={{
+          ease: "linear",
+          duration: 2,
+          x: { duration: 1 }
+        }}
+        className={`flex flex-col hover:scale-[1.04] transition duration-200	 font-poppins   bg-white font-normal justify-around rounded-md border border-slate-300 hover:border-slate-500 py-1 xs:w-[11rem] xs:my-2 my-8 mx-auto md:mx-3 ${props.className}`}
       >
         <div className="w-full" key={product.uid}>
           <img
@@ -118,16 +124,17 @@ const ProductCard = ({ ...props }) => {
             />
             <p className="w-full text-sm">{t('CompareProduct')}</p>
           </div>
-          <button
-            className="bg-[#08F46C] w-fit px-8 py-2 text-base rounded-md shadow-md mt-4 mb-1 shadow-slate-500"
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            className="bg-[#08F46C] duration-100 w-fit px-8 py-2 text-base rounded-md shadow-md mt-4 mb-1 shadow-slate-500"
             onClick={() => {
               setShowModel(true);
             }}
           >
             {t('AddToCart')}
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

@@ -26,6 +26,7 @@ import TextRenderer from '../textrender';
 import Rating from '../Rating';
 import { rating } from '../../features/products/rating';
 import { showSuccessMessage } from '../../utils/toast';
+import { Slide } from 'react-awesome-reveal';
 
 const SingleProduct = () => {
   const { product, isLoading } = useSelector((state) => state.singleProduct);
@@ -99,7 +100,7 @@ console.log(product?.data?.options?.Color?.values,'hello')
   return isLoading ? (
     <Loader />
   ) : (
-    <div>
+    <Slide>
       <div className="grid grid-cols-2 xs:grid-cols-1 mx-10 justify-around xs:mx-auto mr-20 xs:w-full">
         {showModel && (
           <Model
@@ -395,7 +396,7 @@ console.log(product?.data?.options?.Color?.values,'hello')
           ))}
         </div>
       </div>
-    </div>
+    </Slide>
   );
 };
 
