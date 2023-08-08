@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getCategories } from '../features/products/category';
 import { Slide } from 'react-awesome-reveal';
-const Categories = ({ scale }) => {
+const Categories = ({ scale, setScale }) => {
   const { categories } = useSelector((state) => state.categories);
   const navigate = useNavigate();
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const [showSubCategory, setShowSubCategory] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [showSubSubCategory, setShowSubSubCategory] = useState(false);
@@ -28,24 +28,26 @@ const Categories = ({ scale }) => {
     }
     setCurrentSubCategory(subcategoryId);
   };
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getCategories())
-  },[dispatch])
+  }, [dispatch])
   return (
     <div
-  className={
-    scale
-      ? 'md:-translate-y-[3.7rem] w-full border-2 transition md:ml-10 md:mt-[3.7rem] duration-500 transform xs:w-full md:w-1/4 md:absolute bg-white text-green z-[999] h-fit text-xl font-poppins'
-      : `opacity-0 -translate-y-[3.7rem] -translate-x-[100%] w-full border-2 transition md:ml-10 md:mt-[3.7rem] duration-500 transform xs:w-full md:w-1/4 md:absolute bg-white text-green z-[999] h-fit text-xl font-poppins`
-  }
->
+      onMouseEnter={() => { setScale(true) }} onMouseLeave={() => { setScale(false) }}
+      className={
+        scale
+          ? 'md:-translate-y-[3.7rem] w-full border-2 transition md:ml-10 md:mt-[3.7rem] duration-500 transform xs:w-full md:w-1/4 md:absolute bg-white text-green z-[999] h-fit text-xl font-poppins'
+          : `opacity-0 -translate-y-[3.7rem] -translate-x-[100%] w-full border-2 transition md:ml-10 md:mt-[3.7rem] duration-500 transform xs:w-full md:w-1/4 md:absolute bg-white text-green z-[999] h-fit text-xl font-poppins`
+      }
+    >
       <ul>
         {categories?.map((category) => (
-          <li key={category.uid} className="">
-            <div className="flex hover:bg-[#D9D9D9] flex-row-reverse border-b w-full  justify-between px-4 items-center">
+          <li key={category.uid} className="relative">
+            <div
+              onMouseEnter={() => handleCategoryClick(category.uid)}
+              className="flex hover:bg-[#D9D9D9] flex-row-reverse border-b w-full  justify-between px-4 items-center">
               <span
                 className="py-2 cursor-pointer"
-                onClick={() => handleCategoryClick(category.uid)}
               >
                 {category.subCategories.length > 0
                   ? showSubCategory && currentCategory === category.uid
@@ -65,16 +67,19 @@ const Categories = ({ scale }) => {
             <ul
               className={
                 showSubCategory && currentCategory === category.uid
-                  ? ''
+                  ? 'absolute top-0 left-full bg-white w-full border-l-2'
                   : 'hidden'
               }
             >
               {category?.subCategories?.map((subcategory) => (
                 <li key={subcategory.category_name} className="">
-                  <div className="flex hover:bg-[#D9D9D9] border-b w-full flex-row-reverse justify-between px-4 items-center">
+                  <div
+                    onMouseEnter={() => handleSubCategoryClick(subcategory.uid)}
+                    onMouseLeave={() => handleSubCategoryClick(subcategory.uid)}
+                    className="flex hover:bg-[#D9D9D9] border-b w-full flex-row-reverse justify-between px-4 items-center">
                     <span
                       className="py-2 cursor-pointer text-xl"
-                      onClick={() => handleSubCategoryClick(subcategory.uid)}
+                      onMouseEnter={() => handleSubCategoryClick(subcategory.uid)}
                     >
                       {subcategory.subCategories?.length > 0
                         ? showSubSubCategory &&
@@ -95,8 +100,8 @@ const Categories = ({ scale }) => {
                   <ul
                     className={
                       showSubSubCategory &&
-                      currentSubCategory === subcategory.uid
-                        ? ''
+                        currentSubCategory === subcategory.uid
+                        ? 'absolute top-0 left-full bg-white w-full border-l-2'
                         : 'hidden'
                     }
                   >
@@ -123,9 +128,9 @@ const Categories = ({ scale }) => {
 };
 export default Categories;
 
-export const MobileCategories=()=>{
-  return(
-    <Slide>
+export const MobileCategories = () => {
+  return (
+    <Slide direction='up'>
       <Categories scale={true} />
     </Slide>
   )

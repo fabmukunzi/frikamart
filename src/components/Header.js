@@ -380,7 +380,7 @@ const Header = ({ onCurrencyChange, currency }) => {
         }`}</h1>
       </div> */}
       <div className='xs:hidden'>
-        {<Categories scale={scale} />}
+        {<Categories scale={scale} setScale={setScale} />}
       </div>
     </div>
   );
