@@ -4,6 +4,7 @@ import { useOutletContext, useParams } from 'react-router-dom';
 import ProductCard from '../components/product/ProductCard';
 import { searchProducts } from '../features/products/Search';
 import Loader from '../components/Loader';
+import { Slide } from 'react-awesome-reveal';
 
 const SearchPage = () => {
   const { products, isLoading } = useSelector((state) => state.searchProducts);
@@ -19,7 +20,7 @@ const SearchPage = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="grid grid-cols-4 mx-10 xs:grid-cols-1">
+        <Slide className="grid grid-cols-4 mx-10 xs:grid-cols-1">
           {products.length > 0 ? (
             products.map((product) => {
               return (
@@ -41,7 +42,7 @@ const SearchPage = () => {
               No products found
             </h1>
           )}
-        </div>
+        </Slide>
       )}
     </>
   );

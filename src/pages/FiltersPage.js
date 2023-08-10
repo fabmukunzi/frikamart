@@ -19,7 +19,7 @@ const SearchCategoryPage = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="grid grid-cols-4 mx-10 xs:grid-cols-1">
+        <div className="grid grid-cols-4 xs:grid-cols-2 xs:gap-2">
           {products.length > 0 ? (
             products.map((product) => {
               return (

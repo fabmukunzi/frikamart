@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Slide } from 'react-awesome-reveal';
 import { useSelector } from 'react-redux';
 
 const Profile = () => {
@@ -6,7 +7,7 @@ const Profile = () => {
   const [currentItem,setCurrentItem]=useState('Account Information')
   const items=['Account Information','Update Profile','Orders','Address','Change Password','Logout']
   return (
-    <div className="py-4 ml-20 xs:ml-4">
+    <Slide className="py-4 ml-20 xs:ml-4">
       <div className="flex items-center gap-4">
         <div className="text-5xl bg-slate-600 rounded-full p-0.5 text-center w-12">
           {data?.avatar?<img src={data?.avatar} alt='profile' />:data?.firstname[0].toUpperCase()}
@@ -31,7 +32,7 @@ const Profile = () => {
         </div>
       </div>
       </div>
-    </div>
+    </Slide>
   );
 };
 

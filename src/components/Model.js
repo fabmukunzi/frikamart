@@ -7,6 +7,8 @@ import { showErrorMessage, showSuccessMessage } from '../utils/toast';
 import { getCart } from '../features/cart/getCart';
 import { useOutletContext } from 'react-router-dom';
 import convertCurrency from '../utils/convertCurrency';
+import { motion } from 'framer-motion';
+
 const Model = ({ ...props }) => {
   const [totalPrice, setTotalPrice] = useState(props.product.price);
   const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
@@ -38,7 +40,7 @@ const Model = ({ ...props }) => {
       {props.showModel ? (
         <>
           <div className="fixed flex justify-center items-center inset-0 z-50">
-            <div className="relative xs:w-screen xs:h-fit xs:mx-2 w-[50%] h-[50%] rounded-md bg-white my-6">
+            <motion.div className="relative xs:w-screen xs:h-fit xs:mx-2 w-[50%] h-[50%] rounded-md bg-white my-6">
               <div className="text-center p-5 border-b-2">
                 <h1 className="font-bold text-2xl">{props.title}</h1>
               </div>
@@ -95,7 +97,7 @@ const Model = ({ ...props }) => {
                   {isLoading ? 'Loading...' : 'Confirm'}
                 </button>
               </div>
-            </div>
+            </motion.div>
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-app-slate" />
         </>

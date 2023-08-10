@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllStores } from '../features/stores/getAll';
 import Loader from '../components/Loader';
+import { Slide } from 'react-awesome-reveal';
 
 const ShopsPage = () => {
   const { t } = useTranslation();
@@ -18,7 +19,7 @@ const ShopsPage = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="my-6">
+        <Slide className="my-6">
           <div className="relative py-3 hidden">
             <input
               type="search"
@@ -36,7 +37,7 @@ const ShopsPage = () => {
               <ShopCard data={store} />
             ))}
           </div>
-        </div>
+        </Slide>
       )}
     </>
   );

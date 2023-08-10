@@ -24,7 +24,7 @@ const Header = ({ onCurrencyChange, currency }) => {
   const [scale, setScale] = useState(false);
   // const location = useLocation();
   const navigate = useNavigate();
-  const location=useLocation();
+  const location = useLocation();
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const changeLanguage = (lng) => {
@@ -38,17 +38,17 @@ const Header = ({ onCurrencyChange, currency }) => {
     dispatch(getProfile()).unwrap();
     dispatch(getCart()).unwrap();
   }, [dispatch]);
-useEffect(() => {
-  window.addEventListener('resize',()=>{
-    if (window.innerWidth < 426 && location.pathname === '/categories') {
-      setScale(true);
-    }
-    else if (window.innerWidth > 426 && location.pathname === '/categories') {
-      setScale(false);
-      window.location.href = '/'; // Redirect to the root path '/'
-    }
-  })
-}, [dispatch, location.pathname, navigate]);
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      if (window.innerWidth < 426 && location.pathname === '/categories') {
+        setScale(true);
+      }
+      else if (window.innerWidth > 426 && location.pathname === '/categories') {
+        setScale(false);
+        window.location.href = '/'; // Redirect to the root path '/'
+      }
+    })
+  }, [dispatch, location.pathname, navigate]);
 
   const navItems = [
     { name: `${t('Home')}`, path: '/' },
@@ -72,7 +72,8 @@ useEffect(() => {
   return (
     <div className="w-screen">
       <div className="top-nav flex justify-between bg-app-slate text-white">
-        <h1 className="ml-6 xs:hidden">{t('paragraph')}</h1>
+        {/* <div className="w-full h-16 bg-white"></div> */}
+        {/* <h1 className="ml-6 xs:hidden">{t('paragraph')}</h1> */}
         <div className="flex mx-10 xs:hidden">
           <h1>{t('HOTLINE')}:(+250) 788 679 903</h1>
           <div className="pl-0.5 ml-3 mt-1 bg-white"></div>
@@ -239,19 +240,19 @@ useEffect(() => {
           <div
             className="flex items-center mx-4 xs:mx-2 cursor-pointer"
             onClick={() => {
-              if(!profile.data)
-              navigate('/auth/login')
+              if (!profile.data)
+                navigate('/auth/login')
               else
-              navigate('/user/profile')
+                navigate('/user/profile')
             }}
           >
             <img
-              src={profile.data?profile?.data?.avatar:defaultAvatar}
+              src={profile.data ? profile?.data?.avatar : defaultAvatar}
               alt="compare"
               className="w-7 h-7 xs:w-6 xs:h-6 md:mx-3"
             />
             <span className="xs:hidden">
-              {profile.data?profile.data.firstname:(<div>{t('Login')} <br /> {t('my account')}</div>)}
+              {profile.data ? profile.data.firstname : (<div>{t('Login')} <br /> {t('my account')}</div>)}
             </span>
           </div>
         </div>
@@ -261,9 +262,12 @@ useEffect(() => {
           <img src={category} alt="categories" className="w-7 h-7 mx-3" />
           <button
             className="bg-inherit"
-            onClick={() => {
+            onMouseEnter={() => {
               setScale(!scale);
               // dispatch(getCategories());
+            }}
+            onMouseLeave={() => {
+              setScale(false);
             }}
           >
             {t('Category')}
@@ -376,7 +380,7 @@ useEffect(() => {
         }`}</h1>
       </div> */}
       <div className='xs:hidden'>
-      {<Categories scale={scale} />}
+        {<Categories scale={scale} setScale={setScale} />}
       </div>
     </div>
   );
