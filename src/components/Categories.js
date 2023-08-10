@@ -55,7 +55,7 @@ const Categories = ({ scale }) => {
               <span
                 className="py-2 cursor-pointer"
                 onClick={() => {
-                  navigate(`/search/${category.category_id}`);
+                  navigate(`/simple-filter/${category.uid}`);
                 }}
               >
                 {category.category_name}
@@ -85,7 +85,7 @@ const Categories = ({ scale }) => {
                     <span
                       className="py-2 text-lg cursor-pointer ml-5"
                       onClick={() => {
-                        navigate(`/search/${subcategory.category_id}`);
+                        navigate(`/simple-filter/${subcategory.uid}`);
                       }}
                     >
                       {subcategory.category_name}
@@ -104,7 +104,7 @@ const Categories = ({ scale }) => {
                         key={subsubcategory.category_name}
                         className="border-b hover:bg-[#D9D9D9] ml-10 cursor-pointer w-full px-4 py-2"
                         onClick={() => {
-                          navigate(`/search/${subsubcategory.category_id}`);
+                          navigate(`/simple-filter/${subsubcategory.uid}`);
                         }}
                       >
                         {subsubcategory.category_name}

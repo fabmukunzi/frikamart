@@ -91,7 +91,7 @@ const HomePage = ({ ...props }) => {
               />
               <div>
                 <p
-                  onClick={() => navigate(`/search/${category?.category_id}`)}
+                  onClick={() => navigate(`/simple-filter/${category?.uid}`)}
                   className="uppercase cursor-pointer text-xs w-full"
                 >
                   {category?.category_name}
@@ -120,7 +120,7 @@ const HomePage = ({ ...props }) => {
           {trends?.map((cat, i) => (
             <div
               key={i}
-              onClick={() => navigate(`/search/${cat?.category_id}`)}
+              onClick={() => navigate(`/simple-filter/${cat?.uid}`)}
               className="flex w-full items-center justify-between shadow-lg border px-4 cursor-pointer"
             >
               <div>
