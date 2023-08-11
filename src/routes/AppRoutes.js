@@ -11,12 +11,13 @@ import LoginForm from '../components/forms/LoginForm';
 import RegisterForm from '../components/forms/Register';
 import ShopsPage from '../pages/ShopsPage';
 import SingleShop from '../pages/SingleShop';
-import Categories, { MobileCategories } from '../components/Categories';
+import { MobileCategories } from '../components/Categories';
 import SearchPage from '../pages/SearchPage';
 import ContactPage from '../pages/ContactPage';
 import MadeInAfrica from '../pages/MadeInAfrica';
 import Profile from '../pages/Profile';
 import CheckoutPage from '../pages/CheckoutPage';
+import SearchCategoryPage from '../pages/FiltersPage';
 
 const AppRoutes = () => {
   return (
@@ -32,6 +33,7 @@ const AppRoutes = () => {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/store/:id" element={<SingleShop />} />
         <Route path="/categories" element={<MobileCategories />} />
+        <Route path="/simple-filter/:item" element={<SearchCategoryPage />} />
         <Route path="/search/:item" element={<SearchPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/user/profile" element={<Profile />} />

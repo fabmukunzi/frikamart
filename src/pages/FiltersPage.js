@@ -2,25 +2,24 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useOutletContext, useParams } from 'react-router-dom';
 import ProductCard from '../components/product/ProductCard';
-import { searchProducts } from '../features/products/Search';
 import Loader from '../components/Loader';
-import { Slide } from 'react-awesome-reveal';
+import { searchCategory } from '../features/products/filter';
 
-const SearchPage = () => {
-  const { products, isLoading } = useSelector((state) => state.searchProducts);
+const SearchCategoryPage = () => {
+  const { products, isLoading } = useSelector((state) => state.searchCategories);
   const { item } = useParams();
   const dispatch = useDispatch();
   const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
 
   useEffect(() => {
-    dispatch(searchProducts({ product: item }));
+    dispatch(searchCategory({ product: item }));
   }, [dispatch, item]);
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : (
-        <Slide className="grid grid-cols-4 mx-10 xs:grid-cols-1">
+        <div className="grid grid-cols-4 xs:grid-cols-2 xs:gap-2">
           {products.length > 0 ? (
             products.map((product) => {
               return (
@@ -42,10 +41,10 @@ const SearchPage = () => {
               No products found
             </h1>
           )}
-        </Slide>
+        </div>
       )}
     </>
   );
 };
 
-export default SearchPage;
+export default SearchCategoryPage;

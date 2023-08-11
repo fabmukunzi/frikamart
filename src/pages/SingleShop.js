@@ -6,6 +6,7 @@ import ProductCard from '../components/product/ProductCard';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleStore } from '../features/stores/getSingle';
+import { Slide } from 'react-awesome-reveal';
 
 const SingleShop = () => {
   const { t } = useTranslation();
@@ -16,7 +17,7 @@ const SingleShop = () => {
     dispatch(getSingleStore({ id: id }));
   }, [dispatch, id]);
   return (
-    <div className="mx-2">
+    <Slide className="mx-2">
       <div className="flex xs:flex-col xs:w-full mx-auto font-bold justify-end bg-[#D9D9D9] w-2/3 my-6">
         <img
           src={store?.config_logo}
@@ -59,7 +60,7 @@ const SingleShop = () => {
           <ProductCard product={product} />
         ))}
       </div>
-    </div>
+    </Slide>
   );
 };
 

@@ -7,6 +7,7 @@ import { getAllProducts } from '../features/products/getProducts';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/Loader';
 import { CaretLeft, CaretRight } from 'phosphor-react';
+import { Slide } from 'react-awesome-reveal';
 
 const ProductsPage = () => {
   const [showSub, setShowSub] = useState(false);
@@ -73,7 +74,7 @@ const ProductsPage = () => {
   // console.log(products?.page[1])
   // console.log(typeof([...products?.page]),'=========?')
   return (
-    <div className="my-10 w-full flex xs:flex-wrap justify-around">
+    <Slide className="my-10 w-full flex xs:flex-wrap justify-around">
       {/* <div className="bg-gray-500 w-full mx-3 text-center mb-3 sm:hidden">
         Filter
       </div> */}
@@ -207,7 +208,7 @@ const ProductsPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </Slide>
   );
 };
 

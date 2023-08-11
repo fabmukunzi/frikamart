@@ -9,6 +9,7 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { homeData } from '../features/home/getHome';
 import Loader from '../components/Loader';
+import { Slide } from 'react-awesome-reveal';
 
 const HomePage = ({ ...props }) => {
   // eslint-disable-next-line no-unused-vars
@@ -27,7 +28,7 @@ const HomePage = ({ ...props }) => {
   return isLoading ? (
     <Loader />
   ) : (
-    <div>
+    <Slide>
       <div className="flex xs:flex-col justify-around">
         <div className="rounded-md shadow-md  my-3 lg:mx-2 shadow-[#415871] w-2/3 xs:w-[95%] xs:rounded-xl mx-auto">
           <Slider data={data?.Head?.Sections_001?.Slider} />
@@ -91,7 +92,7 @@ const HomePage = ({ ...props }) => {
               />
               <div>
                 <p
-                  onClick={() => navigate(`/search/${category?.category_name}`)}
+                  onClick={() => navigate(`/simple-filter/${category?.uid}`)}
                   className="uppercase cursor-pointer text-xs w-full"
                 >
                   {category?.category_name}
@@ -120,7 +121,7 @@ const HomePage = ({ ...props }) => {
           {trends?.map((cat, i) => (
             <div
               key={i}
-              onClick={() => navigate(`/search/${cat?.category_name}`)}
+              onClick={() => navigate(`/simple-filter/${cat?.uid}`)}
               className="flex w-full items-center justify-between shadow-lg border px-4 cursor-pointer"
             >
               <div>
@@ -150,7 +151,7 @@ const HomePage = ({ ...props }) => {
           ))}
         </div>
       </div>
-    </div>
+    </Slide>
   );
 };
 

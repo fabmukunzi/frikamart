@@ -23,7 +23,7 @@ const requestHandler = async (request) => {
 const responseHandler = (response) => response;
 
 const errorHandler = async (error) => {
-  if (error?.response?.status === 401) {
+  if (error?.response?.status === 401 && error?.response?.message==="Unauthorized cart") {
     const { data } = await axios.post(
       `${process.env.REACT_APP_PRODUCTS_API}user/guest/create-session`
     );

@@ -1,14 +1,21 @@
+/* eslint-disable no-unused-vars */
 import { Autocomplete, TextField, } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { countries, paymentMethods } from './../utils/data';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
+import convertCurrency from '../utils/convertCurrency';
+import { showErrorMessage } from '../utils/toast';
+import { checkout } from '../features/products/checkout';
+import { Slide } from 'react-awesome-reveal';
 
 const CheckoutPage = () => {
-
+    const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
+    const navigate=useNavigate()
+    const dispatch=useDispatch()
     const [checkoutData, setCheckoutData] = useState({
-        shippingInformation: {
+        shipping: {
             fullName: '',
             email: "",
             phone: "",
@@ -17,7 +24,7 @@ const CheckoutPage = () => {
             city: "",
             address: ""
         },
-        billingInformation: {
+        payment: {
             fullName: '',
             email: "",
             phone: "",
@@ -27,14 +34,14 @@ const CheckoutPage = () => {
             address: ""
         },
         paymentMethod: "",
-        orderNotes: "",
+        comment: "",
         companyInvoiceRequired: false,
     })
 
     const [billingSimilarToShipping, setBillingSimilarToShipping] = useState(true)
 
     const validationSchema = Yup.object({
-        shippingInformation: {
+        shipping: {
             fullName: Yup.string().required("Required"),
             email: Yup.string().email("Invalid email").required("Required"),
             phone: Yup.string().required("Required"),
@@ -43,7 +50,7 @@ const CheckoutPage = () => {
             city: Yup.string().required("Required"),
             address: Yup.string().required("Required"),
         },
-        billingInformation: {
+        payment: {
             fullName: Yup.string().required("Required"),
             email: Yup.string().email("Invalid email").required("Required"),
             phone: Yup.string().required("Required"),
@@ -53,13 +60,20 @@ const CheckoutPage = () => {
             address: Yup.string().required("Required"),
         },
         paymentMethod: Yup.string().required("Required"),
-        orderNotes: Yup.string(),
+        comment: Yup.string(),
         companyInvoiceRequired: Yup.boolean(),
     })
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log(checkoutData)
+        try {
+            e.preventDefault();
+            dispatch(await checkout(checkoutData).unwrap())
+            console.log(checkoutData)
+            navigate('/')
+        } catch (error) {
+            console.log(error,'errr')
+        showErrorMessage('Something went wrong try again')
+        }
     }
 
     const { data } = useSelector(
@@ -70,7 +84,7 @@ const CheckoutPage = () => {
         document.title = 'Checkout'
     }, [])
     return (
-        <div className='w-full flex md:flex-row flex-col-reverse min-h-screen justify-center px-2 smd:px-12 lg:px-32 pb-8'>
+        <Slide className='w-full flex md:flex-row flex-col-reverse min-h-screen justify-center px-2 smd:px-12 lg:px-32 pb-8'>
             <div className='md:border-r border-black flex flex-col w-full md:w-7/12 smd:w-3/6 pb-8'>
                 <span className='font-bold text-3xl'>Checkout.</span>
                 <hr className='my-6' />
@@ -78,27 +92,27 @@ const CheckoutPage = () => {
                     <div className='flex flex-col'>
                         <span className='text-2xl font-bold mb-6'>Shipping Information</span>
                         <TextField
-                            onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Full Name" className='w-full mb-4' size='small' focused variant="outlined" value={checkoutData.shippingInformation.fullName} required />
+                            onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Full Name" className='w-full mb-4' size='small' focused variant="outlined" value={checkoutData.shipping.fullName} required />
                         <div className='w-full flex items-center my-6 justify-between'>
-                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, email: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Email" className='w-[62%] mr-4' type='email' size='small' focused variant="outlined" value={checkoutData.shippingInformation.email} required />
-                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, phone: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Phone" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.shippingInformation.phone} required />
+                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, email: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Email" className='w-[62%] mr-4' type='email' size='small' focused variant="outlined" value={checkoutData.shipping.email} required />
+                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, phone: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Phone" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.shipping.phone} required />
                         </div>
                         <Autocomplete
                             disablePortal
                             sx={{ '& fieldset': { borderRadius: 4 } }}
                             onChange={(event, newValue) => {
-                                setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, country: newValue } });
+                                setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, country: newValue } });
                             }}
                             options={countries}
-                            renderInput={(params) => <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} focused className='w-full' {...params} label="Country" />}
+                            renderInput={(params) => <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} focused className='w-full' {...params} label="Country" />}
                             className='w-full outline-none'
                             size='small'
                         />
                         <div className='w-full flex items-center my-6 justify-between'>
-                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, state: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="State" className='w-[62%] mr-4' size='small' focused variant="outlined" value={checkoutData.shippingInformation.state} required />
-                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, city: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="City" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.shippingInformation.city} required />
+                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, state: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="State" className='w-[62%] mr-4' size='small' focused variant="outlined" value={checkoutData.shipping.state} required />
+                            <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, city: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="City" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.shipping.city} required />
                         </div>
-                        <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shippingInformation: { ...checkoutData.shippingInformation, address: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Address" className='my-6' size='small' focused variant="outlined" value={checkoutData.shippingInformation.add} required />
+                        <TextField onChange={(e) => setCheckoutData({ ...checkoutData, shipping: { ...checkoutData.shipping, address: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Address" className='my-6' size='small' focused variant="outlined" value={checkoutData.shipping.add} required />
                     </div>
                     <div className='flex flex-col'>
                         <span className='text-2xl font-bold mt-10'>Billing Information</span>
@@ -108,24 +122,24 @@ const CheckoutPage = () => {
                         </label>
                         {!billingSimilarToShipping &&
                             <div className='flex flex-col'>
-                                <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Full Name" className='w-full mb-4' size='small' focused variant="outlined" value={checkoutData.billingInformation.fullName} required />
+                                <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Full Name" className='w-full mb-4' size='small' focused variant="outlined" value={checkoutData.payment.fullName} required />
                                 <div className='w-full flex items-center my-6 justify-between'>
-                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, email: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Email" className='w-[62%] mr-4' type='email' size='small' focused variant="outlined" value={checkoutData.billingInformation.email} required />
-                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, phone: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Phone" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.billingInformation.phone} required />
+                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, email: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Email" className='w-[62%] mr-4' type='email' size='small' focused variant="outlined" value={checkoutData.payment.email} required />
+                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, phone: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Phone" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.payment.phone} required />
                                 </div>
                                 <Autocomplete
                                     disablePortal
                                     sx={{ borderRadius: 4, }}
                                     options={countries}
-                                    renderInput={(params) => <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} focused className='w-full' {...params} label="Country" />}
+                                    renderInput={(params) => <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, fullName: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} focused className='w-full' {...params} label="Country" />}
                                     className='w-full outline-none'
                                     size='small'
                                 />
                                 <div className='w-full flex items-center my-6 justify-between'>
-                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, state: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="State" className='w-[62%] mr-4' size='small' focused variant="outlined" value={checkoutData.billingInformation.state} required />
-                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, city: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="City" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.billingInformation.city} required />
+                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, state: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="State" className='w-[62%] mr-4' size='small' focused variant="outlined" value={checkoutData.payment.state} required />
+                                    <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, city: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="City" className='w-[36%] mr-2' size='small' focused variant="outlined" value={checkoutData.payment.city} required />
                                 </div>
-                                <TextField onChange={(e) => setCheckoutData({ ...checkoutData, billingInformation: { ...checkoutData.billingInformation, address: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Address" className='my-6' size='small' focused variant="outlined" value={checkoutData.shippingInformation.add} required />
+                                <TextField onChange={(e) => setCheckoutData({ ...checkoutData, payment: { ...checkoutData.payment, address: e.target.value } })} InputProps={{ sx: { borderRadius: 4, } }} label="Address" className='my-6' size='small' focused variant="outlined" value={checkoutData.shipping.add} required />
                             </div>
                         }
                     </div>
@@ -141,7 +155,7 @@ const CheckoutPage = () => {
                                                 <input onChange={(e) => setCheckoutData({ ...checkoutData, paymentMethod: e.target.value })} type={"radio"} className='w-5' name="payment-method" value={method.value} />
                                                 <span className='ml-2'>{method.name}</span>
                                             </div>
-                                            {checkoutData.paymentMethod == method.value &&
+                                            {checkoutData.paymentMethod === method.value &&
                                                 <span className='ml-8 mt-2'>
                                                     {method.description}
                                                 </span>}
@@ -153,7 +167,7 @@ const CheckoutPage = () => {
                     </div>
                     <div className='flex flex-col'>
                         <span className='font-semibold text-lg my-2'>Order Notes</span>
-                        <textarea value={checkoutData.orderNotes} onChange={(e) => setCheckoutData({ ...checkoutData, orderNotes: e.target.value })} className='w-full p-3 rounded-md border outline-none' placeholder="Notes about your order, e.g. special notes for delivery" rows={3}></textarea>
+                        <textarea value={checkoutData.comment} onChange={(e) => setCheckoutData({ ...checkoutData, comment: e.target.value })} className='w-full p-3 rounded-md border outline-none' placeholder="Notes about your order, e.g. special notes for delivery" rows={3}></textarea>
                     </div>
                     <div className="w-full flex justify-between mt-4 items-center">
                         <Link to="/cart" className="text-app-slate">Back to Cart</Link>
@@ -164,9 +178,14 @@ const CheckoutPage = () => {
             <div className='w-full md:w-4/12 smd:w-2/6 md:pt-4 px-2 smd:px-6 flex flex-row overflow-x-scroll whitespace-nowrap md:flex-col'>
                 {
                     data.map((data, index) => {
-                        const subtotal = data.count * parseInt(data.price.split(" ")[1])
-                        const tax = 18 / 100 * subtotal
-                        const shipping = 10
+                        let subtotal = data.count * parseInt(data.price.split(" ")[1])
+                        let tax = 18 / 100 * subtotal
+                        let shipping = 10
+                        let total=subtotal+tax+shipping
+                        shipping='RWF 10'
+                        subtotal=data.price.split(" ")[0]+" "+subtotal
+                        tax=data.price.split(" ")[0]+" "+tax
+                        total=data.price.split(" ")[0]+" "+total
 
                         return (
                             <div className="rounded-lg my-8 w-10/12 md:mx-0 mx-2 md:w-full flex flex-col" key={index}>
@@ -184,7 +203,7 @@ const CheckoutPage = () => {
                                             <span>(Size: S, Color: Black)</span>
                                         </div>
                                     </div>
-                                    <span>{data.price}</span>
+                                    <span>{convertCurrency(currency,data.price)}</span>
                                 </div>
                                 <div className='flex flex-col my-4'>
                                     <span className='font-bold text-lg'>Shipping method</span>
@@ -199,19 +218,19 @@ const CheckoutPage = () => {
                                 <div className='w-full flex flex-col'>
                                     <div className="my-2 w-full flex justify-between">
                                         <span>Subtotal:</span>
-                                        <span>{subtotal} {data.price.split(" ")[0]}</span>
+                                        <span>{convertCurrency(currency,subtotal)}</span>
                                     </div>
                                     <div className="my-2 w-full flex justify-between">
                                         <span>Tax:</span>
-                                        <span>{tax} {data.price.split(" ")[0]}</span>
+                                        <span>{convertCurrency(currency,tax)}</span>
                                     </div>
                                     <div className="my-2 w-full flex justify-between">
                                         <span>Shipping Fee:</span>
-                                        <span>{shipping} {data.price.split(" ")[0]}</span>
+                                        <span>{convertCurrency(currency,shipping)}</span>
                                     </div>
                                     <div className="my-2 w-full flex justify-between">
                                         <span>Total:</span>
-                                        <span className='font-bold text-2xl'>{shipping + tax + subtotal} {data.price.split(" ")[0]}</span>
+                                        <span className='font-bold text-2xl'>{convertCurrency(currency,total)}</span>
                                     </div>
                                 </div>
                             </div>
@@ -219,7 +238,7 @@ const CheckoutPage = () => {
                     })
                 }
             </div>
-        </div>
+        </Slide>
     )
 }
 

@@ -6,6 +6,7 @@ import usa from '../assets/images/Rectangle 14574.png';
 import togo from '../assets/images/Rectangle 14575.png';
 import ProductCard from '../components/product/ProductCard';
 import { useOutletContext } from 'react-router-dom';
+import { Slide } from 'react-awesome-reveal';
 
 const MadeInAfrica = () => {
   const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
@@ -71,7 +72,7 @@ const MadeInAfrica = () => {
     SKU: 'TEST/test/test',
   };
   return (
-    <div>
+    <Slide>
       <div className="flex xs:gap-3 gap-10 my-4 md:ml-24 xs:mx-2 xs:justify-center">
         <div className="cursor-pointer" onClick={() => setCountry('Rwanda')}>
           <img src={rwanda} alt="" />
@@ -112,7 +113,7 @@ const MadeInAfrica = () => {
             />
           ))}
       </div>
-    </div>
+    </Slide>
   );
 };
 
