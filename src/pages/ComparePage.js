@@ -6,7 +6,7 @@ import { Slide } from 'react-awesome-reveal';
 const ComparePage = () => {
     const {products} =useSelector((state)=>state.compareProducts)
   return (
-    <Slide className='grid grid-cols-3 xs:grid-cols-1 gap-10 place-items-center'>
+    <Slide triggerOnce className='grid grid-cols-3 xs:grid-cols-1 gap-10 place-items-center'>
       {products.length>0?(products.map((product) => (
         <CompareCard product={product} />
       ))):(

@@ -28,10 +28,10 @@ const HomePage = ({ ...props }) => {
   return isLoading ? (
     <Loader />
   ) : (
-    <Slide>
+    <Slide triggerOnce>
       <div className="flex xs:flex-col justify-around">
         <div className="rounded-md shadow-md  my-3 lg:mx-2 shadow-[#415871] w-2/3 xs:w-[95%] xs:rounded-xl mx-auto">
-          <Slider data={data?.Head?.Sections_001?.Slider} />
+          <Slide triggerOncer data={data?.Head?.Sections_001?.Slider} />
         </div>
         <div className="w-1/3 sm:px-6 xs:hidden">
           {sideData?.map((data, i) => (

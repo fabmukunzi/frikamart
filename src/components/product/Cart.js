@@ -30,7 +30,7 @@ const Cart = () => {
   let items;
   items = data;
   return (
-    <Slide>
+    <Slide triggerOnce>
       {isLoading || load || loadingg || loading ? (
         <Loader />
       ) : (

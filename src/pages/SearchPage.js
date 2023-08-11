@@ -20,7 +20,7 @@ const SearchPage = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <Slide className="grid grid-cols-4 mx-10 xs:grid-cols-1">
+        <Slide triggerOnce className="grid grid-cols-4 mx-10 xs:grid-cols-1">
           {products.length > 0 ? (
             products.map((product) => {
               return (

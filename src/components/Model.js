@@ -39,7 +39,7 @@ const Model = ({ ...props }) => {
     <>
       {props.showModel ? (
         <>
-          <div className="fixed flex justify-center items-center inset-0 z-50">
+          <div className="absolute min-h-screen top-0 left-0 flex justify-center items-center inset-0 z-50">
             <motion.div className="relative xs:w-screen xs:h-fit xs:mx-2 w-[50%] h-[50%] rounded-md bg-white my-6">
               <div className="text-center p-5 border-b-2">
                 <h1 className="font-bold text-2xl">{props.title}</h1>
