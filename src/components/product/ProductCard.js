@@ -1,18 +1,18 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
+import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import rate1 from '../../assets/images/star-svgrepo-com (2).svg';
-import rate0 from '../../assets/images/star-svgrepo-com (1).svg';
-import wish from '../../assets/images/material-symbols_heart-plus-outline.svg';
-import compare from '../../assets/images/fluent_branch-compare-20-filled.svg';
-import { useNavigate } from 'react-router-dom';
-import Modal from '../Model';
 import { useTranslation } from 'react-i18next';
-import { addProduct } from '../../features/products/compareProducts';
+import { AiOutlineShoppingCart } from 'react-icons/ai';
+import { BiGitCompare } from 'react-icons/bi';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import rate0 from '../../assets/images/star-svgrepo-com (1).svg';
+import rate1 from '../../assets/images/star-svgrepo-com (2).svg';
+import { addProduct } from '../../features/products/compareProducts';
 import convertCurrency from '../../utils/convertCurrency';
 import { showSuccessMessage } from '../../utils/toast';
-import { motion } from 'framer-motion';
+import Modal from '../Model';
 
 const ProductCard = ({ ...props }) => {
   const [showModel, setShowModel] = useState(false);
@@ -57,7 +57,7 @@ const ProductCard = ({ ...props }) => {
           duration: 2,
           x: { duration: 1 }
         }}
-        className={`flex flex-col hover:scale-[1.04] transition duration-200	 font-poppins   bg-white font-normal justify-around rounded-md border border-slate-300 hover:border-slate-500 py-1 xs:w-[11rem] xs:my-2 my-8 mx-auto md:mx-3 ${props.className}`}
+        className={`flex flex-col px-2 hover:scale-[1.04] transition duration-200	 font-poppins   bg-white font-normal justify-around rounded-md border border-slate-300 hover:border-slate-500 py-1 xs:w-[11rem] xs:my-2 my-8 mx-auto md:mx-3 ${props.className}`}
       >
         <div className="w-full" key={product.uid}>
           <img
@@ -111,26 +111,25 @@ const ProductCard = ({ ...props }) => {
             <p className="w-full text-sm">{t('AddToWishlist')}</p>
           </div> */}
           <div
-            className="flex items-center cursor-pointer"
+            className="flex items-center cursor-pointer my-3"
             onClick={() => {
               dispatch(addProduct(product)).unwrap();
               showSuccessMessage('Product has been added to compare');
             }}
           >
-            <img
-              src={compare}
-              alt="phone"
-              className="invert rounded-full hover:invert-0 transition duration-500 hover:bg-slate-500 w-10 mr-2"
-            />
-            <p className="w-full text-sm">{t('CompareProduct')}</p>
+            <span className='w-10 h-10 mr-3 p-2 flex items-center justify-center text-white bg-app-slate rounded-full cursor-pointer'>
+              <BiGitCompare size={25} />
+            </span>
+            <p className="w-full text-sm capitalize">{t('CompareProduct')}</p>
           </div>
           <motion.button
             whileTap={{ scale: 0.9 }}
-            className="bg-[#08F46C] duration-100 w-fit px-8 py-2 text-base rounded-md shadow-md mt-4 mb-1 shadow-slate-500"
+            className="bg-[#08F46C] duration-100 w-fit px-8 py-2 text-base rounded mt-4 mb-1 shadow-slate-500 flex items-center"
             onClick={() => {
               setShowModel(true);
             }}
           >
+            <AiOutlineShoppingCart size={25} className='mr-2' />
             {t('AddToCart')}
           </motion.button>
         </div>

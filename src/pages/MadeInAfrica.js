@@ -72,7 +72,7 @@ const MadeInAfrica = () => {
     SKU: 'TEST/test/test',
   };
   return (
-    <Slide>
+    <Slide triggerOnce>
       <div className="flex xs:gap-3 gap-10 my-4 md:ml-24 xs:mx-2 xs:justify-center">
         <div className="cursor-pointer" onClick={() => setCountry('Rwanda')}>
           <img src={rwanda} alt="" />

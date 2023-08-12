@@ -74,7 +74,7 @@ const ProductsPage = () => {
   // console.log(products?.page[1])
   // console.log(typeof([...products?.page]),'=========?')
   return (
-    <Slide className="my-10 w-full flex xs:flex-wrap justify-around">
+    <Slide triggerOnce className="my-10 w-full flex xs:flex-wrap justify-around">
       {/* <div className="bg-gray-500 w-full mx-3 text-center mb-3 sm:hidden">
         Filter
       </div> */}

@@ -17,7 +17,7 @@ const SingleShop = () => {
     dispatch(getSingleStore({ id: id }));
   }, [dispatch, id]);
   return (
-    <Slide className="mx-2">
+    <Slide triggerOnce className="mx-2">
       <div className="flex xs:flex-col xs:w-full mx-auto font-bold justify-end bg-[#D9D9D9] w-2/3 my-6">
         <img
           src={store?.config_logo}

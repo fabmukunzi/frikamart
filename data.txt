@@ -1,0 +1,19 @@
+           <div className='md:border-r border-black flex flex-col w-full md:w-7/12 smd:w-3/6 pb-8'>
+                <span className='font-bold text-3xl'>Checkout.</span>
+                <hr className='my-6' />
+                <form onSubmit={handleSubmit} className='flex flex-col w-full px-4'>
+                    
+                   
+                    <div className='flex flex-col'>
+                        <span className='font-semibold text-lg my-2'>Order Notes</span>
+                        <textarea value={checkoutData.comment} onChange={(e) => setCheckoutData({ ...checkoutData, comment: e.target.value })} className='w-full p-3 rounded-md border outline-none' placeholder="Notes about your order, e.g. special notes for delivery" rows={3}></textarea>
+                    </div>
+                    <div className="w-full flex justify-between mt-4 items-center">
+                        <Link to="/cart" className="text-app-slate">Back to Cart</Link>
+                        <button className='px-4 py-3 rounded bg-green-600 text-white' type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <div className='w-full md:w-4/12 smd:w-2/6 md:pt-4 px-2 smd:px-6 flex flex-row overflow-x-scroll whitespace-nowrap md:flex-col'>
+
+            </div>

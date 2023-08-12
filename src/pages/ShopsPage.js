@@ -19,7 +19,7 @@ const ShopsPage = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <Slide className="my-6">
+        <Slide triggerOnce className="my-6">
           <div className="relative py-3 hidden">
             <input
               type="search"

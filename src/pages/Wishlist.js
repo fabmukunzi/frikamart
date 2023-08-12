@@ -7,7 +7,7 @@ const Wishlist = () => {
     for(let i=0;i<3;i++)
     wishes.push('Wish')
     return (
-        <Slide className='flex xs:mx-4 flex-wrap gap-8 justify-around xs:flex-col'>
+        <Slide triggerOnce className='flex xs:mx-4 flex-wrap gap-8 justify-around xs:flex-col'>
             {
                 wishes.map((wish)=><WishCard />)
             }

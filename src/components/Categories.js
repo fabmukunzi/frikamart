@@ -130,7 +130,7 @@ export default Categories;
 
 export const MobileCategories = () => {
   return (
-    <Slide direction='up'>
+    <Slide triggerOnce direction='up'>
       <Categories scale={true} />
     </Slide>
   )
