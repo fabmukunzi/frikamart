@@ -19,7 +19,7 @@ const Footer = () => {
   ];
   const digital = [t('FreeHosting'), t('YourOnlineShop'), t('API')];
   return (
-    <div className="flex xs:flex-col xs:pl-4 font-poppins justify-around relative bottom-0 bg-app-slate w-screen text-white">
+    <div className={`${window.location.pathname == "/checkout" ? "hidden" : "flex"} xs:flex-col xs:pl-4 font-poppins justify-around relative bottom-0 bg-app-slate w-screen text-white`}>
       <div className="mt-5">
         <h1 className="font-bold text-lg">FRIKAMART</h1>
         <p>
@@ -70,19 +70,19 @@ const Footer = () => {
       </div>
       <div className="mt-5">
         <h1 className="font-bold text-lg">About us</h1>
-        {about.map((item,i) => (
+        {about.map((item, i) => (
           <h2 key={i} className="sm:mt-3">{item}</h2>
         ))}
       </div>
       <div className="mt-5">
         <h1 className="font-bold text-lg">Safety</h1>
-        {safety.map((item,i) => (
+        {safety.map((item, i) => (
           <h2 key={i} className="sm:mt-3">{item}</h2>
         ))}
       </div>
       <div className="mt-5 xs:mb-10">
         <h1 className="font-bold text-lg">Digital Product</h1>
-        {digital.map((item,i) => (
+        {digital.map((item, i) => (
           <h2 key={i} className="sm:mt-3">{item}</h2>
         ))}
       </div>

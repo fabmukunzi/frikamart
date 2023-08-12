@@ -1,38 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useOutletContext } from 'react-router-dom';
-import convertCurrency from '../../utils/convertCurrency';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-const CheckoutCartComponent = ({ checkoutData, setCheckoutData }) => {
-    const [setCurrentAmount, convertedAmount, currency] = useOutletContext();
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
-    const [cartData, setCartData] = useState({
-        subtotal: "",
-        tax: "",
-        shipping: "",
-        total: ""
-    })
-    const { data, totalprice } = useSelector(
+const CheckoutCartComponent = () => {
+ 
+    const { data } = useSelector(
         (state) => state.cart.cart
     );
-    useEffect(() => {
-        let subtotal = data.length * parseInt(totalprice.split(" ")[1])
-        let tax = 18 / 100 * subtotal
-        let shipping = 10
-        let total = subtotal + tax + shipping
-        shipping = 'RWF 10'
-        subtotal = totalprice.split(" ")[0] + " " + subtotal
-        tax = totalprice.split(" ")[0] + " " + tax
-        total = totalprice.split(" ")[0] + " " + total
 
-        setCartData({
-            subtotal, tax, shipping, total
-        })
-    }, [totalprice])
     return (
         <div className='w-full flex md:flex-row flex-col justify-between'>
-            <div className='w-7/12 flex flex-col h-[50vh] overflow-y-scroll'>
+            <div className='w-7/12 pr-8 flex flex-col h-[50vh] overflow-y-scroll'>
                 <span className='w-full border-b font-light text-2xl text-start border-slate-600'>
                     Shopping Cart
                 </span>

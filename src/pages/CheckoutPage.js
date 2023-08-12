@@ -92,26 +92,28 @@ const CheckoutPage = () => {
             </div>
             {
                 <div className='w-11/12 flex flex-col'>
-                    {step === 'shopping_cart' && <CheckoutCartComponent setCheckoutData={setCheckoutData} checkoutData={checkoutData} />}
+                    {step === 'shopping_cart' && <CheckoutCartComponent />}
                     {step === 'shipping' && <ShippingDetails setCheckoutData={setCheckoutData} checkoutData={checkoutData} />}
                     {step === 'payment' && <PaymentOptions setCheckoutData={setCheckoutData} checkoutData={checkoutData} />}
                 </div>
             }
             <div className='w-11/12 flex items-center'>
-                <button className='bg-slate-600 text-white px-6 py-2 mx-4' onClick={() => {
+                <button className={`bg-slate-600 text-white px-6 py-2 mx-4 ${step !== 'shopping_cart' ? "flex" : "hidden"}`} onClick={() => {
                     const prevStep = step === 'shipping' ? 'shopping_cart' : step === 'payment' ? 'shipping' : 'shopping_cart'
                     setStep(prevStep)
                 }}>Previous</button>
-                <button className='bg-slate-600 text-white px-6 py-2 mx-4' onClick={() => {
-                    step === 'payment' ? handleSubmit() : null
+                <button className={`bg-slate-600 text-white px-6 py-2 mx-4 ${step !== 'payment' ? "flex" : "hidden"}`} onClick={() => {
                     const nextStep = step === 'shopping_cart' ? 'shipping' : step === 'shipping' ? 'payment' : 'payment'
                     setStep(nextStep)
-                }}>{step === 'payment' ? "Pay Now" : "Next"}</button>
+                }}>Next</button>
+                <button className={`bg-slate-600 text-white px-6 py-2 mx-4 ${step === 'payment' ? "flex" : "hidden"}`} onClick={handleSubmit} type={'button'}>
+                    Pay Now
+                </button>
                 <Link to="/" className='bg-slate-600 text-white px-6 py-2 mx-4'>
                     Cancel
                 </Link>
             </div>
-        </Slide>
+        </Slide >
     )
 }
 
